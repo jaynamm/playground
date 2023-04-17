@@ -38,6 +38,8 @@
 * Framework
   * Front-end
     * `react.js` 
+    * `Node.js v19.9.0`
+    * `npm v9.6.3`
   * Back-end
     * `Spring Boot 3.0.5` 
     * `Gradle` (Build Tool) 
