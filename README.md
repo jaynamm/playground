@@ -48,6 +48,7 @@
   * `Mysql 5.7.41` → `Mysql 8.0.32`
     * 5.7 버전이 23년 10월 지원 종료
     * 지원 종료로 인해 8.0 버전을 사용하기로 결정
+    * git pull request test
     
 <details>
   <summary>start.spring.io 프로젝트 내용</summary>
