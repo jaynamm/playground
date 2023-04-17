@@ -39,10 +39,17 @@
   * Front-end
     * `react.js` 
   * Back-end
-    * `Spring Boot 3.0.5`
+    * `Spring Boot 3.0.5` 
     * `Gradle` (Build Tool) 
     * `lombok`
 * Database
   * `Mysql 5.7.41` → `Mysql 8.0.32`
     * 5.7 버전이 23년 10월 지원 종료
     * 지원 종료로 인해 8.0 버전을 사용하기로 결정
+    
+<details>
+  <summary>start.spring.io 프로젝트 내용</summary>
+  <div markdown="1">
+    <img width="889" alt="springbootinit" src="https://user-images.githubusercontent.com/48994100/232404385-8fd43fc7-8efb-4215-90fc-fb3ed4074b44.png">
+  </div>
+</details>
