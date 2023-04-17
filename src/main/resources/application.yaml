@@ -18,17 +18,3 @@ spring:
     show_sql: true
     hibernate:
       ddl-auto: update
-
-  mail:
-    default-encoding: UTF-8
-    host: smtp.gmail.com
-    port: 587
-    username: []
-    password: []
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    protocol: smtp
