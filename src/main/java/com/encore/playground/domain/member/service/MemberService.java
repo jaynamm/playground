@@ -18,9 +18,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * @param memberDTO
      * 회원 가입 시 파라미터를 전달받아 Entity 로 변환
      * Repository 를 통해 DB 에 저장
+     * @param memberDTO
      */
 
     public void register(MemberDTO memberDTO) {
@@ -39,8 +39,8 @@ public class MemberService {
     }
 
     /**
-     * @param memberDTO
      * 아이디 찾기 시 파타미터를 전달받아 Userid 반환
+     * @param memberDTO
      */
 
     public String searchIdForEmail(MemberDTO memberDTO) {
