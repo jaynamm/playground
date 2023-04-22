@@ -34,9 +34,11 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests().requestMatchers(
                         new AntPathRequestMatcher("/**")).permitAll()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
 
                 // 로그인 구현
-                .and()
                 .formLogin()
                 .loginPage("/member/login") // 로그인 페이지
                 .defaultSuccessUrl("/home") // 로그인 성공
@@ -48,10 +50,6 @@ public class SecurityConfig {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
-
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();
