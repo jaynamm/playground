@@ -9,7 +9,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -19,8 +22,8 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 로그인 기능 구현
-     * 1. 인덱스 화면에서 로그인 화면으로 이동
+     * GET - 로그인 화면 페이지 이동
+     * @return 로그인 페이지 이동 (인덱스 -> 로그인 화면)
      */
 
     @GetMapping("/login")
@@ -28,17 +31,24 @@ public class MemberController {
         return "member/login_form";
     }
 
-
     /**
-     * 회원 가입 기능 구현
-     * 1. 회원가입 화면으로 이동
-     * 2. 회원가입 입력 후 저장
+     * GET - 회원가입 화면 페이지 이동
+     * @param memberRegisterForm
+     * @return 회원가입 화면으로 이동
      */
 
     @GetMapping("/signup")
     public String registerForm(MemberRegisterForm memberRegisterForm) {
         return "member/register_form";
     }
+
+    /**
+     * POST - 회원가입 데이터 전달
+     * @param memberDTO
+     * @param memberRegisterForm
+     * @param bindingResult
+     * @return Member 생성 후 로그인 페이지로 이동
+     */
 
     @PostMapping("/signup")
     public String register(@ModelAttribute MemberDTO memberDTO,
@@ -71,15 +81,24 @@ public class MemberController {
     }
 
     /**
-     * 아이디 찾기, 비밀번호 찾기 구현
+     * GET - 아이디 찾기 페이지 이동
+     * 아래의 2 가지 방법으로 아이디 찾기 진행
      * 1. 이메일 입력 후 가입한 이메일로 아이디 찾기
      * 2. 아이디 입력 후 이메일 인증 완료 후 비밀번호 재설정 화면
+     * @return 아이디 찾기 페이지 이동
      */
 
     @GetMapping("/search/id")
     public String searchIdForm() {
         return "member/search_id_form";
     }
+
+    /**
+     * POST - 아이디 찾기를 위한 이메일 데이터 전달
+     * @param memberDTO
+     * @param model
+     * @return 입력된 이메일에 해당 하는 유저 아이디 반환
+     */
 
     @PostMapping("search/id")
     public String searchIdForEmail(@ModelAttribute MemberDTO memberDTO, Model model) {
