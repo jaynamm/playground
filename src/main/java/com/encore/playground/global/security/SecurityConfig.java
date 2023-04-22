@@ -26,9 +26,6 @@ public class SecurityConfig {
                 .headers()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰 기반 인증이므로 세션을 사용하지 않는다.
-                //.csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
-                //.and()
-                //.addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 .and()
                 .authorizeHttpRequests().requestMatchers(
                         new AntPathRequestMatcher("/**")).permitAll()
