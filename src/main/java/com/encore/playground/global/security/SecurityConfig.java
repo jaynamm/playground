@@ -52,7 +52,6 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests() // 권한 요청 처리 설정
         ;
 
         return http.build();
