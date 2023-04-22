@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,15 +21,17 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers(
-                        new AntPathRequestMatcher("/**")).permitAll()
-                .and()
-                .csrf().ignoringRequestMatchers(
-                        new AntPathRequestMatcher("/h2-console/**"))
-                .and()
+        http.httpBasic().disable() // REST API 를 사용하기 위해 http 기본 설정 해제
+                .csrf().disable() // REST API 를 사용하기 위해 csrf 보안 비활성화
                 .headers()
-                .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰 기반 인증이므로 세션을 사용하지 않는다.
+                //.csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                //.and()
+                //.addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .and()
+                .authorizeHttpRequests().requestMatchers(
+                        new AntPathRequestMatcher("/**")).permitAll()
 
                 // 로그인 구현
                 .and()
