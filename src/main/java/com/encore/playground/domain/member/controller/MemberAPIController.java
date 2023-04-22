@@ -2,7 +2,7 @@ package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.repository.MemberRepository;
 import com.encore.playground.domain.member.service.MemberSecurityService;
-import com.encore.playground.global.jwt.provider.JwtTokenProvider;
+import com.encore.playground.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
