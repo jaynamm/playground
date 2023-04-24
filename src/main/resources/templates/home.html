@@ -8,6 +8,6 @@
     <h1>HOME</h1>
     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
-    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/feed}">피드</a>
+    <a class="nav-link" th:href="@{/feed}">피드</a>
 </body>
 </html>
