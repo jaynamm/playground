@@ -20,9 +20,9 @@
 `남민우만나고피씨방에5만원쓸수있어서`
 
 ### 팀 구성원  
-| 남민우                                          | 권광일                                                | 김용호                                | 김희주                                    | 남정현                                    |  
-|----------------------------------------------|----------------------------------------------------|------------------------------------|----------------------------------------|----------------------------------------|
-|                                              |                                                    |                                    |                                        |                                        |
+| 남민우 | 권광일 | 김용호 | 김희주 | 남정현 |  
+|:----------------------------------------------:|:----------------------------------------------------:|:------------------------------------:|:----------------------------------------:|:----------------------------------------:|
+| <img src="https://user-images.githubusercontent.com/48994100/233946147-db2cd31d-12d0-4b74-a3dd-804a44cf071c.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233946014-cf30c208-ae30-4efb-a00c-77f901e6dbb9.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233945902-a37dd21f-8b52-4562-8a47-e7ae77a4704e.png" width="100" />| <img src="https://user-images.githubusercontent.com/48994100/233944309-7d6b86e6-bb21-48a7-b621-b7a0d2924e82.png" width="100"/> | <img src="https://user-images.githubusercontent.com/48994100/233943872-6613d356-4578-412a-bbd8-6c291cdb5610.png" width="100"/> |
 | [@mandoo1229](https://github.com/mandoo1229) | [@moneyless1989](https://github.com/moneyless1989) | [@KKYHH](https://github.com/KKYHH) | [@HeeJu23](https://github.com/HeeJu23) | [@jaynamm](https://github.com/jaynamm) |
 
 
