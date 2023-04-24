@@ -19,6 +19,20 @@ public class FeedController {
 
     private final FeedService feedService;
 
+    @PostMapping(value = "/write")
+    public String write(String id, String article, Model model) {
+        List<FeedDto> feedAfterWrite = feedService.write(id, article);
+        model.addAttribute("feeds", feedAfterWrite);
+        return "feed/feed_main";
+    }
+
+    @GetMapping(value = "/modify")
+    public String modify(int feedNo, Model model) {
+        FeedDto feedToModify = feedService.getFeed(feedNo);
+        model.addAttribute("feed", feedToModify);
+        return "feed/feed_modify";
+    }
+
     @PostMapping(value = "/modify")
     public String modify(int feedNo, String article, Model model) {
         List<FeedDto> feedAfterModify = feedService.modify(feedNo, article);
