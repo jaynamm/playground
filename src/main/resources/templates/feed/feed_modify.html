@@ -5,7 +5,7 @@
     <p th:text="'해당 글 번호: '+${feed.feedNo}"></p>
     <input type="hidden" name="feedNo" th:value="${feed.feedNo}">
     <div class="mb-3">
-      <label for="article" class="form-label">내용을 수정하세요</label>
+      <label for="article" class="form-label">내용을 수정하세요 </label>
       <input type="text" name="article" id="article" class="form-control" th:value="${feed.article}">
     </div>
     <button type="submit" class="btn btn-primary">수정</button>

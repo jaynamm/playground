@@ -39,4 +39,5 @@ public class FeedDto {
         this.viewCount = entity.getViewCount();
         this.article = entity.getArticle();
     }
+
 }

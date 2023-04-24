@@ -4,8 +4,6 @@ import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,4 +81,5 @@ public class FeedService {
         feedRepository.delete(feedDto.toEntity());
         return feedPage();
     }
+
 }
