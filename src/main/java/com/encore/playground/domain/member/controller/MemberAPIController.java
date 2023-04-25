@@ -2,7 +2,7 @@ package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.repository.MemberRepository;
 import com.encore.playground.domain.member.service.MemberSecurityService;
-import com.encore.playground.global.jwt.provider.JwtTokenProvider;
+import com.encore.playground.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -43,5 +44,29 @@ public class MemberAPIController {
         String roles = member.getAuthorities().stream().toList().get(0).toString();
 
         return jwtTokenProvider.generateToken(userid, roles);
+    }
+
+    /**
+     * POST - Header 에 JWT 데이터 전달
+     * @return 토큰 인증이 정상적으로 완료되면 "user ok" 반환
+     */
+
+    @PostMapping("/user/test")
+    public Map userResponseTest() {
+        Map<String, String> result = new HashMap<>();
+        result.put("result","user ok");
+        return result;
+    }
+
+    /**
+     * POST - Header 에 JWT 데이터 전달
+     * @return 토큰 인증이 정상적으로 완료되면 "admin ok" 반환
+     */
+
+    @PostMapping("/admin/test")
+    public Map adminResponseTest() {
+        Map<String, String> result = new HashMap<>();
+        result.put("result","admin ok");
+        return result;
     }
 }

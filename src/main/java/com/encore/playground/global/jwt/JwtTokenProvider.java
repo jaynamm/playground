@@ -1,4 +1,4 @@
-package com.encore.playground.global.jwt.provider;
+package com.encore.playground.global.jwt;
 
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import io.jsonwebtoken.Claims;
@@ -6,18 +6,14 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,6 +30,7 @@ public class JwtTokenProvider {
     /**
      * JWT 토큰 생성 메서드
      * @param userid
+     * @param roles
      * @return JWT 토큰을 생성해준다.
      */
     public static String generateToken(String userid, String roles) {
@@ -64,7 +61,7 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
+    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN 값'
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("X-AUTH-TOKEN");
     }
