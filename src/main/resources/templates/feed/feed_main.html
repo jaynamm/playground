@@ -1,0 +1,33 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h1>피드 페이지입니다.</h1>
+
+<!--    글 작성란 (임시)-->
+    <form th:action="@{/feed/write}" method="post">
+        <div class="mb-3">
+            <label for="userid" class="form-label">작성자</label>
+            <input type="text" name="id" id="userid" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="article" class="form-label">글 내용</label>
+            <input type="text" name="article" id="article" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">작성</button>
+    </form>
+<!--    DB에서 받아온 글 내용 그대로 뿌리기 -->
+    <div class="card" th:each="feed : ${feeds}">
+        <h5 class="card-header" th:text="${feed.uploadTime}"></h5>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${feed.userid}"></h5>
+            <p class="card-text" th:text="${feed.article}"></p>
+            <a th:href="@{/feed/modify(feedNo=${feed.feedNo})}" class="btn btn-primary">
+<!--                    th:if="${#authentication.principal.username}==${feed.userid}" -->
+                    수정</a>
+            <a th:href="@{/feed/delete(feedNo=${feed.feedNo})}" class="btn btn-danger">
+<!--                    th:if="${#authentication.principal.username}==${feed.userid}" -->
+                    삭제</a>
+        </div>
+        <div class="card-footer text-muted" th:text="'좋아요: ' + ${feed.likeCount} + '    조회수: ' + ${feed.viewCount} + '    댓글수: ' + ${feed.commentCount}"></div>
+    </div>
+</div>
+</html>
