@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -26,6 +27,8 @@ public class JwtTokenProvider {
     private static final String JWT_SECRET = "secretKey";
     // 토큰 유효 시간을 설정해준다. -> 30분으로 설정해주었다.
     private static final long JWT_EXPIRATION_MS = 30 * 60 * 1000L;
+
+    private static final String TOKEN_HEADER_NAME = "Authorization";
 
     /**
      * JWT 토큰 생성 메서드
@@ -61,9 +64,18 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN 값'
+    // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "Bearer {TOKEN}'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        // Request Header 에서 토큰을 가져완다.
+        String bearerToken = request.getHeader(TOKEN_HEADER_NAME);
+
+        // 토큰을 가지고 있고 토큰이 Bearer 로 시직한다면 "Bearer " 이후의 값을 가져온다.
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+
+        // 가져온 토큰이 없으면 null
+        return null;
     }
 
     // 토큰의 유효성 + 만료일자 확인
