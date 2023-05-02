@@ -3,6 +3,7 @@ package com.encore.playground.domain.feed.control;
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class FeedAPIController {
      * @return JSON 형태의 피드 리스트
      */
     @RequestMapping(value = "/getallfeeds")
+    @CrossOrigin(originPatterns = "http://localhost:*")
     public Map<String, List<FeedDto>> feedMain(@RequestBody Map<String, String> requestMap) {
         Map<String, List<FeedDto>> feeds = new HashMap<>();
         feeds.put("feeds", feedService.feedPage());

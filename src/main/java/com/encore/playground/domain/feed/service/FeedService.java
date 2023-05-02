@@ -4,6 +4,7 @@ import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public class FeedService {
      * @return 피드 피드 객체 List
      */
     public List<FeedDto> feedPage() {
-        List<Feed> feedList =  feedRepository.findAll(); // 추후 페이징 처리(검색 갯수 제한) 필요
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "feedNo")); // 추후 페이징 처리(검색 갯수 제한) 필요
         List<FeedDto> feedDtoList = feedList.stream().map(FeedDto::new).toList();
         return feedDtoList;
     }
@@ -32,7 +33,7 @@ public class FeedService {
      * @param feedNo: 글 번호
      * @return 피드 글 하나
      */
-    public FeedDto getFeed(int feedNo) {
+    public FeedDto getFeed(long feedNo) {
         Feed feed = feedRepository.findById(feedNo).get();
         return new FeedDto(feed);
     }
@@ -62,7 +63,7 @@ public class FeedService {
      * @param article: 수정할 글 내용
      * @return 글 수정 이후의 피드 객체 List
      */
-    public List<FeedDto> modify(int feedNo, String article) {
+    public List<FeedDto> modify(long feedNo, String article) {
         Feed feedToModify = feedRepository.findById(feedNo).get();
         FeedDto feedDto = new FeedDto(feedToModify);
         feedDto.setArticle(article);
@@ -75,7 +76,7 @@ public class FeedService {
      * @param feedNo: 글 번호
      * @return 글 삭제 이후의 피드 객체 List
      */
-    public List<FeedDto> delete(int feedNo) {
+    public List<FeedDto> delete(long feedNo) {
         Feed feedToDelete = feedRepository.findById(feedNo).get();
         FeedDto feedDto = new FeedDto(feedToDelete);
         feedRepository.delete(feedDto.toEntity());

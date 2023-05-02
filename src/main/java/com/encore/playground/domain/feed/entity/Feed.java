@@ -35,5 +35,4 @@ public class Feed {
     private int viewCount; // 조회 수
     @Column(nullable = false, length = 1000)
     private String article; // 글 내용
-
 }
