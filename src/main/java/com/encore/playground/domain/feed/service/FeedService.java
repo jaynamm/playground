@@ -38,6 +38,10 @@ public class FeedService {
         return new FeedDto(feed);
     }
 
+    public FeedDto getFeed(FeedDto feedDto) {
+        return new FeedDto(feedRepository.findById(feedDto.getFeedNo()).get());
+    }
+
     /**
      * 글 작성기능
      * @param id: 글 작성자
@@ -57,6 +61,18 @@ public class FeedService {
         return feedPage();
     }
 
+    public List<FeedDto> write(FeedDto feedDto) {
+        feedRepository.save(FeedDto.builder()
+                .userid(feedDto.getUserid())
+                .uploadTime(LocalDateTime.now())
+                .likeCount(0)
+                .commentCount(0)
+                .viewCount(0)
+                .article(feedDto.getArticle())
+                .build().toEntity());
+        return feedPage();
+    }
+
     /**
      * 글 수정기능
      * @param feedNo: 글 번호
@@ -67,6 +83,13 @@ public class FeedService {
         Feed feedToModify = feedRepository.findById(feedNo).get();
         FeedDto feedDto = new FeedDto(feedToModify);
         feedDto.setArticle(article);
+        feedRepository.save(feedDto.toEntity());
+        return feedPage();
+    }
+
+    public List<FeedDto> modify(FeedDto newFeedDto) {
+        FeedDto feedDto = new FeedDto(feedRepository.findById(newFeedDto.getFeedNo()).get());
+        feedDto.setArticle(newFeedDto.getArticle());
         feedRepository.save(feedDto.toEntity());
         return feedPage();
     }
@@ -83,4 +106,9 @@ public class FeedService {
         return feedPage();
     }
 
+    public List<FeedDto> delete(FeedDto feedDto) {
+        FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDto.getFeedNo()).get());
+        feedRepository.delete(feedToDelete.toEntity());
+        return feedPage();
+    }
 }
