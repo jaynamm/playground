@@ -15,6 +15,7 @@ public class FeedDto {
     private LocalDateTime uploadTime;
     private int likeCount;
     private int commentCount;
+    private int commentTotalCount;
     private int viewCount;
     private String article;
 
@@ -25,6 +26,7 @@ public class FeedDto {
                 .uploadTime(uploadTime)
                 .likeCount(likeCount)
                 .commentCount(commentCount)
+                .commentTotalCount(commentTotalCount)
                 .viewCount(viewCount)
                 .article(article)
                 .build();
@@ -36,6 +38,7 @@ public class FeedDto {
         this.uploadTime = entity.getUploadTime();
         this.likeCount = entity.getLikeCount();
         this.commentCount = entity.getCommentCount();
+        this.commentTotalCount = entity.getCommentTotalCount();
         this.viewCount = entity.getViewCount();
         this.article = entity.getArticle();
     }

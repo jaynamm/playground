@@ -32,6 +32,9 @@ public class Feed {
     private int commentCount; // 댓글 수
     @Column(nullable = false)
     @ColumnDefault("0")
+    private int commentTotalCount; // 댓글이 저장된 횟수. 댓글 번호를 지정하기 위하여 사용
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private int viewCount; // 조회 수
     @Column(nullable = false, length = 1000)
     private String article; // 글 내용

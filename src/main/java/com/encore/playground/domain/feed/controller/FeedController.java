@@ -1,4 +1,4 @@
-package com.encore.playground.domain.feed.control;
+package com.encore.playground.domain.feed.controller;
 
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;

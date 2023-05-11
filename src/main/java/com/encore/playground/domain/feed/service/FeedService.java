@@ -54,6 +54,7 @@ public class FeedService {
                 .uploadTime(LocalDateTime.now())
                 .likeCount(0)
                 .commentCount(0)
+                .commentTotalCount(0)
                 .viewCount(0)
                 .article(article)
                 .build();
@@ -67,6 +68,7 @@ public class FeedService {
                 .uploadTime(LocalDateTime.now())
                 .likeCount(0)
                 .commentCount(0)
+                .commentTotalCount(0)
                 .viewCount(0)
                 .article(feedDto.getArticle())
                 .build().toEntity());
@@ -110,5 +112,12 @@ public class FeedService {
         FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDto.getFeedNo()).get());
         feedRepository.delete(feedToDelete.toEntity());
         return feedPage();
+    }
+
+    public void addComment(FeedDto feedDto) {
+        FeedDto feedToAddComment = new FeedDto(feedRepository.findById(feedDto.getFeedNo()).get());
+        feedToAddComment.setCommentCount(feedToAddComment.getCommentCount() + 1);
+        feedToAddComment.setCommentTotalCount(feedToAddComment.getCommentTotalCount() + 1);
+        feedRepository.save(feedToAddComment.toEntity());
     }
 }
