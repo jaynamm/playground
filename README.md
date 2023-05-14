@@ -12,22 +12,25 @@
 <h2>프로젝트 팀</h2>
 <h2><code>남민우만나고피씨방에5만원쓸수있어서</code></h2>
 
-|                                                               남민우                                                               |                                                               권광일                                                               |                                                               김용호                                                               |                                                              김희주                                                               |                                                              남정현                                                               |      유수빈      |  
-|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:-------------:|
-| <img src="https://user-images.githubusercontent.com/48994100/233946147-db2cd31d-12d0-4b74-a3dd-804a44cf071c.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233946014-cf30c208-ae30-4efb-a00c-77f901e6dbb9.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233945902-a37dd21f-8b52-4562-8a47-e7ae77a4704e.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233944309-7d6b86e6-bb21-48a7-b621-b7a0d2924e82.png" width="100"/> | <img src="https://user-images.githubusercontent.com/48994100/233943872-6613d356-4578-412a-bbd8-6c291cdb5610.png" width="100"/> |               |
-|                                     [Donald  (@mandoo1229)](https://github.com/mandoo1229)                                      |                              [Richard (@moneyless1989)](https://github.com/moneyless1989)                              |                                      [Nicolas (@KKYHH)](https://github.com/KKYHH)                                       |                                      [Judy (@HeeJu23)](https://github.com/HeeJu23)                                       |                                       [Jay (@jaynamm)](https://github.com/jaynamm)                                        | [Amelia ()]() |
+|                                                               남민우                                                               |                                                               권광일                                                               |                                                               김용호                                                               |                                                              김희주                                                               |                                                              남정현                                                               |            유수빈            |  
+|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:-------------------------:|
+| <img src="https://user-images.githubusercontent.com/48994100/233946147-db2cd31d-12d0-4b74-a3dd-804a44cf071c.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233946014-cf30c208-ae30-4efb-a00c-77f901e6dbb9.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233945902-a37dd21f-8b52-4562-8a47-e7ae77a4704e.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233944309-7d6b86e6-bb21-48a7-b621-b7a0d2924e82.png" width="100"/> | <img src="https://user-images.githubusercontent.com/48994100/233943872-6613d356-4578-412a-bbd8-6c291cdb5610.png" width="100"/> | <img src="" width="100"/> |
+|                                     [Donald  (@mandoo1229)](https://github.com/mandoo1229)                                      |                              [Richard (@moneyless1989)](https://github.com/moneyless1989)                              |                                      [Nicolas (@KKYHH)](https://github.com/KKYHH)                                       |                                      [Judy (@HeeJu23)](https://github.com/HeeJu23)                                       |                                       [Jay (@jaynamm)](https://github.com/jaynamm)                                        |      [Amelia (@)]()       |
 
 
 <h2>개발환경</h2>
 
-❖ IDE ❖ <br>
+❖ IDE ❖ <br><br>
 <img src="https://img.shields.io/badge/IntelliJ IDEA Communit-000000?style=flat&logo=intellijidea&logoColor=white"/>
+<img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat&logo=Visual Studio Code&logoColor=white"/>
 
-❖ Language ❖ <br>
+❖ Language ❖ <br><br>
 <img src="https://img.shields.io/badge/Java-3399FF?style=flat&logo=java&logoColor=white"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black" />
 <img src="https://img.shields.io/badge/OpenJDK 17-FFFFFF?style=flat&logo=java&logoColor=black"/>
+<img src="https://img.shields.io/badge/JSON-000000?style=flat&logo=json&logoColor=white" />
 
-❖ Framework - Front-end & Back-end ❖ <br>
+❖ Front-end & Back-end Framework ❖ <br><br>
 <img src="https://img.shields.io/badge/Node.js v19.9.0-339933?style=flat&logo=node.js&logoColor=white"/>
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black"/>
 <img src="https://img.shields.io/badge/npm v9.6.3-CB3837?style=flat&logo=npm&logoColor=white"/>
@@ -36,10 +39,13 @@
 <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/>
 <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white"/>
 
-❖ Database ❖ <br>
+❖ Server ❖ <br><br>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white" />
+
+❖ Database ❖ <br><br>
 <img src="https://img.shields.io/badge/Mysql 8.0.32-4479A1?style=flat&logo=mysql&logoColor=white"/>
 
-❖ Etc ❖ <br>
+❖ Etc ❖ <br><br>
 Mysql 5.7 버전이 23년 10월 지원 종료<br>지원 종료로 인해 Mysql 8.0 버전을 사용하기로 결정
 
 <details>
@@ -48,6 +54,10 @@ Mysql 5.7 버전이 23년 10월 지원 종료<br>지원 종료로 인해 Mysql 8
     <img width="889" alt="springbootinit" src="https://user-images.githubusercontent.com/48994100/232404385-8fd43fc7-8efb-4215-90fc-fb3ed4074b44.png">
   </div>
 </details>
+
+<h2> Git Repository </h2>  
+
+[PlAYGROUND React](https://github.com/jaynamm/playground-react)
 
 <h2>🤝 커밋 규칙</h2>
 
