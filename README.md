@@ -17,6 +17,7 @@
 | <img src="https://user-images.githubusercontent.com/48994100/233946147-db2cd31d-12d0-4b74-a3dd-804a44cf071c.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233946014-cf30c208-ae30-4efb-a00c-77f901e6dbb9.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233945902-a37dd21f-8b52-4562-8a47-e7ae77a4704e.png" width="100" /> | <img src="https://user-images.githubusercontent.com/48994100/233944309-7d6b86e6-bb21-48a7-b621-b7a0d2924e82.png" width="100"/> | <img src="https://user-images.githubusercontent.com/48994100/233943872-6613d356-4578-412a-bbd8-6c291cdb5610.png" width="100"/> | <img src="" width="100"/> |
 |                                     [Donald  (@mandoo1229)](https://github.com/mandoo1229)                                      |                              [Richard (@moneyless1989)](https://github.com/moneyless1989)                              |                                      [Nicolas (@KKYHH)](https://github.com/KKYHH)                                       |                                      [Judy (@HeeJu23)](https://github.com/HeeJu23)                                       |                                       [Jay (@jaynamm)](https://github.com/jaynamm)                                        |      [Amelia (@)]()       |
 
+<br>
 
 <h2>개발환경</h2>
 
@@ -55,9 +56,13 @@ Mysql 5.7 버전이 23년 10월 지원 종료<br>지원 종료로 인해 Mysql 8
   </div>
 </details>
 
+<br>
+
 <h2> Git Repository </h2>  
 
 [PlAYGROUND React](https://github.com/jaynamm/playground-react)
+
+<br>
 
 <h2>🤝 커밋 규칙</h2>
 
@@ -75,6 +80,8 @@ Mysql 5.7 버전이 23년 10월 지원 종료<br>지원 종료로 인해 Mysql 8
 
 태그: 내용 (#이슈번호)  
 예시 ) Feat: 내용추가추가추가 (#1) , Refactor: Config 리팩토링 (#4)
+
+<br>
 
 <h2> 🤝 PR 규칙 </h2>
 
