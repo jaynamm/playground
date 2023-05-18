@@ -1,4 +1,4 @@
-package com.encore.playground.domain.feed.control;
+package com.encore.playground.domain.feed.controller;
 
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
@@ -35,7 +35,7 @@ public class FeedController {
 
     // 게시글 수정 페이지로 이동
     @GetMapping(value = "/modify")
-    public String modify(int feedNo, Model model) {
+    public String modify(long feedNo, Model model) {
         FeedDto feedToModify = feedService.getFeed(feedNo);
         model.addAttribute("feed", feedToModify);
         return "feed/feed_modify";
@@ -43,7 +43,7 @@ public class FeedController {
 
     // 게시글 수정
     @PostMapping(value = "/modify")
-    public String modify(int feedNo, String article, Model model) {
+    public String modify(long feedNo, String article, Model model) {
         List<FeedDto> feedAfterModify = feedService.modify(feedNo, article);
         model.addAttribute("feeds", feedAfterModify);
         return "feed/feed_main";
@@ -51,7 +51,7 @@ public class FeedController {
 
     // 게시글 삭제
     @GetMapping(value = "/delete")
-    public String delete(int feedNo, Model model) {
+    public String delete(long feedNo, Model model) {
         List<FeedDto> feedAfterDel = feedService.delete(feedNo);
         model.addAttribute("feeds", feedAfterDel);
         return "feed/feed_main";
