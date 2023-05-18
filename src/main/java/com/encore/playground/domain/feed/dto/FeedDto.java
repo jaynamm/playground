@@ -10,37 +10,39 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FeedDto {
-    private long feedNo;
-    private String userid;
-    private LocalDateTime uploadTime;
+    private long id;
+    private String memberId;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private int likeCount;
     private int commentCount;
     private int commentTotalCount;
     private int viewCount;
-    private String article;
+    private String content;
 
     public Feed toEntity() { // FeedDto를 Feed 엔티티로 변환
         return Feed.builder()
-                .feedNo(feedNo)
-                .userid(userid)
-                .uploadTime(uploadTime)
+                .id(id)
+                .memberId(memberId)
+                .createdDate(createdDate)
+                .modifiedDate(modifiedDate)
                 .likeCount(likeCount)
                 .commentCount(commentCount)
                 .commentTotalCount(commentTotalCount)
                 .viewCount(viewCount)
-                .article(article)
+                .content(content)
                 .build();
     }
 
     public FeedDto(Feed entity) { // Feed 엔티티를 FeedDto로 변환
-        this.feedNo = entity.getFeedNo();
-        this.userid = entity.getUserid();
-        this.uploadTime = entity.getUploadTime();
+        this.id = entity.getId();
+        this.memberId = entity.getMemberId();
+        this.createdDate = entity.getCreatedDate();
+        this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();
         this.commentCount = entity.getCommentCount();
         this.commentTotalCount = entity.getCommentTotalCount();
         this.viewCount = entity.getViewCount();
-        this.article = entity.getArticle();
+        this.content = entity.getContent();
     }
-
 }

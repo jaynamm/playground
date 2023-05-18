@@ -28,7 +28,7 @@ public class FeedAPIController {
     /**
      * 피드 글을 수정하기 위해 해당 글을 반환하는 메소드
      * @param feedDto 다음의 프로퍼티를 포함한 JSON 형태의 입력<br>
-     * feedno: 수정할 피드 글 번호
+     * id: 수정할 피드 글 번호
      * @return JSON 형태의 피드 글 1개
      */
     @RequestMapping(value = "/getfeed")
@@ -39,8 +39,8 @@ public class FeedAPIController {
     /**
      * 피드 글을 작성하는 메소드
      * @param feedDto 다음의 프로퍼티를 포함한 JSON 입력<br>
-     * userid: 작성자 아이디<br>
-     * article: 작성한 피드 내용<br>
+     * memberId: 작성자 아이디<br>
+     * content: 작성한 피드 내용<br>
      * @return 작성한 글을 추가한 JSON 형태의 피드 리스트
      */
     @RequestMapping(value = "/write")
@@ -51,8 +51,8 @@ public class FeedAPIController {
     /**
      * 피드 글 번호(PK)를 통해 피드 글을 수정하는 메소드
      * @param feedDto 다음의 프로퍼티를 포함한 JSON 입력<br>
-     * feedno: 수정할 피드 글 번호<br>
-     * article: 수정할 피드 글 내용
+     * id: 수정할 피드 글 번호<br>
+     * content: 수정할 피드 글 내용
      * @return 글 수정사항을 반영한 JSON 형태의 피드 리스트
      */
     @RequestMapping(value = "/modify")
@@ -63,7 +63,7 @@ public class FeedAPIController {
     /**
      * 피드 글 번호(PK)를 통해 피드 글을 삭제하는 메소드
      * @param feedDto 다음의 프로퍼티를 포함한 JSON 입력<br>
-     * feedno: 삭제할 피드 글 번호
+     * id: 삭제할 피드 글 번호
      * @return 글 삭제를 반영한 JSON 형태의 피드 리스트
      */
     @RequestMapping(value = "/delete")

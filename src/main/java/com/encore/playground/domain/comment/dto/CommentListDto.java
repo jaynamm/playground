@@ -13,21 +13,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class CommentListDto {
-    private long commentid;
-    private long feedNo;
-    private String userid;
-    private int commentNo;
-    private LocalDateTime uploadTime;
+    private long id;
+    private long feedId;
+    private String memberId;
+//    private int commentNo;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private int likeCount;
-    private String article;
+    private String content;
 
     public CommentListDto(Comment entity) {
-        this.commentid = entity.getCommentid();
-        this.feedNo = entity.getFeed().getFeedNo();
-        this.userid = entity.getUserid();
-        this.commentNo = entity.getCommentNo();
-        this.uploadTime = entity.getUploadTime();
+        this.id = entity.getId();
+        this.feedId = entity.getFeed().getId();
+        this.memberId = entity.getMemberId();
+//        this.commentNo = entity.getCommentNo();
+        this.createdDate = entity.getCreatedDate();
+        this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();
-        this.article = entity.getArticle();
+        this.content = entity.getContent();
     }
 }

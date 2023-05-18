@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CommentWriteDto {
-    private long feedid;
-    private String userid;
-    private String article;
+    private long feedId;
+    private String memberId;
+    private String content;
 }
