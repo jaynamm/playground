@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class NoticeController {
 
@@ -20,9 +21,9 @@ public class NoticeController {
         return noticeService.noticeList();
     }
 
-    @GetMapping("/notice/view")
-    public NoticeDto noticeRead(@RequestBody NoticeDto noticeDto) {
-        return noticeService.readNotice(noticeDto);
+    @PostMapping("/notice/view/{id}")
+    public NoticeDto noticeRead(@PathVariable Long id) {
+        return noticeService.readNotice(id);
     }
 
     @PostMapping("/notice/write")
@@ -36,7 +37,7 @@ public class NoticeController {
         return noticeService.modifyNotice(noticeDto);
     }
 
-    @GetMapping("/notice/delete")
+    @PostMapping("/notice/delete")
     public List<NoticeDto> noticeDelete(@RequestBody NoticeDto noticeDto) {
         return noticeService.deleteNotice(noticeDto);
     }
