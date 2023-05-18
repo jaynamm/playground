@@ -1,10 +1,12 @@
 package com.encore.playground.domain.qna.entity;
 
+import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,8 +24,9 @@ public class Question {
     @Column(nullable = false)
     private String title;
 
+    // TODO: author 를 member_id 로 참조해서 가져와야한다.
     @Column(nullable = false)
-    private String author;
+    private String memberId;
 
     @Column(nullable = false)
     private String content;
@@ -31,8 +34,10 @@ public class Question {
     @CreatedDate
     private LocalDateTime createdDate;
 
-    // mappedBy : 참조할 엔티티
-    // cascade : 질문 삭제 시 답변도 같이 삭제
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+//    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "member_id")
+//    private Member member;
+
+    @OneToMany(mappedBy = "question")
     private List<Answer> answerList;
 }

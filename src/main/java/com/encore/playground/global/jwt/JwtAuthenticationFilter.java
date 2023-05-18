@@ -15,13 +15,18 @@ public class JwtAuthenticationFilter extends GenericFilter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        System.out.println("[JwtAuthenticationFilter] ::: doFilter() ");
+
         // Header 부분에서 JWT 정보를 가져온다.
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+
+        System.out.println("[JwtAuthenticationFilter] ::: resolveToken() - token = " + token);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("토큰이 유효합니다.");
+            System.out.println("[JwtAuthenticationFilter] ::: 토큰이 유효합니다.");
         }
         chain.doFilter(request, response);
     }

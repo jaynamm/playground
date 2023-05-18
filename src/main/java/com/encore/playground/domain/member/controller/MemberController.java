@@ -1,6 +1,6 @@
 package com.encore.playground.domain.member.controller;
 
-import com.encore.playground.domain.member.dto.MemberDTO;
+import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.form.MemberRegisterForm;
 import com.encore.playground.domain.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -51,7 +51,7 @@ public class MemberController {
      */
 
     @PostMapping("/signup")
-    public String register(@ModelAttribute MemberDTO memberDTO,
+    public String register(@ModelAttribute MemberDto memberDTO,
                            @Valid MemberRegisterForm memberRegisterForm, BindingResult bindingResult) {
         // 파라미터 바인딩 확인
         if (bindingResult.hasErrors()) {
@@ -101,9 +101,9 @@ public class MemberController {
      */
 
     @PostMapping("search/id")
-    public String searchIdForEmail(@ModelAttribute MemberDTO memberDTO, Model model) {
+    public String searchIdForEmail(@ModelAttribute MemberDto memberDTO, Model model) {
         // 파라미터를 받아서 Service 로 전달
-        String userid = memberService.searchIdForEmail(memberDTO);
+        String userid = memberService.searchIdByEmail(memberDTO.getEmail());
         model.addAttribute("userid", userid);
 
         return "member/search_id_check";

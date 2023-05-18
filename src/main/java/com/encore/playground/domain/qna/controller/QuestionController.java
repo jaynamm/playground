@@ -1,9 +1,13 @@
 package com.encore.playground.domain.qna.controller;
 
 import com.encore.playground.domain.qna.dto.QuestionDto;
-import com.encore.playground.domain.qna.service.AnswerService;
 import com.encore.playground.domain.qna.service.QuestionService;
+import com.encore.playground.global.api.DefaultResponse;
+import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,36 +20,64 @@ import java.util.Map;
 
 public class QuestionController {
     private final QuestionService questionService;
-    private final AnswerService answerService;
 
-    @GetMapping("/question")
+    @GetMapping("/question/list")
     public List<QuestionDto> questionMain() {
+        System.out.println("[/api/qna/question] ::: 질문 목록 가져가기");
+
         return questionService.questionList();
     }
 
-    @PostMapping("/question/view")
-    public Map questionRead(@RequestBody QuestionDto questionDto) {
-        String question = questionService.readQuestion(questionDto);
+    @GetMapping("/question/view/{id}")
+    public ResponseEntity<?> viewQuestion(@PathVariable Long id) {
+        QuestionDto questionDto = questionService.readQuestion(id);
 
-        Map<String, > getQuestion = new HashMap<>();
-        getQuestion.put("quetion", question);
-        getQuestion.put("answer", answer);
+        Map<String, QuestionDto> questionDtoMap = new HashMap<>();
+        questionDtoMap.put("question", questionDto);
 
-        return getQuestion;
+        return new ResponseEntity(questionDtoMap, HttpStatus.OK);
     }
 
     @PostMapping("/question/write")
-    public List<QuestionDto> questionWrite(@RequestBody QuestionDto questionDto) {
-        return questionService.writeQuestion(questionDto);
+    public ResponseEntity<?> questionWrite(@RequestBody QuestionDto questionDto) {
+        System.out.println(questionDto.getTitle());
+        System.out.println(questionDto.getMemberId());
+        System.out.println(questionDto.getContent());
+
+        questionService.writeQuestion(questionDto);
+
+        return new ResponseEntity(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        ResponseMessage.QNA_WRITE_SUCCESS
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/question/modify")
-    public List<QuestionDto> questionModify(@RequestBody QuestionDto questionDto) {
-        return questionService.modifyQuestion(questionDto);
+    public ResponseEntity<?> questionModify(@RequestBody QuestionDto questionDto) {
+        questionService.modifyQuestion(questionDto);
+
+        return new ResponseEntity(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        ResponseMessage.QNA_MODIFY
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/question/delete")
-    public List<QuestionDto> questionDelete(@RequestBody QuestionDto questionDto) {
-        return questionService.deleteQuestion(questionDto);
+    public ResponseEntity<?> questionDelete(@RequestBody QuestionDto questionDto) {
+        questionService.deleteQuestion(questionDto);
+
+        return new ResponseEntity(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        ResponseMessage.QNA_DELETE
+                ),
+                HttpStatus.OK
+        );
     }
 }

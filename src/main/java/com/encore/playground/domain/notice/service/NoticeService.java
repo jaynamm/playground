@@ -32,8 +32,7 @@ public class NoticeService {
      * @param noticeDto
      * @return NoticeDto
      */
-    public NoticeDto readNotice(NoticeDto noticeDto) {
-        Long noticeId = noticeDto.getNoticeId();
+    public NoticeDto readNotice(Long noticeId) {
         return new NoticeDto(noticeRepository.findById(noticeId).get());
     }
 

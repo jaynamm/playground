@@ -11,18 +11,18 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Data
-public class AnswerDTO {
+public class AnswerDto {
     private Long id;
     private String content;
-    private String author;
+    private String memberId;
     private LocalDateTime createdDate;
     private Question question;
 
     // Entity -> DTO
-    public AnswerDTO (Answer answer) {
+    public AnswerDto(Answer answer) {
         this.id = answer.getId();
         this.content = answer.getContent();
-        this.author = answer.getAuthor();
+        this.memberId = answer.getMemberId();
         this.createdDate = answer.getCreatedDate();
         this.question = answer.getQuestion();
     }
@@ -31,7 +31,7 @@ public class AnswerDTO {
         return Answer.builder()
                 .id(id)
                 .content(content)
-                .author(author)
+                .memberId(memberId)
                 .createdDate(createdDate)
                 .question(question)
                 .build();
