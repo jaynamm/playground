@@ -65,8 +65,6 @@ public class MemberService {
         member.setNickname(memberDTO.getNickname());
         member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         member.setCurriculum(memberDTO.getCurriculum());
-        member.setCreatedDate(LocalDateTime.now());
-        member.setModifiedDate(LocalDateTime.now());
 
         memberRepository.save(member);
     }
