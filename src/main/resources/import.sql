@@ -1,0 +1,4 @@
+insert into feed (comment_count, comment_total_count, content, created_date, like_count, member_id, modified_date, view_count) values (0, 0, "플레이그라운드에 오신 걸 환영합니다!", '2023-05-18T19:27:41.487261', 0, "민우", '2023-05-18T19:27:41.487261', 0);
+insert into feed (comment_count, comment_total_count, content, created_date, like_count, member_id, modified_date, view_count) values (0, 0, "마음껏 즐겨주세요!", '2023-05-18T19:27:41.487261', 0, "용호", '2023-05-18T19:27:41.487261', 0);
+insert into feed (comment_count, comment_total_count, content, created_date, like_count, member_id, modified_date, view_count) values (0, 0, "희희희주", '2023-05-18T19:27:41.487261', 0, "희주", '2023-05-18T19:27:41.487261', 0);
+insert into feed (comment_count, comment_total_count, content, created_date, like_count, member_id, modified_date, view_count) values (0, 0, "수수수빈", '2023-05-18T19:27:41.487261', 0, "수빈", '2023-05-18T19:27:41.487261', 0);
