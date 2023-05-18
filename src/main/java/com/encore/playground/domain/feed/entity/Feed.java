@@ -3,6 +3,8 @@ package com.encore.playground.domain.feed.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -19,11 +21,14 @@ public class Feed {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long feedNo; // 글번호
+    private long id; // 글번호
     @Column(nullable = false, length = 20)
-    private String userid; // 작성자
+    private String memberId; // 작성자
+    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime uploadTime; // 작성일자
+    private LocalDateTime createdDate; // 작성일자
+    @LastModifiedDate
+    private LocalDateTime modifiedDate; // 수정일자
     @Column(nullable = false)
     @ColumnDefault("0")
     private int likeCount; // 좋아요 수
@@ -32,8 +37,10 @@ public class Feed {
     private int commentCount; // 댓글 수
     @Column(nullable = false)
     @ColumnDefault("0")
+    private int commentTotalCount; // 댓글이 저장된 횟수. 댓글 번호를 지정하기 위하여 사용
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private int viewCount; // 조회 수
     @Column(nullable = false, length = 1000)
-    private String article; // 글 내용
-
+    private String content; // 글 내용
 }
