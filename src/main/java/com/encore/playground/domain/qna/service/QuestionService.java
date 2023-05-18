@@ -1,6 +1,9 @@
 package com.encore.playground.domain.qna.service;
 
+import com.encore.playground.domain.qna.dto.AnswerDto;
 import com.encore.playground.domain.qna.dto.QuestionDto;
+import com.encore.playground.domain.qna.entity.Answer;
+import com.encore.playground.domain.qna.repository.AnswerRepository;
 import com.encore.playground.domain.qna.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final AnswerService answerService;
 
     // question CRUD
 
@@ -30,10 +35,26 @@ public class QuestionService {
      * qna 게시물을 조회한다.
      * @param questionDto
      * @return QuestionDto
+     *
+     * 조회하고자 하는 question객체의 id값을 가져와서
+     * 해당 id를 가지고 있는 answer객체를 반환하고
+     * 이를 List에 담아서 questionDto에 담는다.
      */
+
+
     public QuestionDto readQuestion(QuestionDto questionDto) {
         Long id = questionDto.getId();
-        return new QuestionDto(questionRepository.findById(id).get());
+        QuestionDto readQuestionDto = new QuestionDto(questionRepository.findById(id).get());
+        List<AnswerDto> answerDtoList = answerRepository.findByQuestionId(id).stream().map(AnswerDto::new).toList();
+        QuestionDto newQuestionDto = QuestionDto.builder()
+                .id(id)
+                .title(readQuestionDto.getTitle())
+                .author(readQuestionDto.getAuthor())
+                .content(readQuestionDto.getContent())
+                .createdDate(readQuestionDto.getCreatedDate())
+                .answerList(answerDtoList.toString())
+                .build();
+        return newQuestionDto;
     }
 
     /**

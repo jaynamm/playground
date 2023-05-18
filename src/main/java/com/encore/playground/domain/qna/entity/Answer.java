@@ -1,36 +1,32 @@
 package com.encore.playground.domain.qna.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 @Entity
-@Table(name="question")
+@Table(name="answer")
 
-public class Question {
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private String author;
+
     @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private String author;
+
     @Column(nullable = false)
     @CreatedDate
     private LocalDateTime createdDate;
-    private String answerList;
-
+    @Column(nullable = false)
+    private Long questionId;
 }
-

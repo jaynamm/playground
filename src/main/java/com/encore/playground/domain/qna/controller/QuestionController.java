@@ -19,7 +19,7 @@ public class QuestionController {
         return questionService.questionList();
     }
 
-    @GetMapping("/question/view")
+    @PostMapping("/question/view")
     public QuestionDto questionRead(@RequestBody QuestionDto questionDto) {
         return questionService.readQuestion(questionDto);
     }

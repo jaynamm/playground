@@ -1,5 +1,7 @@
 package com.encore.playground.domain.qna.dto;
 
+//import com.encore.playground.domain.qna.entity.Answer;
+import com.encore.playground.domain.qna.entity.Answer;
 import com.encore.playground.domain.qna.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,6 +22,7 @@ public class QuestionDto {
     private String author;
     private String content;
     private LocalDateTime createdDate;
+    private String answerList;
 
 
     /**
@@ -31,6 +35,7 @@ public class QuestionDto {
         this.author = question.getAuthor();
         this.content = question.getContent();
         this.createdDate = question.getCreatedDate();
+        this.answerList = question.getAnswerList();
     }
 
     /**
@@ -43,6 +48,7 @@ public class QuestionDto {
                 .author(author)
                 .content(content)
                 .createdDate(createdDate)
+                .answerList(answerList)
                 .build();
     }
 

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -21,10 +20,12 @@ public class NoticeController {
         return noticeService.noticeList();
     }
 
-    @GetMapping("/notice/view")
-    public NoticeDto noticeRead(@RequestBody NoticeDto noticeDto) {
-        return noticeService.readNotice(noticeDto);
+    @GetMapping("/notice/view/{id}")
+    public NoticeDto noticeRead(@PathVariable Long id) {
+        return noticeService.readNotice(id);
     }
+
+
 
     @PostMapping("/notice/write")
     public List<NoticeDto> noticeWrite(@RequestBody NoticeDto noticeDto) {

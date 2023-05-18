@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -20,15 +22,19 @@ import java.time.LocalDateTime;
 public class Notice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long noticeId;
+    private Long id;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private String author;
+    private String memberId;
     @Column(nullable = false)
-    private String contents;
+    private String content;
     @Column(nullable = false)
-    private LocalDateTime uploadTime;
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @Column(nullable = false)
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
     @Column(nullable = false)
     @ColumnDefault("0")
     private int viewCount;
