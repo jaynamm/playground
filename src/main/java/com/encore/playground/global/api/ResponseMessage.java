@@ -9,6 +9,10 @@ public class ResponseMessage {
     public static final String REGISTER_USER = "회원 가입 성공";
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String UNREGISTER_USER = "회원 탈퇴 성공";
+    public static final String QNA_WRITE_SUCCESS = "질문 등록 성공";
+    public static final String QNA_VIEW_SUCCESS = "질문 가져오기 성공";
+    public static final String QNA_MODIFY = "질문 수정 성공";
+    public static final String QNA_DELETE = "질문 삭제 성공";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
 }

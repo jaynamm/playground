@@ -1,19 +1,22 @@
 package com.encore.playground.domain.qna.service;
 
 import com.encore.playground.domain.qna.dto.QuestionDto;
+import com.encore.playground.domain.qna.entity.Question;
 import com.encore.playground.domain.qna.repository.QuestionRepository;
+import com.encore.playground.global.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-
     // question CRUD
 
     /**
@@ -28,12 +31,17 @@ public class QuestionService {
 
     /**
      * qna 게시물을 조회한다.
-     * @param questionDto
+     * @param questionId
      * @return QuestionDto
      */
-    public String readQuestion(QuestionDto questionDto) {
-        Long id = questionDto.getId();
-        return new QuestionDto(questionRepository.findById(id).get()).toString();
+    public QuestionDto readQuestion(Long questionId) {
+        Optional<Question> questionDto = this.questionRepository.findById(questionId);
+
+        if (questionDto.isPresent()) {
+            return new QuestionDto(questionDto.get());
+        } else {
+            throw new DataNotFoundException("question not found");
+        }
     }
 
     /**
@@ -44,7 +52,7 @@ public class QuestionService {
     public List<QuestionDto> writeQuestion(QuestionDto questionDto) {
         questionRepository.save(QuestionDto.builder()
                 .title(questionDto.getTitle())
-                .author(questionDto.getAuthor())
+                .memberId(questionDto.getMemberId())
                 .content(questionDto.getContent())
                 .createdDate(LocalDateTime.now())
                 .build().toEntity()
@@ -61,7 +69,7 @@ public class QuestionService {
     public List<QuestionDto> modifyQuestion(QuestionDto newQuestionDto) {
         QuestionDto questionDto = new QuestionDto(questionRepository.findById(newQuestionDto.getId()).get());
         questionDto.setTitle(newQuestionDto.getTitle());
-        questionDto.setAuthor(newQuestionDto.getAuthor());
+        questionDto.setMemberId(newQuestionDto.getMemberId());
         questionRepository.save(questionDto.toEntity());
         return questionList();
     }
