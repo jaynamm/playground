@@ -1,9 +1,9 @@
 package com.encore.playground.domain.notice.service;
 
 import com.encore.playground.domain.notice.dto.NoticeDto;
-import com.encore.playground.domain.notice.entity.Notice;
 import com.encore.playground.domain.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class NoticeService {
      * @return List<NoticeDto>
      */
     public List<NoticeDto> noticeList() {
-            List<NoticeDto> noticeDtoList = noticeRepository.findAll().stream().map(NoticeDto::new).toList();
+            List<NoticeDto> noticeDtoList = noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream().map(NoticeDto::new).toList();
             return noticeDtoList;
     }
 
@@ -46,9 +46,9 @@ public class NoticeService {
     public List<NoticeDto> writeNotice(NoticeDto noticeDto) {
         noticeRepository.save(NoticeDto.builder()
                 .title(noticeDto.getTitle())
-                .author(noticeDto.getAuthor())
-                .contents(noticeDto.getContents())
-                .uploadTime(LocalDateTime.now())
+                .memberId(noticeDto.getMemberId())
+                .content(noticeDto.getContent())
+                .createdDate(LocalDateTime.now())
                 .viewCount(0)
                 .build().toEntity()
         );
@@ -62,9 +62,9 @@ public class NoticeService {
      */
 
     public List<NoticeDto> modifyNotice(NoticeDto newNoticeDto) {
-        NoticeDto noticeDto = new NoticeDto(noticeRepository.findById(newNoticeDto.getNoticeId()).get());
+        NoticeDto noticeDto = new NoticeDto(noticeRepository.findById(newNoticeDto.getId()).get());
         noticeDto.setTitle(newNoticeDto.getTitle());
-        noticeDto.setContents(newNoticeDto.getContents());
+        noticeDto.setContent(newNoticeDto.getContent());
         noticeRepository.save(noticeDto.toEntity());
         return noticeList();
 
@@ -77,7 +77,7 @@ public class NoticeService {
      */
 
     public List<NoticeDto> deleteNotice(NoticeDto noticeDto) {
-        noticeRepository.deleteById(noticeDto.getNoticeId());
+        noticeRepository.deleteById(noticeDto.getId());
         return noticeList();
     }
 
