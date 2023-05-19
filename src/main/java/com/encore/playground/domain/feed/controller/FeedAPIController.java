@@ -3,6 +3,7 @@ package com.encore.playground.domain.feed.controller;
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class FeedAPIController {
      * 현재 DB에 저장된 모든 피드를 반환하는 메소드
      * @return JSON 형태의 피드 리스트
      */
-    @RequestMapping(value = "/getallfeeds")
+    @RequestMapping(value = "/list")
     public List<FeedDto> feedMain() {
         return feedService.feedPage();
     }
@@ -31,8 +32,8 @@ public class FeedAPIController {
      * id: 수정할 피드 글 번호
      * @return JSON 형태의 피드 글 1개
      */
-    @RequestMapping(value = "/getfeed")
-    public FeedDto getFeed(@RequestBody FeedDto feedDto) {
+    @RequestMapping(value = "/view/{id}")
+    public FeedDto getFeed(@PathVariable Long id, @RequestBody FeedDto feedDto) {
         return feedService.getFeed(feedDto);
     }
 

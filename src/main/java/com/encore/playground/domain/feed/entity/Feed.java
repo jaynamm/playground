@@ -22,25 +22,33 @@ public class Feed {
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id; // 글번호
+
     @Column(nullable = false, length = 20)
     private String memberId; // 작성자
+
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdDate; // 작성일자
+
     @LastModifiedDate
     private LocalDateTime modifiedDate; // 수정일자
+
     @Column(nullable = false)
     @ColumnDefault("0")
     private int likeCount; // 좋아요 수
+
     @Column(nullable = false)
     @ColumnDefault("0")
     private int commentCount; // 댓글 수
+
     @Column(nullable = false)
     @ColumnDefault("0")
     private int commentTotalCount; // 댓글이 저장된 횟수. 댓글 번호를 지정하기 위하여 사용
+
     @Column(nullable = false)
     @ColumnDefault("0")
     private int viewCount; // 조회 수
+
     @Column(nullable = false, length = 1000)
     private String content; // 글 내용
 }
