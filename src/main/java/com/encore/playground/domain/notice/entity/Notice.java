@@ -20,15 +20,17 @@ import java.time.LocalDateTime;
 public class Notice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long noticeId;
+    private Long id;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private String author;
+    private String memberId;
     @Column(nullable = false)
-    private String contents;
+    private String content;
     @Column(nullable = false)
-    private LocalDateTime uploadTime;
+    private LocalDateTime createdDate;
+    @Column
+    private LocalDateTime modifiedDate;
     @Column(nullable = false)
     @ColumnDefault("0")
     private int viewCount;
