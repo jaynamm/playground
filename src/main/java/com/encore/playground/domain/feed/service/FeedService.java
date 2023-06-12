@@ -23,7 +23,7 @@ public class FeedService {
      * @return 피드 피드 객체 List
      */
     public List<FeedDto> feedPage() {
-        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // 추후 페이징 처리(검색 갯수 제한) 필요
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
         List<FeedDto> feedDtoList = feedList.stream().map(FeedDto::new).toList();
         return feedDtoList;
     }
