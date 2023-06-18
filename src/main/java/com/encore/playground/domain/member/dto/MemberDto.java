@@ -19,6 +19,7 @@ public class MemberDto {
     private String curriculum;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private String role;
 
 
     /**
@@ -36,6 +37,7 @@ public class MemberDto {
         this.curriculum = member.getCurriculum();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
+//        this.role = member.getRole();
     }
 
     public Member toMember(){
@@ -49,6 +51,7 @@ public class MemberDto {
                 .curriculum(curriculum)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
+//                .role(role)
                 .build();
     }
 }

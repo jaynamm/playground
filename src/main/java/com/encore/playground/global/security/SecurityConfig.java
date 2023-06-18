@@ -19,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //기본적인 보안을 활성화
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -55,11 +55,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //암호화에 필요한 PasswordEncoder Bean 등록
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // authenticationManager Bean 등록
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

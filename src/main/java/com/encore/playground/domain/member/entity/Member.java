@@ -4,6 +4,7 @@ import com.encore.playground.domain.qna.entity.Answer;
 import com.encore.playground.domain.qna.entity.Question;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,4 +49,8 @@ public class Member {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedDate;
+
+//    @Column(nullable = false)
+//    @ColumnDefault("user")
+//    private String role;
 }
