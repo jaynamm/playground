@@ -21,6 +21,10 @@ public class AnswerService {
         return answerRepository.findAnswerByQuestion_Id(questionId).get().stream().map(AnswerDto::new).toList();
     }
 
+    public List<AnswerDto> getAnswerListByMember(String memberId) {
+        return answerRepository.findByMemberId(memberId).get().stream().map(AnswerDto::new).toList();
+    }
+
     public List<AnswerDto> create(AnswerDto answerDTO, Long questionId) {
         QuestionDto questionDto = questionService.readQuestion(questionId);
         answerDTO = AnswerDto.builder()
