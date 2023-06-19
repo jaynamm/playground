@@ -2,6 +2,7 @@ package com.encore.playground.domain.member.entity;
 
 import com.encore.playground.domain.qna.entity.Answer;
 import com.encore.playground.domain.qna.entity.Question;
+import com.encore.playground.global.security.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -50,7 +51,8 @@ public class Member {
     @Column(nullable = false)
     private LocalDateTime modifiedDate;
 
-//    @Column(nullable = false)
-//    @ColumnDefault("user")
-//    private String role;
+    //member의 권한 컬럼 추가 -> 기본값으로 USER
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role = UserRole.USER;
 }

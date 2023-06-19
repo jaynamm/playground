@@ -30,6 +30,7 @@ public class TokenService {
         String userid = member.getUsername();
         String roles = member.getAuthorities().stream().toList().get(0).toString();
         TokenDto tokenDto = JwtTokenProvider.generateToken(userid, roles);
+        // token에서 Refresh token의 정보를 refreshToken DTO로 만들어서 saveRefreshToken에 넣어준다.
         RefreshTokenDto refreshTokenDto = RefreshTokenDto
                 .builder()
                 .refreshToken(tokenDto.getRefreshToken())
@@ -39,7 +40,7 @@ public class TokenService {
         return tokenDto;
     }
 
-    // refreshToken을 DB에 저장하기
+    // refreshToken을 DB에 저장한다.
     public void saveRefreshToken(RefreshTokenDto refreshTokenDto) {
         refreshRepository.save(refreshTokenDto.toEntity());
 
