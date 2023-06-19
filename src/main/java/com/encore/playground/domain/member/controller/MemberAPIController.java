@@ -2,20 +2,15 @@ package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberSearchDto;
-import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.domain.member.service.MemberService;
-import com.encore.playground.global.api.DefaultResponse;
-import com.encore.playground.global.api.ResponseMessage;
-import com.encore.playground.global.api.StatusCode;
-import com.encore.playground.global.dto.TokenDto;
+import com.encore.playground.global.dto.AccessTokenDto;
+import com.encore.playground.global.dto.RefreshTokenDto;
 import com.encore.playground.global.service.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,11 +54,12 @@ public class MemberAPIController {
         }
 
         // 로그인해서 아이디 확인하고 패스워드 맞는지 확인 후에 토큰 생성
-        TokenDto tokenDto = tokenService.generateToken(userid);
+        AccessTokenDto accessTokenDto = tokenService.generateAccessToken(userid);
+        RefreshTokenDto refreshTokenDto = tokenService.generateRefreshToken(userid);
 
 
-        String accessToken = tokenDto.getAccessToken();
-        String refreshToken = tokenDto.getRefreshToken();
+        String accessToken = accessTokenDto.getAccessToken();
+        String refreshToken = refreshTokenDto.getRefreshToken();
 
 //        String token = String.valueOf(tokenService.generateToken(userid));
 

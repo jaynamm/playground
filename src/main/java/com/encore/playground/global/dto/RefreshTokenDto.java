@@ -15,6 +15,15 @@ public class RefreshTokenDto {
     private String refreshToken;
     private String memberId;
 
+    /**
+     * entity -> dto
+     * @param refreshToken
+     */
+     public RefreshTokenDto(RefreshToken refreshToken) {
+         this.id = refreshToken.getId();
+         this.refreshToken = refreshToken.getRefreshToken();
+         this.memberId = refreshToken.getMemberId();
+     }
 
     /**
      * dto -> entity

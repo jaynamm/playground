@@ -23,10 +23,13 @@ public class JwtAuthenticationFilter extends GenericFilter {
 
         System.out.println("[JwtAuthenticationFilter] ::: resolveToken() - token = " + token);
 
-//        if (token != null && jwtTokenProvider.validateToken(token)) {
-//            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            System.out.println("[JwtAuthenticationFilter] ::: 토큰이 유효합니다.");
+        if (token != null && jwtTokenProvider.validateAccessToken(token)) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("[JwtAuthenticationFilter] ::: 토큰이 유효합니다.");
+        } //else if (!jwtTokenProvider.validateAccessToken(token)) {
+//            // refresh token을 검증하고 새 access token 재발급
+//            jwtTokenProvider.validateRefreshToken();
 //        }
         chain.doFilter(request, response);
     }

@@ -1,7 +1,8 @@
 package com.encore.playground.global.jwt;
 
 import com.encore.playground.domain.member.service.MemberSecurityService;
-import com.encore.playground.global.dto.TokenDto;
+import com.encore.playground.global.dto.AccessTokenDto;
+import com.encore.playground.global.dto.RefreshTokenDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -35,19 +36,18 @@ public class JwtTokenProvider {
     private static final String TOKEN_HEADER_NAME = "Authorization";
 
     /**
-     * JWT 토큰 생성 메서드
+     * Access Token 생성 메서드
      * @param userid
      * @param roles
-     * @return JWT Token Dto
+     * @return AccessTokenDto
      */
-    public static TokenDto generateToken(String userid, String roles) {
+
+    public static AccessTokenDto generateAccessToken(String userid, String roles) {
         Date now = new Date();
         Date accessTokenExpiredDate = new Date(now.getTime() + JWT_ACCESS_EXPIRATION_MS);
-        Date refreshTokenExpiredDate = new Date(now.getTime() + JWT_REFRESH_EXPIRATION_MS);
         // 사용자 정보 설정 (JWT payload)
         Claims claims = Jwts.claims().setSubject(userid);
-        claims.put("roles", roles); // 정보는 key:value 형태로 저장된다.
-
+        claims.put("roles", roles);  // 정보는 key:value 형태로 저장된다.
         String accessToken = Jwts.builder()
                 // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
                 .setClaims(claims) // 사용자 정보 저장
@@ -55,6 +55,23 @@ public class JwtTokenProvider {
                 .setExpiration(accessTokenExpiredDate) // 토큰 만료시간 - 생성으로부터 30분
                 .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_SECRET) // 암호화 알고리즘 설정
                 .compact(); // 생성 완료
+
+        return AccessTokenDto.builder().accessToken(accessToken).key(userid).build();
+    }
+
+    /**
+     * Refresh Token 생성 메서드
+     * @param userid
+     * @param roles
+     * @return RefreshTokenDto
+     */
+
+
+    public static RefreshTokenDto generateRefreshToken(String userid, String roles) {
+        Date now = new Date();
+        Date refreshTokenExpiredDate = new Date(now.getTime() + JWT_REFRESH_EXPIRATION_MS);
+        Claims claims = Jwts.claims().setSubject(userid);
+        claims.put("roles", roles);
 
         String refreshToken = Jwts.builder()
                 // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
@@ -64,8 +81,37 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, JWT_REFRESH_TOKEN_SECRET) // 암호화 알고리즘 생성
                 .compact(); // 생성 완료
 
-        return TokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).key(userid).build();
+        return RefreshTokenDto.builder().refreshToken(refreshToken).memberId(userid).build();
+
     }
+
+
+//    public static AccessTokenDto generateToken(String userid, String roles) {
+//        Date now = new Date();
+//        Date accessTokenExpiredDate = new Date(now.getTime() + JWT_ACCESS_EXPIRATION_MS);
+//        Date refreshTokenExpiredDate = new Date(now.getTime() + JWT_REFRESH_EXPIRATION_MS);
+//        // 사용자 정보 설정 (JWT payload)
+//        Claims claims = Jwts.claims().setSubject(userid);
+//        claims.put("roles", roles); // 정보는 key:value 형태로 저장된다.
+//
+//        String accessToken = Jwts.builder()
+//                // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
+//                .setClaims(claims) // 사용자 정보 저장
+//                .setIssuedAt(now) // 토큰 생성 시간
+//                .setExpiration(accessTokenExpiredDate) // 토큰 만료시간 - 생성으로부터 30분
+//                .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_SECRET) // 암호화 알고리즘 설정
+//                .compact(); // 생성 완료
+//
+//        String refreshToken = Jwts.builder()
+//                // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
+//                .setClaims(claims) // 사용자 정보 저장
+//                .setIssuedAt(now) // 토큰 생성 시간
+//                .setExpiration(refreshTokenExpiredDate) // 토큰 만료시간 - 생성으로부터 14일
+//                .signWith(SignatureAlgorithm.HS256, JWT_REFRESH_TOKEN_SECRET) // 암호화 알고리즘 생성
+//                .compact(); // 생성 완료
+//
+//        return AccessTokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).key(userid).build();
+//    }
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
@@ -92,13 +138,22 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // 토큰의 유효성 + 만료일자 확인
-//    public boolean validateToken(String jwtToken) {
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(jwtToken);
-//            return !claims.getBody().getExpiration().before(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
+     //토큰의 유효성 + 만료일자 확인
+    public boolean validateAccessToken(String jwtToken) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(jwtToken);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+//    public boolean validateRefreshToken() {
+//        // refresh token 검증 // repository를 거쳐야 하기 때문에 TokenService에 작성
+//
+//    }
+
+//    public static AccessTokenDto regenerateAccessToken(){
+//
 //    }
 }
