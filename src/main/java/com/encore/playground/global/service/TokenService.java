@@ -6,6 +6,8 @@ import com.encore.playground.global.dto.AccessTokenDto;
 import com.encore.playground.global.jwt.JwtTokenProvider;
 import com.encore.playground.global.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -53,34 +55,16 @@ public class TokenService {
         return refreshTokenDto;
     }
 
-//    public AccessTokenDto generateToken(String loginId) {
-//        UserDetails member = memberSecurityService.loadUserByUsername(loginId);
-//
-//        // 토큰 생성할 때 유저 아이디와 권한을 넣어준다.
-//        String userid = member.getUsername();
-//        String roles = member.getAuthorities().stream().toList().get(0).toString();
-//        AccessTokenDto accessTokenDto = JwtTokenProvider.generateToken(userid, roles);
-//        // token에서 Refresh token의 정보를 refreshToken DTO로 만들어서 saveRefreshToken에 넣어준다.
-//        RefreshTokenDto refreshTokenDto = RefreshTokenDto
-//                .builder()
-//                .refreshToken(accessTokenDto.getRefreshToken())
-//                .memberId(accessTokenDto.getKey())
-//                .build();
-//        saveRefreshToken(refreshTokenDto);
-//        return accessTokenDto;
-//    }
 
     // refreshToken을 DB에 저장한다.
     public void saveRefreshToken(RefreshTokenDto refreshTokenDto) {
         refreshTokenRepository.save(refreshTokenDto.toEntity());
-
     }
 
+    // refreshToken이 유효한 지 검증
+    // refreshToken repository의 값을 불러와서 검증해야 함
 
     public boolean validateRefreshToken(RefreshTokenDto refreshTokenDto) {
-        // refreshToken이 유효한 지 검증
-        // refreshToken repository의 값을 불러와서 검증
-
         RefreshTokenDto storedRefreshTokenDto = new RefreshTokenDto(refreshTokenRepository.findById(refreshTokenDto.getId()).get());
         if (refreshTokenDto.getRefreshToken().equals(storedRefreshTokenDto.getRefreshToken())) {
 //            JwtTokenProvider.regenerateAccessToken();

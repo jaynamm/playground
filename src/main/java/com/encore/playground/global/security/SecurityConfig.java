@@ -2,6 +2,7 @@ package com.encore.playground.global.security;
 
 import com.encore.playground.global.jwt.JwtAuthenticationFilter;
 import com.encore.playground.global.jwt.JwtTokenProvider;
+import com.encore.playground.global.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenService tokenService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

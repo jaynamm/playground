@@ -30,7 +30,9 @@ public class JwtTokenProvider {
     private static final String JWT_REFRESH_TOKEN_SECRET = "secretKey2";
     // 토큰 유효 시간을 설정해준다.
     // Access Token의 유효 시간 -> 30분으로 설정한다.
-    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
+    // access token 만료 테스트로 5초로 설정
+    private static final long JWT_ACCESS_EXPIRATION_MS = 10 * 1000L;
+//    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
     // Refresh Token의 유효 시간 -> 14일로 설정한다.
     private static final long JWT_REFRESH_EXPIRATION_MS = 14 * 24 * 60 * 60 * 1000L;
     private static final String TOKEN_HEADER_NAME = "Authorization";
@@ -86,32 +88,6 @@ public class JwtTokenProvider {
     }
 
 
-//    public static AccessTokenDto generateToken(String userid, String roles) {
-//        Date now = new Date();
-//        Date accessTokenExpiredDate = new Date(now.getTime() + JWT_ACCESS_EXPIRATION_MS);
-//        Date refreshTokenExpiredDate = new Date(now.getTime() + JWT_REFRESH_EXPIRATION_MS);
-//        // 사용자 정보 설정 (JWT payload)
-//        Claims claims = Jwts.claims().setSubject(userid);
-//        claims.put("roles", roles); // 정보는 key:value 형태로 저장된다.
-//
-//        String accessToken = Jwts.builder()
-//                // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
-//                .setClaims(claims) // 사용자 정보 저장
-//                .setIssuedAt(now) // 토큰 생성 시간
-//                .setExpiration(accessTokenExpiredDate) // 토큰 만료시간 - 생성으로부터 30분
-//                .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_SECRET) // 암호화 알고리즘 설정
-//                .compact(); // 생성 완료
-//
-//        String refreshToken = Jwts.builder()
-//                // .setSubject(userid) // 토큰 제목 -> Claim 으로 대체
-//                .setClaims(claims) // 사용자 정보 저장
-//                .setIssuedAt(now) // 토큰 생성 시간
-//                .setExpiration(refreshTokenExpiredDate) // 토큰 만료시간 - 생성으로부터 14일
-//                .signWith(SignatureAlgorithm.HS256, JWT_REFRESH_TOKEN_SECRET) // 암호화 알고리즘 생성
-//                .compact(); // 생성 완료
-//
-//        return AccessTokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).key(userid).build();
-//    }
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
