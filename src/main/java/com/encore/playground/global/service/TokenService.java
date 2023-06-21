@@ -3,8 +3,10 @@ package com.encore.playground.global.service;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.global.dto.RefreshTokenDto;
 import com.encore.playground.global.dto.AccessTokenDto;
+import com.encore.playground.global.dto.RefreshTokenValidateDto;
 import com.encore.playground.global.jwt.JwtTokenProvider;
 import com.encore.playground.global.repository.RefreshTokenRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +66,23 @@ public class TokenService {
     // refreshToken이 유효한 지 검증
     // refreshToken repository의 값을 불러와서 검증해야 함
 
-    public boolean validateRefreshToken(RefreshTokenDto refreshTokenDto) {
-        RefreshTokenDto storedRefreshTokenDto = new RefreshTokenDto(refreshTokenRepository.findById(refreshTokenDto.getId()).get());
-        if (refreshTokenDto.getRefreshToken().equals(storedRefreshTokenDto.getRefreshToken())) {
-//            JwtTokenProvider.regenerateAccessToken();
-            return true;
+    public boolean validateRefreshToken(RefreshTokenValidateDto refreshTokenDto) {
+        if (JwtTokenProvider.validateRefreshToken(refreshTokenDto.getRefreshToken())) {
+            System.out.println(refreshTokenDto.getRefreshToken());
+            System.out.println(refreshTokenRepository.findByRefreshToken(refreshTokenDto.getRefreshToken()).get().getRefreshToken());
+            if (refreshTokenDto.getRefreshToken().equals(refreshTokenRepository.findByRefreshToken(refreshTokenDto.getRefreshToken()).get().getRefreshToken())) {
+                generateAccessToken(refreshTokenDto.getMemberId());
+                System.out.println("동일한 refresh token이 존재합니다.");
+                System.out.println(refreshTokenDto);
+                return true;
+            } else {
+                System.out.println("동일한 refresh token이 존재하지 않습니다.");
+                // 로그인이 풀리도록 처리
+                return false;
+            }
         } else {
+            System.out.println("refresh token이 만료됐습니다.");
+            // 로그인이 풀리도록 처리
             return false;
         }
     }

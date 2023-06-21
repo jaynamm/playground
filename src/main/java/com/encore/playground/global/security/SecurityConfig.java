@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers(
                         new AntPathRequestMatcher("/**")).permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, tokenService),
                         UsernamePasswordAuthenticationFilter.class)
 
                 // 로그인 구현

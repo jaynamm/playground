@@ -34,7 +34,8 @@ public class JwtTokenProvider {
     private static final long JWT_ACCESS_EXPIRATION_MS = 10 * 1000L;
 //    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
     // Refresh Token의 유효 시간 -> 14일로 설정한다.
-    private static final long JWT_REFRESH_EXPIRATION_MS = 14 * 24 * 60 * 60 * 1000L;
+//    private static final long JWT_REFRESH_EXPIRATION_MS = 14 * 24 * 60 * 60 * 1000L;
+    private static final long JWT_REFRESH_EXPIRATION_MS = 30 * 1000L;
     private static final String TOKEN_HEADER_NAME = "Authorization";
 
     /**
@@ -115,21 +116,23 @@ public class JwtTokenProvider {
     }
 
      //토큰의 유효성 + 만료일자 확인
-    public boolean validateAccessToken(String jwtToken) {
+    public boolean validateAccessToken(String accessToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(accessToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
     }
 
-//    public boolean validateRefreshToken() {
-//        // refresh token 검증 // repository를 거쳐야 하기 때문에 TokenService에 작성
-//
-//    }
+    public static boolean validateRefreshToken(String refreshToken) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_REFRESH_TOKEN_SECRET).parseClaimsJws(refreshToken);
+            return!claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+        // refresh token 검증 // repository를 거쳐야 하기 때문에 TokenService에 작성
+    }
 
-//    public static AccessTokenDto regenerateAccessToken(){
-//
-//    }
 }
