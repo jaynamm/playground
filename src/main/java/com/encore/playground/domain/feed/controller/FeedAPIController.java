@@ -27,6 +27,14 @@ public class FeedAPIController {
     }
 
     /**
+     * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드
+     */
+    @RequestMapping(value = "/list/{id}")
+    public List<FeedDto> getFeedListByMember(@PathVariable String id) {
+        return feedService.getFeedListByMember(id);
+    }
+
+    /**
      * 피드 글을 수정하기 위해 해당 글을 반환하는 메소드
      * @param feedDto 다음의 프로퍼티를 포함한 JSON 형태의 입력<br>
      * id: 수정할 피드 글 번호

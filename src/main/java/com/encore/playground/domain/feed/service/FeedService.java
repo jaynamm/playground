@@ -29,6 +29,17 @@ public class FeedService {
     }
 
     /**
+     * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드 (마이페이지에서 사용할 용도)
+     * @param id 사용자 memberId
+     * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
+     */
+    public List<FeedDto> getFeedListByMember(String id) {
+        List<Feed> feedList = feedRepository.findByMemberId(id).get();
+        List<FeedDto> feedDtoList = feedList.stream().map(FeedDto::new).toList();
+        return feedDtoList;
+    }
+
+    /**
      * 피드 글 하나를 반환하는 메소드
      * @param id: 글 번호
      * @return 피드 글 하나
