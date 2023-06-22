@@ -70,7 +70,7 @@ public class MemberAPIController {
         Map<String, String> loginRes = new HashMap<>();
         loginRes.put("userid", userid);
         loginRes.put("nickname", nickname);
-        loginRes.put("refreshToken", refreshToken);
+        loginRes.put("refresh-token", refreshToken);
 
         // 헤더에 access 토큰을 저장한다.
         HttpHeaders headers = new HttpHeaders();

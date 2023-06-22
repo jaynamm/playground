@@ -31,11 +31,11 @@ public class JwtTokenProvider {
     // 토큰 유효 시간을 설정해준다.
     // Access Token의 유효 시간 -> 30분으로 설정한다.
     // access token 만료 테스트로 5초로 설정
-    private static final long JWT_ACCESS_EXPIRATION_MS = 10 * 1000L;
+    private static final long JWT_ACCESS_EXPIRATION_MS = 20 * 1000L;
 //    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
-    // Refresh Token의 유효 시간 -> 14일로 설정한다.
-//    private static final long JWT_REFRESH_EXPIRATION_MS = 14 * 24 * 60 * 60 * 1000L;
-    private static final long JWT_REFRESH_EXPIRATION_MS = 30 * 1000L;
+    // Refresh Token의 유효 시간 -> 7일로 설정한다.
+//    private static final long JWT_REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000L;
+    private static final long JWT_REFRESH_EXPIRATION_MS = 40 * 1000L;
     private static final String TOKEN_HEADER_NAME = "Authorization";
 
     /**
@@ -121,6 +121,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(accessToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
+            // 로그인이 풀리도록 처리 - 클라이언트에 토큰 삭제 요청
             return false;
         }
     }

@@ -26,15 +26,22 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // refresh token이 있는지를 검증한다.
-        if (httpRequest.getHeader("refreshToken") != null){
+        if (httpRequest.getHeader("refresh-token") != null){
             System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
             // refresh token을 받아와서 검증한다.
             System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
-            tokenService.validateRefreshToken(getRefreshToken(httpRequest));
-            // refresh token이 유효한 경우, 새로운 access token을 발급해서 보내준다.
-            // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
-
+            // refresh token이 유효한 경우,
+            if (tokenService.validateRefreshToken(getRefreshToken(httpRequest))) {
+                // 새로운 access token을 발급해서 보내준다.
+                String newAccessToken = tokenService.generateAccessToken(getRefreshToken(httpRequest).getMemberId()).getAccessToken();
+                httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
+                httpResponse.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
+                System.out.println("refresh token이 유효하지 않습니다.");
+            }
         }
+
 
         // Header 부분에서 JWT 정보를 가져온다.
         String token = jwtTokenProvider.resolveToken(httpRequest);
@@ -57,9 +64,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
     }
 
     private RefreshTokenValidateDto getRefreshToken(HttpServletRequest request) {
-        String refreshToken = request.getHeader("RefreshToken");
-        String userid = request.getHeader("Userid");
-        System.out.println(refreshToken + userid);
+        String refreshToken = request.getHeader("refresh-token");
+        String userid = request.getHeader("userid");
         return new RefreshTokenValidateDto(refreshToken, userid);
     }
 

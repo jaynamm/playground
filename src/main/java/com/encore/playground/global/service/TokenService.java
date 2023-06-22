@@ -71,18 +71,18 @@ public class TokenService {
             System.out.println(refreshTokenDto.getRefreshToken());
             System.out.println(refreshTokenRepository.findByRefreshToken(refreshTokenDto.getRefreshToken()).get().getRefreshToken());
             if (refreshTokenDto.getRefreshToken().equals(refreshTokenRepository.findByRefreshToken(refreshTokenDto.getRefreshToken()).get().getRefreshToken())) {
-                generateAccessToken(refreshTokenDto.getMemberId());
                 System.out.println("동일한 refresh token이 존재합니다.");
                 System.out.println(refreshTokenDto);
+//                generateAccessToken(refreshTokenDto.getMemberId());
                 return true;
             } else {
                 System.out.println("동일한 refresh token이 존재하지 않습니다.");
-                // 로그인이 풀리도록 처리
+                // 로그인이 풀리도록 처리 - 클라이언트에 토큰 삭제 요청
                 return false;
             }
         } else {
             System.out.println("refresh token이 만료됐습니다.");
-            // 로그인이 풀리도록 처리
+            // 로그인이 풀리도록 처리 - 클라이언트에 토큰 삭제 요청
             return false;
         }
     }
