@@ -61,7 +61,6 @@ public class MemberAPIController {
         String accessToken = accessTokenDto.getAccessToken();
         String refreshToken = refreshTokenDto.getRefreshToken();
 
-//        String token = String.valueOf(tokenService.generateToken(userid));
 
         // TODO : 로그인할 때 보내줘야할 데이터 - 아이디, 닉네임, 이메일, 토큰(헤더로 보내기 때문에 이후에 제외해도 될듯)
         // header에 access token을 넣어서 보내고 body에 refresh token을 넣어서 보낸다.

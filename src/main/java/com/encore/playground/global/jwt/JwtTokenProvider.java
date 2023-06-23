@@ -30,12 +30,9 @@ public class JwtTokenProvider {
     private static final String JWT_REFRESH_TOKEN_SECRET = "secretKey2";
     // 토큰 유효 시간을 설정해준다.
     // Access Token의 유효 시간 -> 30분으로 설정한다.
-    // access token 만료 테스트로 5초로 설정
-    private static final long JWT_ACCESS_EXPIRATION_MS = 20 * 1000L;
-//    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
+    private static final long JWT_ACCESS_EXPIRATION_MS = 30 * 60 * 1000L;
     // Refresh Token의 유효 시간 -> 7일로 설정한다.
-//    private static final long JWT_REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000L;
-    private static final long JWT_REFRESH_EXPIRATION_MS = 40 * 1000L;
+    private static final long JWT_REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000L;
     private static final String TOKEN_HEADER_NAME = "Authorization";
 
     /**

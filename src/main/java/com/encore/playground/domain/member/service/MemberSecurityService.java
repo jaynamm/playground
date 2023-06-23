@@ -40,10 +40,12 @@ public class MemberSecurityService implements UserDetailsService {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
-        if ("admin".equals(userid)) {
-            authorityList.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
-        } else {
+        if (member.getRole().getValue().equals("ROLE_USER")) {
             authorityList.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
+            System.out.println(member.getRole().getValue());
+        } else {
+            authorityList.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+            System.out.println(member.getRole().getValue());
         }
 
         return new User(member.getUserid(), member.getPassword(), authorityList);
