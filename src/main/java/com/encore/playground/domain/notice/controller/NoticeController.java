@@ -21,7 +21,7 @@ public class NoticeController {
         return noticeService.noticeList();
     }
 
-    @PostMapping("/notice/view/{id}")
+    @GetMapping("/notice/view/{id}")
     public NoticeDto noticeRead(@PathVariable Long id) {
         return noticeService.readNotice(id);
     }
