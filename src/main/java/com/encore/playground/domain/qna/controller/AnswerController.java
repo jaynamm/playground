@@ -43,8 +43,6 @@ public class AnswerController {
      */
     @PostMapping("/answer/create/{id}")
     private List<AnswerDto> createAnswer(@PathVariable Long id, @RequestBody AnswerDto answerDTO) {
-//    private void createAnswer(@PathVariable Long id, @RequestBody AnswerWriteDto answerDTO) {
-//        answerService.create(answerDTO, id);
         return answerService.create(answerDTO, id);
     }
 }

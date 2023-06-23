@@ -16,7 +16,6 @@ public class CommentListDto {
     private long id;
     private long feedId;
     private String memberId;
-//    private int commentNo;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private int likeCount;
@@ -26,7 +25,6 @@ public class CommentListDto {
         this.id = entity.getId();
         this.feedId = entity.getFeed().getId();
         this.memberId = entity.getMemberId();
-//        this.commentNo = entity.getCommentNo();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();

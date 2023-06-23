@@ -35,9 +35,6 @@ public class Comment {
     private Feed feed; // 피드 번호
     @Column(nullable = false)
     private String memberId; // 작성자
-//    @Column(nullable = false, name = "comment_no")
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private int commentNo; // 해당 피드에서의 댓글 번호
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdDate; // 댓글 작성시각
