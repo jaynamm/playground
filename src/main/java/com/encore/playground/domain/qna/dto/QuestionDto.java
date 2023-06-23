@@ -37,6 +37,7 @@ public class QuestionDto {
      */
     public Question toEntity() {
         return Question.builder()
+                .id(id)
                 .title(title)
                 .memberId(memberId)
                 .content(content)
