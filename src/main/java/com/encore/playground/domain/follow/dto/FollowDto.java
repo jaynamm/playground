@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 public class FollowDto {
     private Long id;
-    private Long fromMember;
-    private Long toMember;
+    private String fromMemberId;
+    private String toMemberId;
     private LocalDateTime followDate;
 
     /**
@@ -25,8 +25,8 @@ public class FollowDto {
     public Follow toEntity() {
         return Follow.builder()
               .id(id)
-              .fromMember(fromMember)
-              .toMember(toMember)
+              .fromMemberId(fromMemberId)
+              .toMemberId(toMemberId)
               .followDate(followDate)
               .build();
     }
@@ -37,8 +37,8 @@ public class FollowDto {
      */
     public FollowDto(Follow follow) {
         this.id = follow.getId();
-        this.fromMember = follow.getFromMember();
-        this.toMember = follow.getToMember();
+        this.fromMemberId = follow.getFromMemberId();
+        this.toMemberId = follow.getToMemberId();
         this.followDate = follow.getFollowDate();
     }
 
