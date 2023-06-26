@@ -12,3 +12,5 @@ insert into notice(title, content, created_date, modified_date, member_id) value
 insert into question(title, content, member_id, created_date) values ("공가 사용에 대해 질문이 있습니다.", "한번에 공가를 몇개까지 사용할 수 있나요? ", "남민우", 20230518091726);
 insert into question(title, content, member_id, created_date) values ("독산 캠퍼스 운영시간이 궁금합니다.", "몇시까지 운영하나요? ", "김희주", 20230519221726);
 insert into question(title, content, member_id, created_date) values ("도서 대출 관련 질문입니다.", "책 대여기간은 며칠인가요?", "유수빈", 20230519231726);
+
+INSERT INTO playground.member (id, created_date, curriculum, email, name, nickname, password, modified_date, role, userid) VALUES (1, '2023-05-17 16:54:04.593788', 'qwer', 'qwer@qwer', 'qwer', 'qwer', '$2a$10$9KexgHrV.lFGxIonm8Q7yuwvEfwMeoi2YSo.uYznryT1Kypoa/tMG', '2023-05-17 16:54:04.593788', 'USER', 'qwer');
