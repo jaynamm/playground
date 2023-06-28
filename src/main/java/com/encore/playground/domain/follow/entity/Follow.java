@@ -1,5 +1,6 @@
 package com.encore.playground.domain.follow.entity;
 
+import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,6 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name = "follow")
 @Getter
 @Builder
 @Entity
@@ -22,14 +22,12 @@ public class Follow {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_user_id")
-    @Column(nullable = false)
-    private String fromMemberId;
+    @JoinColumn(name = "from_member", nullable = false)
+    private Member fromMember;
 
     @ManyToOne
-    @JoinColumn(name = "member_user_id")
-    @Column(nullable = false)
-    private String toMemberId;
+    @JoinColumn(name = "to_member", nullable = false)
+    private Member toMember;
 
     @CreatedDate
     @Column(nullable = false)

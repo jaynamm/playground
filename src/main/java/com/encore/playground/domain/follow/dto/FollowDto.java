@@ -1,6 +1,7 @@
 package com.encore.playground.domain.follow.dto;
 
 import com.encore.playground.domain.follow.entity.Follow;
+import com.encore.playground.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class FollowDto {
     private Long id;
-    private String fromMemberId;
-    private String toMemberId;
+    private Member fromMember;
+    private Member toMember;
     private LocalDateTime followDate;
 
     /**
@@ -25,8 +26,8 @@ public class FollowDto {
     public Follow toEntity() {
         return Follow.builder()
               .id(id)
-              .fromMemberId(fromMemberId)
-              .toMemberId(toMemberId)
+              .fromMember(fromMember)
+              .toMember(toMember)
               .followDate(followDate)
               .build();
     }
@@ -37,8 +38,8 @@ public class FollowDto {
      */
     public FollowDto(Follow follow) {
         this.id = follow.getId();
-        this.fromMemberId = follow.getFromMemberId();
-        this.toMemberId = follow.getToMemberId();
+        this.fromMember = follow.getFromMember();
+        this.toMember = follow.getToMember();
         this.followDate = follow.getFollowDate();
     }
 

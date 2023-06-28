@@ -1,5 +1,6 @@
 package com.encore.playground.domain.follow.repository;
 
+import com.encore.playground.domain.follow.dto.FollowGetMemberIdDto;
 import com.encore.playground.domain.follow.entity.Follow;
 import org.springframework.data.jpa.repository.JpaRepository;
 
