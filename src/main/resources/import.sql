@@ -14,3 +14,8 @@ insert into question(title, content, member_id, created_date) values ("독산 �
 insert into question(title, content, member_id, created_date) values ("도서 대출 관련 질문입니다.", "책 대여기간은 며칠인가요?", "유수빈", 20230519231726);
 
 INSERT INTO playground.member (id, created_date, curriculum, email, name, nickname, password, modified_date, role, userid) VALUES (1, '2023-05-17 16:54:04.593788', 'qwer', 'qwer@qwer', 'qwer', 'qwer', '$2a$10$9KexgHrV.lFGxIonm8Q7yuwvEfwMeoi2YSo.uYznryT1Kypoa/tMG', '2023-05-17 16:54:04.593788', 'USER', 'qwer');
+
+INSERT INTO playground.comment (id, content, created_date, like_count, member_id, modified_date, feed_id) VALUES (2, '댓글 내용', '2023-05-17 19:37:35.890895', 0, '작성자', '2023-05-17 19:37:35.890895', 1);
+INSERT INTO playground.comment (id, content, created_date, like_count, member_id, modified_date, feed_id) VALUES (3, '다', '2023-05-17 19:37:36.881436', 0, '존', '2023-05-17 19:37:36.881436', 1);
+INSERT INTO playground.comment (id, content, created_date, like_count, member_id, modified_date, feed_id) VALUES (4, '난 피자가 싫어', '2023-05-17 19:37:37.770748', 0, '도우', '2023-05-17 19:37:37.770748', 1);
+INSERT INTO playground.comment (id, content, created_date, like_count, member_id, modified_date, feed_id) VALUES (5, '난 댓글이야', '2023-05-17 19:37:38.571587', 0, '댓글', '2023-05-17 19:37:38.571587', 1);

@@ -5,6 +5,8 @@ import com.encore.playground.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +52,15 @@ public class CommentAPIController {
      *                   memberId: 유저 id<br>
      *                   content: 댓글 내용
      */
-    @Operation(summary = "댓글 작성", description = "피드 글 번호에 해당하는 피드에 댓글을 작성한다.<br>피드 번호는 URL에, 작성자와 댓글 내용은 RequestBody에 담아서 보낸다.")
-    @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
-    @PostMapping(value = "/write/{feedId}")
-    public void write(@PathVariable long feedId, @RequestBody CommentWriteDto commentWriteDto) {
-        commentService.writeComment(feedId, commentWriteDto);
+    @Operation(summary = "댓글 작성", description = "피드 글 번호에 해당하는 피드에 댓글을 작성한다.<br>axios의 data란에 아래 예시(Request Body)와 같이 피드 번호, 작성자, 댓글 내용을 입력해야 한다.")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 작성에 필요한 정보<br>feedId: 댓글을 적을 피드 글번호<br>memberId: <br>content: 댓글 내용",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentWriteDto.class))
+    )
+    @PostMapping(value = "/write")
+    public void write(@RequestBody CommentWriteDto commentWriteDto) {
+        commentService.writeComment(commentWriteDto);
     }
 
     /**

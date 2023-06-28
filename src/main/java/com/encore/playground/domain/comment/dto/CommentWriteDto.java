@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @Schema(description = "댓글 작성용 DTO")
 public class CommentWriteDto {
+    @NotBlank(message = "댓글을 작성할 피드의 feedId를 입력해 주십시오.")
+    @Schema(description = "댓글을 작성할 피드의 feedId", example = "1")
+    private Long feedId;
+
     @NotBlank(message = "댓글 작성자의 memberId를 입력해 주십시오.")
     @Schema(description = "댓글 작성자의 memberId", example = "댓글 작성자")
     private String memberId;

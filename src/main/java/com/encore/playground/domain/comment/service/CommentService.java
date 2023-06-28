@@ -47,12 +47,12 @@ public class CommentService {
      *                   memberId: 유저 id<br>
      *                   content: 댓글 내용
      */
-    public void writeComment(long feedId, CommentWriteDto commentDto) {
+    public void writeComment(CommentWriteDto commentDto) {
+        Long feedId = commentDto.getFeedId();
         FeedDto feedDto = feedService.getFeed(FeedDto.builder().id(feedId).build());
         commentRepository.save(CommentDto.builder()
                         .feed(feedDto.toEntity())
                         .memberId(commentDto.getMemberId())
-//                        .commentNo(feedDto.getCommentTotalCount())
                         .likeCount(0)
                         .content(commentDto.getContent())
                         .build().toEntity());
