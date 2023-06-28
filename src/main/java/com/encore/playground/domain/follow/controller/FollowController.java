@@ -1,6 +1,6 @@
 package com.encore.playground.domain.follow.controller;
 
-import com.encore.playground.domain.follow.dto.FollowGetMemberIdDto;
+import com.encore.playground.domain.follow.dto.FollowGetIdDto;
 import com.encore.playground.domain.follow.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +13,14 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/follow")
-    public void follow(@RequestBody FollowGetMemberIdDto followGetMemberIdDto) {
-        followService.follow(followGetMemberIdDto);
+    public void follow(@RequestBody FollowGetIdDto followGetIdDto) {
+        followService.follow(followGetIdDto);
     }
 
     @PostMapping("/unfollow")
-    public void unfollow(@RequestBody FollowGetMemberIdDto followGetMemberIdDto) {
-        System.out.println(followGetMemberIdDto);
-        followService.unfollow(followGetMemberIdDto);
+    public void unfollow(@RequestBody FollowGetIdDto followGetIdDto) {
+        System.out.println(followGetIdDto);
+        followService.unfollow(followGetIdDto);
     }
 
 

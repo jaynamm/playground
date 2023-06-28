@@ -7,5 +7,5 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MemberFollowDto {
-    private String memberId;
+    private Long id;
 }

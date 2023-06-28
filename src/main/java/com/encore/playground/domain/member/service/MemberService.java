@@ -138,6 +138,6 @@ public class MemberService {
     }
 
     public MemberDto getMember(MemberFollowDto memberFollowDto) {
-        return new MemberDto(memberRepository.findByUserid(memberFollowDto.getMemberId()).get());
+        return new MemberDto(memberRepository.findById(memberFollowDto.getId()).get());
     }
 }

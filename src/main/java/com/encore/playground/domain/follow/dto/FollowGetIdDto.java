@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FollowGetMemberIdDto {
-    private String fromMemberId;
-    private String toMemberId;
+public class FollowGetIdDto {
+    private Long fromId;
+    private Long toId;
 }

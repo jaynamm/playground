@@ -2,7 +2,7 @@ package com.encore.playground.domain.follow.service;
 
 
 import com.encore.playground.domain.follow.dto.FollowDto;
-import com.encore.playground.domain.follow.dto.FollowGetMemberIdDto;
+import com.encore.playground.domain.follow.dto.FollowGetIdDto;
 import com.encore.playground.domain.follow.repository.FollowRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberFollowDto;
@@ -19,9 +19,9 @@ public class FollowService {
 
     private final MemberService memberService;
     // 사용자가 다른 사용자를 follow
-    public void follow(FollowGetMemberIdDto followGetMemberId) {
-        MemberDto fromMember = memberService.getMember(MemberFollowDto.builder().memberId(followGetMemberId.getFromMemberId()).build());
-        MemberDto toMember = memberService.getMember(MemberFollowDto.builder().memberId(followGetMemberId.getToMemberId()).build());
+    public void follow(FollowGetIdDto followGetIdDto) {
+        MemberDto fromMember = memberService.getMember(MemberFollowDto.builder().id(followGetIdDto.getFromId()).build());
+        MemberDto toMember = memberService.getMember(MemberFollowDto.builder().id(followGetIdDto.getToId()).build());
         followRepository.save(FollowDto.builder()
                 .fromMember(fromMember.toMember())
                 .toMember(toMember.toMember())
@@ -31,9 +31,10 @@ public class FollowService {
     }
 
     // 사용자가 다른 사용자를 unfollow
-    public void unfollow(FollowGetMemberIdDto followGetMemberIdDto) {
-        System.out.println(followGetMemberIdDto.getFromMemberId() + " " + followGetMemberIdDto.getToMemberId());
-        followRepository.deleteByFromMemberIdAndToMemberId(followGetMemberIdDto.getFromMemberId(), followGetMemberIdDto.getToMemberId());
+    public void unfollow(FollowGetIdDto followGetIdDto) {
+        MemberDto fromMember = memberService.getMember(MemberFollowDto.builder().id(followGetIdDto.getFromId()).build());
+        MemberDto toMember = memberService.getMember(MemberFollowDto.builder().id(followGetIdDto.getToId()).build());
+        followRepository.deleteByFromMemberAndToMember(fromMember.toMember(), toMember.toMember());
     }
 
 }
