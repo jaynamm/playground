@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeGetIdDto {
+public class LikesGetIdDto {
     private Long feedId;
     private Long memberId;
 }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Entity
-public class Like {
+public class Likes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class Like {
     private Feed feed;
 
     @ManyToOne
-    @JoinColumn(name = "member", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime likeDate;
+    private LocalDateTime likesDate;
 }

@@ -1,7 +1,7 @@
 package com.encore.playground.domain.like.dto;
 
 import com.encore.playground.domain.feed.entity.Feed;
-import com.encore.playground.domain.like.entity.Like;
+import com.encore.playground.domain.like.entity.Likes;
 import com.encore.playground.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,33 +14,33 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeDto {
+public class LikesDto {
     private Long id;
     private Feed feed;
     private Member member;
-    private LocalDateTime likeDate;
+    private LocalDateTime likesDate;
 
     /**
      *  dto -> entity
      * @return like
      */
-    public Like toEntity() {
-        return Like.builder()
+    public Likes toEntity() {
+        return Likes.builder()
                 .id(id)
                 .feed(feed)
                 .member(member)
-                .likeDate(likeDate)
+                .likesDate(likesDate)
                 .build();
     }
 
     /**
      * entity -> dto
      */
-    public LikeDto(Like like) {
-        this.id = like.getId();
-        this.feed = like.getFeed();
-        this.member = like.getMember();
-        this.likeDate = like.getLikeDate();
+    public LikesDto(Likes likes) {
+        this.id = likes.getId();
+        this.feed = likes.getFeed();
+        this.member = likes.getMember();
+        this.likesDate = likes.getLikesDate();
     }
 
 }

@@ -1,14 +1,14 @@
 package com.encore.playground.domain.like.repository;
 
 import com.encore.playground.domain.feed.entity.Feed;
-import com.encore.playground.domain.like.entity.Like;
+import com.encore.playground.domain.like.entity.Likes;
 import com.encore.playground.domain.member.entity.Member;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeRepository extends JpaRepository<Like, Long> {
+public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Transactional
     void deleteByFeedAndMember(Feed feed, Member member);
 
