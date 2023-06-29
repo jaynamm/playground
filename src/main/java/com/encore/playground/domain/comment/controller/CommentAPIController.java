@@ -4,7 +4,6 @@ import com.encore.playground.domain.comment.dto.*;
 import com.encore.playground.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,10 +69,11 @@ public class CommentAPIController {
      *                   content: 수정할 댓글 내용
      */
     @Operation(summary = "댓글 수정", description = "댓글 테이블 id에 해당하는 댓글을 수정한다.")
-    @Parameters({
-            @Parameter(name="id", description="댓글 테이블 id", example="1", required = true),
-            @Parameter(name="content", description="수정할 댓글 내용", example="수정된 댓글 내용", required = true)
-    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 수정에 필요한 정보<br>id: 댓글 테이블 id<br>content: 수정할 댓글 내용",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentModifyDto.class))
+    )
     @PostMapping(value = "/modify")
     public void modify(@RequestBody CommentModifyDto commentModifyDto) {
         commentService.modifyComment(commentModifyDto);
@@ -85,8 +85,12 @@ public class CommentAPIController {
      *                   id: 댓글 테이블 id<br>
      */
     @Operation(summary = "댓글 삭제", description = "댓글 테이블 id에 해당하는 댓글을 삭제한다.")
-    @Parameter(name="id", description="댓글 테이블 id", example="1", required = true)
-    @DeleteMapping(value = "/delete")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 삭제에 필요한 댓글 번호<br>id: 삭제할 댓글 테이블 id",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentDeleteDto.class))
+    )
+    @PostMapping(value = "/delete")
     public void delete(@RequestBody CommentDeleteDto commentDeleteDto) {
         commentService.deleteComment(commentDeleteDto);
     }

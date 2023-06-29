@@ -2,6 +2,7 @@ package com.encore.playground.domain.feed.controller;
 
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/feed")
 @RestController
 //@CrossOrigin(originPatterns = "http://localhost:*")
+@Tag(name="Feed", description = "피드 기능 관련 API")
 public class FeedAPIController {
     private final FeedService feedService;
 

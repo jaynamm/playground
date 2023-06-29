@@ -2,6 +2,7 @@ package com.encore.playground.domain.comment.dto;
 
 import com.encore.playground.domain.comment.entity.Comment;
 import com.encore.playground.domain.feed.entity.Feed;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,6 @@ public class CommentDto {
         this.id = entity.getId();
         this.feed = entity.getFeed();
         this.memberId = entity.getMemberId();
-//        this.commentNo = entity.getCommentNo();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();

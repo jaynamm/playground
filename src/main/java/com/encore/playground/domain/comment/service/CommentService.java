@@ -56,7 +56,6 @@ public class CommentService {
                         .likeCount(0)
                         .content(commentDto.getContent())
                         .build().toEntity());
-        feedService.addComment(feedDto);
     }
 
     /**
@@ -78,9 +77,6 @@ public class CommentService {
      *                   id: 댓글 번호<br>
      */
     public void deleteComment(CommentDeleteDto commentDto) {
-        CommentDeleteDto commentDeleteDto = new CommentDeleteDto(commentRepository.findById(commentDto.getId()).get());
-        FeedDto feedDto = feedService.getFeed(FeedDto.builder().id(commentDeleteDto.getFeedid()).build());
         commentRepository.deleteById(commentDto.getId());
-        feedService.deleteComment(feedDto);
     }
 }

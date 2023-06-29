@@ -124,17 +124,4 @@ public class FeedService {
         feedRepository.delete(feedToDelete.toEntity());
         return feedPage();
     }
-
-    public void addComment(FeedDto feedDto) {
-        FeedDto feedToAddComment = new FeedDto(feedRepository.findById(feedDto.getId()).get());
-        feedToAddComment.setCommentCount(feedToAddComment.getCommentCount() + 1);
-        feedToAddComment.setCommentTotalCount(feedToAddComment.getCommentTotalCount() + 1);
-        feedRepository.save(feedToAddComment.toEntity());
-    }
-
-    public void deleteComment(FeedDto feedDto) {
-        FeedDto feedToDeleteComment = new FeedDto(feedRepository.findById(feedDto.getId()).get());
-        feedToDeleteComment.setCommentCount(feedToDeleteComment.getCommentCount() - 1);
-        feedRepository.save(feedToDeleteComment.toEntity());
-    }
 }
