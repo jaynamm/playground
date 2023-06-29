@@ -1,6 +1,7 @@
 package com.encore.playground.domain.feed.service;
 
 import com.encore.playground.domain.feed.dto.FeedDto;
+import com.encore.playground.domain.feed.dto.FeedGetIdDto;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,11 @@ public class FeedService {
      */
     public FeedDto getFeed(long id) {
         Feed feed = feedRepository.findById(id).get();
+        return new FeedDto(feed);
+    }
+
+    public FeedDto getFeed(FeedGetIdDto feedGetIdDto) {
+        Feed feed = feedRepository.findById(feedGetIdDto.getId()).get();
         return new FeedDto(feed);
     }
 
