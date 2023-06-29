@@ -1,7 +1,7 @@
-package com.encore.playground.domain.like.controller;
+package com.encore.playground.domain.likes.controller;
 
-import com.encore.playground.domain.like.dto.LikesGetIdDto;
-import com.encore.playground.domain.like.service.LikesService;
+import com.encore.playground.domain.likes.dto.LikesGetIdDto;
+import com.encore.playground.domain.likes.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

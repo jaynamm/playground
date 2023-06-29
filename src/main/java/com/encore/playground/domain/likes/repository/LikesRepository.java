@@ -1,7 +1,7 @@
-package com.encore.playground.domain.like.repository;
+package com.encore.playground.domain.likes.repository;
 
 import com.encore.playground.domain.feed.entity.Feed;
-import com.encore.playground.domain.like.entity.Likes;
+import com.encore.playground.domain.likes.entity.Likes;
 import com.encore.playground.domain.member.entity.Member;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

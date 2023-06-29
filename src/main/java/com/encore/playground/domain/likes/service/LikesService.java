@@ -1,10 +1,10 @@
-package com.encore.playground.domain.like.service;
+package com.encore.playground.domain.likes.service;
 
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
-import com.encore.playground.domain.like.dto.LikesDto;
-import com.encore.playground.domain.like.dto.LikesGetIdDto;
-import com.encore.playground.domain.like.repository.LikesRepository;
+import com.encore.playground.domain.likes.dto.LikesDto;
+import com.encore.playground.domain.likes.dto.LikesGetIdDto;
+import com.encore.playground.domain.likes.repository.LikesRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

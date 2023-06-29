@@ -1,4 +1,4 @@
-package com.encore.playground.domain.like.entity;
+package com.encore.playground.domain.likes.entity;
 
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.member.entity.Member;

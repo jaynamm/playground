@@ -1,7 +1,7 @@
-package com.encore.playground.domain.like.dto;
+package com.encore.playground.domain.likes.dto;
 
 import com.encore.playground.domain.feed.entity.Feed;
-import com.encore.playground.domain.like.entity.Likes;
+import com.encore.playground.domain.likes.entity.Likes;
 import com.encore.playground.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

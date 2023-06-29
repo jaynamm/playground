@@ -1,4 +1,4 @@
-package com.encore.playground.domain.like.dto;
+package com.encore.playground.domain.likes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
