@@ -1,0 +1,36 @@
+package com.encore.playground.domain.like.entity;
+
+import com.encore.playground.domain.feed.entity.Feed;
+import com.encore.playground.domain.member.entity.Member;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
+@Entity
+public class Like {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "feed_id", nullable = false)
+    private Feed feed;
+
+    @ManyToOne
+    @JoinColumn(name = "member", nullable = false)
+    private Member member;
+
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDateTime likeDate;
+}
