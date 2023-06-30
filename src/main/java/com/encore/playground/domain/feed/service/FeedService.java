@@ -23,7 +23,18 @@ public class FeedService {
      * @return 피드 피드 객체 List
      */
     public List<FeedDto> feedPage() {
-        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // 추후 페이징 처리(검색 갯수 제한) 필요
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
+        List<FeedDto> feedDtoList = feedList.stream().map(FeedDto::new).toList();
+        return feedDtoList;
+    }
+
+    /**
+     * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드 (마이페이지에서 사용할 용도)
+     * @param id 사용자 memberId
+     * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
+     */
+    public List<FeedDto> getFeedListByMember(String id) {
+        List<Feed> feedList = feedRepository.findByMemberId(id).get();
         List<FeedDto> feedDtoList = feedList.stream().map(FeedDto::new).toList();
         return feedDtoList;
     }

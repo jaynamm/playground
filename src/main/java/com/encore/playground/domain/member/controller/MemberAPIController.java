@@ -1,6 +1,7 @@
 package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberPasswordDto;
 import com.encore.playground.domain.member.dto.MemberSearchDto;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.domain.member.service.MemberService;
@@ -146,5 +147,20 @@ public class MemberAPIController {
         randomPassword.put("randomPassword", getRandomPassword);
 
         return new ResponseEntity<>(randomPassword, HttpStatus.OK);
+    }
+
+    /**
+     * 비밀번호 변경 기능
+     * @param memberPasswordDto - userid, password
+     * @return ? - 비밀번호 변경 성공 여부
+     */
+    @PostMapping("/password")
+    public ResponseEntity<?> changePassword(@RequestBody MemberPasswordDto memberPasswordDto) {
+        String userid = memberPasswordDto.getUserid();
+        String password = memberPasswordDto.getPassword();
+
+        memberService.changePassword(userid, password);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

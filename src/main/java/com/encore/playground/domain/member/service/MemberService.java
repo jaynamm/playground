@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class MemberService {
     }
 
     /**
-     * 회원 가입 시 파라미터를 전달받아 Entity 로 변환
+     * 회원 가입 시 파라미터를 전달받아 Entity로 변환
      * Repository 를 통해 DB 에 저장
      * @param memberDTO
      */
@@ -134,5 +133,20 @@ public class MemberService {
         }
 
         return randomPassword;
+    }
+
+    /**
+     * 비밀번호 변경 기능 - 이미 로그인한 사용자가 비밀번호를 변경하는 기능
+     * @param userid   로그인한 유저의 id
+     * @param password 변경할 비밀번호
+     */
+
+    public void changePassword(String userid, String password) {
+        // userid로 멤버 찾기
+        MemberDto memberDto = this.getMemberByUserid(userid);
+        // 비밀번호 변경
+        memberDto.setPassword(passwordEncoder.encode(password));
+        // member DB에 저장
+        memberRepository.save(memberDto.toMember());
     }
 }

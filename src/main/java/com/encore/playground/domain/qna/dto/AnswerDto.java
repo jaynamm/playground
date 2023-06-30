@@ -27,6 +27,7 @@ public class AnswerDto {
         this.question = answer.getQuestion();
     }
 
+    // DTO -> Entity
     public Answer toEntity() {
         return Answer.builder()
                 .id(id)
