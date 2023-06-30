@@ -25,7 +25,7 @@ public class CommentAPIController {
      * @param feedId 피드 글번호
      * @return 해당 글에 달린 댓글들 List
      */
-    @Operation(summary = "피드 상세화면용", description = "피드 글번호를 입력하면 해당 글에 달린 댓글들을 모두 가져온다.")
+    @Operation(summary = "댓글 목록 가져오기 (피드 상세화면용)", description = "피드 글번호를 입력하면 해당 글에 달린 댓글들을 모두 가져온다.")
     @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
     @GetMapping("/list/{feedId}")
     public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId) {
@@ -37,7 +37,7 @@ public class CommentAPIController {
      * @param memberId 유저 id
      * @return 해당 유저가 작성한 댓글 목록
      */
-    @Operation(summary = "마이페이지용", description = "회원의 id를 입력하면 해당 사용자가 작성한 댓글들을 모두 가져온다.")
+    @Operation(summary = "해당 유저가 작성한 댓글 목록 가져오기 (마이페이지용)", description = "회원의 id를 입력하면 해당 사용자가 작성한 댓글들을 모두 가져온다.")
     @Parameter(name="memberId", description="댓글 작성자의 memberId", example="작성자", required = true)
     @GetMapping("/list/user/{memberId}")
     public List<CommentListDto> getCommentsByUser(@PathVariable String memberId) {

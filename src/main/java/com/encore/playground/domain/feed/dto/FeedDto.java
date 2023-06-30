@@ -1,6 +1,7 @@
 package com.encore.playground.domain.feed.dto;
 
 import com.encore.playground.domain.feed.entity.Feed;
+import com.encore.playground.domain.member.entity.Member;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class FeedDto {
     private long id;
-    private String memberId;
+    private Member member;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private int likeCount;
@@ -23,7 +24,7 @@ public class FeedDto {
     public Feed toEntity() { // FeedDto를 Feed 엔티티로 변환
         return Feed.builder()
                 .id(id)
-                .memberId(memberId)
+                .member(member)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
                 .likeCount(likeCount)
@@ -36,7 +37,7 @@ public class FeedDto {
 
     public FeedDto(Feed entity) { // Feed 엔티티를 FeedDto로 변환
         this.id = entity.getId();
-        this.memberId = entity.getMemberId();
+        this.member = entity.getMember();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();

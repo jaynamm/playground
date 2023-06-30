@@ -5,6 +5,9 @@ import com.encore.playground.domain.qna.service.QuestionService;
 import com.encore.playground.global.api.DefaultResponse;
 import com.encore.playground.global.api.ResponseMessage;
 import com.encore.playground.global.api.StatusCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor
-
+@Tag(name="Question", description = "QnA 중 질문 기능 관련 API")
 public class QuestionController {
     private final QuestionService questionService;
 

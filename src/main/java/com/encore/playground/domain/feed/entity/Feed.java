@@ -1,5 +1,6 @@
 package com.encore.playground.domain.feed.entity;
 
+import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -21,10 +22,11 @@ public class Feed {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; // 글번호
+    private Long id; // 글번호
 
-    @Column(nullable = false, length = 20)
-    private String memberId; // 작성자
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false) // 외래키 이름
+    private Member member; // 멤버 id
 
     @CreatedDate
     @Column(nullable = false)
