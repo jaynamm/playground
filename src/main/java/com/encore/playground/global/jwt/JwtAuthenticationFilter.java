@@ -25,15 +25,18 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // refresh token이 있는지를 검증한다.
+        // refresh token이 있는지 확인하고 존재하면 검증한다.
+        // 클라이언트에 unauthorized error code(401)을 보내서 request로 refresh token이 들어온다.
         if (httpRequest.getHeader("refresh-token") != null){
             System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
             // refresh token을 받아와서 검증한다.
             System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
             // refresh token이 유효한 경우,
-            if (tokenService.validateRefreshToken(getRefreshToken(httpRequest))) {
+            RefreshTokenValidateDto refreshTokenValidateDto = getRefreshToken(httpRequest);
+            if (tokenService.validateRefreshToken(refreshTokenValidateDto)) {
                 // 새로운 access token을 발급해서 보내준다.
-                String newAccessToken = tokenService.generateAccessToken(getRefreshToken(httpRequest).getMemberId()).getAccessToken();
+                // 수정 (refreshtoken으로 refreshtoken table의 memberId 가져오기)
+                String newAccessToken = tokenService.generateAccessToken(tokenService.getMemberIdFromRefreshToken(refreshTokenValidateDto)).getAccessToken();
                 httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
                 httpResponse.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -51,6 +54,14 @@ public class JwtAuthenticationFilter extends GenericFilter {
         if (token != null && jwtTokenProvider.validateAccessToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("================================");
+            System.out.println("name : " + SecurityContextHolder.getContext().getAuthentication().getName());
+            System.out.println("isAuthenticated : " + SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+            System.out.println("authority : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+            System.out.println("principal : " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            System.out.println("credential : " + SecurityContextHolder.getContext().getAuthentication().getCredentials());
+            System.out.println("================================");
+
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 유효합니다.");
         } else if (token == null) {
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 존재하지 않습니다.");
@@ -65,8 +76,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
 
     private RefreshTokenValidateDto getRefreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh-token");
-        String userid = request.getHeader("userid");
-        return new RefreshTokenValidateDto(refreshToken, userid);
+//        String userid = request.getHeader("userid");
+        return new RefreshTokenValidateDto(refreshToken);
     }
 
 
