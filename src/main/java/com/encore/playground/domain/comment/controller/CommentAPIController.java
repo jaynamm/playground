@@ -46,9 +46,9 @@ public class CommentAPIController {
      *                   memberId: 유저 id<br>
      *                   content: 댓글 내용
      */
-    @RequestMapping(value = "/write")
-    public void write(@RequestBody CommentWriteDto commentWriteDto) {
-        commentService.writeComment(commentWriteDto);
+    @RequestMapping(value = "/write/{feedId}")
+    public void write(@PathVariable long feedId, @RequestBody CommentWriteDto commentWriteDto) {
+        commentService.writeComment(feedId, commentWriteDto);
     }
 
     /**

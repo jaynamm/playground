@@ -30,6 +30,17 @@ public class QuestionService {
     }
 
     /**
+     * id에 해당하는 작성자가 작성한 qna 게시물 목록을 가져온다.
+     * @param memberId
+     * @return List<QuestionDto>
+     */
+
+    public List<QuestionDto> getQuestionListByMember(String memberId) {
+        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberId).get().stream().map(QuestionDto::new).toList();
+        return questionDtoList;
+    }
+
+    /**
      * qna 게시물을 조회한다.
      * @param questionId
      * @return QuestionDto

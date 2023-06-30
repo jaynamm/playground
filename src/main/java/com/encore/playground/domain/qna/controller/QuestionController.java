@@ -28,6 +28,11 @@ public class QuestionController {
         return questionService.questionList();
     }
 
+    @GetMapping("/question/list/{memberId}")
+    public List<QuestionDto> questionList(@PathVariable String memberId) {
+        return questionService.getQuestionListByMember(memberId);
+    }
+
     @GetMapping("/question/view/{id}")
     public ResponseEntity<?> viewQuestion(@PathVariable Long id) {
         QuestionDto questionDto = questionService.readQuestion(id);

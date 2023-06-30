@@ -38,6 +38,6 @@ public class Question {
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answerList;
+//    @OneToMany(mappedBy = "question")
+//    private List<Answer> answerList;
 }
