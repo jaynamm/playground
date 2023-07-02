@@ -1,9 +1,16 @@
 package com.encore.playground.domain.qna.service;
 
+import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.member.service.MemberService;
+import com.encore.playground.domain.qna.dto.QuestionDeleteDto;
 import com.encore.playground.domain.qna.dto.QuestionDto;
+import com.encore.playground.domain.qna.dto.QuestionModifyDto;
+import com.encore.playground.domain.qna.dto.QuestionWriteDto;
 import com.encore.playground.domain.qna.entity.Question;
 import com.encore.playground.domain.qna.repository.QuestionRepository;
 import com.encore.playground.global.exception.DataNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +24,7 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final MemberService memberService;
     // question CRUD
 
     /**
@@ -45,7 +53,7 @@ public class QuestionService {
      * @param questionId
      * @return QuestionDto
      */
-    public QuestionDto readQuestion(Long questionId) {
+    public QuestionDto readQuestion(Long questionId, MemberGetMemberIdDto memberIdDto) {
         Optional<Question> questionDto = this.questionRepository.findById(questionId);
 
         if (questionDto.isPresent()) {
@@ -60,11 +68,12 @@ public class QuestionService {
      * @param questionDto
      * @return List<QuestionDto> (qna 메인)
      */
-    public List<QuestionDto> writeQuestion(QuestionDto questionDto) {
+    public List<QuestionDto> writeQuestion(QuestionWriteDto questionWriteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         questionRepository.save(QuestionDto.builder()
-                .title(questionDto.getTitle())
-                .memberId(questionDto.getMemberId())
-                .content(questionDto.getContent())
+                .title(questionWriteDto.getTitle())
+                .member(memberDto.toEntity())
+                .content(questionWriteDto.getContent())
                 .createdDate(LocalDateTime.now())
                 .build().toEntity()
         );
@@ -77,10 +86,10 @@ public class QuestionService {
      * @return List<QuestionDto> (qna 메인)
      */
 
-    public List<QuestionDto> modifyQuestion(QuestionDto newQuestionDto) {
+    public List<QuestionDto> modifyQuestion(QuestionModifyDto newQuestionDto, MemberGetMemberIdDto memberIdDto) {
         QuestionDto questionDto = new QuestionDto(questionRepository.findById(newQuestionDto.getId()).get());
         questionDto.setTitle(newQuestionDto.getTitle());
-        questionDto.setMemberId(newQuestionDto.getMemberId());
+        questionDto.setContent(newQuestionDto.getContent());
         questionRepository.save(questionDto.toEntity());
         return questionList();
     }
@@ -90,8 +99,8 @@ public class QuestionService {
      * @param questionDto
      * @return questionList();
      */
-    public List<QuestionDto> deleteQuestion(QuestionDto questionDto) {
-        questionRepository.deleteById(questionDto.getId());
+    public List<QuestionDto> deleteQuestion(QuestionDeleteDto questionDeleteDto, MemberGetMemberIdDto memberIdDto) {
+        questionRepository.deleteById(questionDeleteDto.getId());
         return questionList();
     }
 
