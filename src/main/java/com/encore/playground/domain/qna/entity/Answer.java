@@ -23,8 +23,9 @@ public class Answer {
     private String content;
 
     // TODO: author 를 member_id 로 참조해서 가져와야한다.
-    @Column(nullable = false)
-    private String memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @CreatedDate
     private LocalDateTime createdDate;

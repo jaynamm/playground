@@ -29,7 +29,7 @@ public class AnswerService {
         QuestionDto questionDto = questionService.readQuestion(questionId);
         answerDTO = AnswerDto.builder()
                 .content(answerDTO.getContent())
-                .memberId(answerDTO.getMemberId())
+                .member(answerDTO.getMember())
                 .createdDate(LocalDateTime.now())
                 .question(questionDto.toEntity())
                 .build();
