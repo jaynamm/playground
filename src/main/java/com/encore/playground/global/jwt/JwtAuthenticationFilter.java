@@ -1,6 +1,7 @@
 package com.encore.playground.global.jwt;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.member.dto.MemberGetRoleDto;
 import com.encore.playground.global.dto.RefreshTokenValidateDto;
 import com.encore.playground.global.service.TokenService;
 import jakarta.servlet.*;
@@ -68,14 +69,15 @@ public class JwtAuthenticationFilter extends GenericFilter {
             // access token의 userid를 추출하는 메소드
             // userid를 dto에 담는 로직
             MemberGetMemberIdDto memberGetMemberIdDto = MemberGetMemberIdDto.builder().userid(jwtTokenProvider.getUserPk(token)).build();
-            // userid만 들어있는 dto를 request에 넣어주기
+            System.out.println(memberGetMemberIdDto);
+            MemberGetRoleDto memberGetRoleDto = MemberGetRoleDto.builder().role(jwtTokenProvider.getMemberRole(token)).build();
+            System.out.println(memberGetRoleDto);// userid만 들어있는 dto를 request에 넣어주기
             httpRequest.setAttribute("memberIdDto", memberGetMemberIdDto);
+            httpRequest.setAttribute("memberRoleDto", memberGetRoleDto);
 
 
         } else if (token == null) {
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 존재하지 않습니다.");
-            // 초기 페이지로 강제 이동
-            httpResponse.sendRedirect("/");
         } else if (!jwtTokenProvider.validateAccessToken(token)) {
             // access token이 유효하지 않음을 클라이언트에 전달한다.
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

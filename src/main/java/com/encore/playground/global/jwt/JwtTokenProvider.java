@@ -3,6 +3,7 @@ package com.encore.playground.global.jwt;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.global.dto.AccessTokenDto;
 import com.encore.playground.global.dto.RefreshTokenDto;
+import com.encore.playground.global.security.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -97,6 +98,12 @@ public class JwtTokenProvider {
     public String getUserPk(String token) {
         return Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
+
+    public String getMemberRole(String token) {
+        return (String) Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(token).getBody().get("roles");
+    }
+
+
 
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "Bearer {TOKEN}'
     public String resolveToken(HttpServletRequest request) {
