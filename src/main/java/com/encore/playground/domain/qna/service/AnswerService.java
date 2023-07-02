@@ -1,8 +1,9 @@
 package com.encore.playground.domain.qna.service;
 
-import com.encore.playground.domain.qna.dto.AnswerDto;
-import com.encore.playground.domain.qna.dto.QuestionDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.repository.AnswerRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +26,27 @@ public class AnswerService {
         return answerRepository.findByMemberId(memberId).get().stream().map(AnswerDto::new).toList();
     }
 
-    public List<AnswerDto> create(AnswerDto answerDTO, Long questionId) {
-        QuestionDto questionDto = questionService.readQuestion(questionId);
-        answerDTO = AnswerDto.builder()
-                .content(answerDTO.getContent())
-                .member(answerDTO.getMember())
+    public List<AnswerDto> createAnswer(AnswerWriteDto answerWriteDto, MemberGetMemberIdDto memberIdDto) {
+        QuestionDto questionDto = questionService.readQuestion(answerWriteDto.getQuestionId(), memberIdDto);
+        answerRepository.save(AnswerDto.builder()
+                .content(answerWriteDto.getContent())
                 .createdDate(LocalDateTime.now())
                 .question(questionDto.toEntity())
-                .build();
+                .build().toEntity());
 
-        answerRepository.save(answerDTO.toEntity());
-
-        return answerList(questionId);
+        return answerList(answerWriteDto.getQuestionId());
     }
+
+    public List<AnswerDto> modifyAnswer(AnswerModifyDto newAnswerDto, MemberGetMemberIdDto memberIdDto) {
+        AnswerDto answerDto = new AnswerDto(answerRepository.findById(newAnswerDto.getId()).get());
+        answerDto.setContent(newAnswerDto.getContent());
+        answerRepository.save(answerDto.toEntity());
+        return answerList(newAnswerDto.getQuestionId());
+    }
+
+    public List<AnswerDto> deleteAnswer(AnswerDeleteDto answerDeleteDto, MemberGetMemberIdDto memberIdDto) {
+        answerRepository.delete(answerRepository.findById(answerDeleteDto.getId()).get());
+        return answerList(answerDeleteDto.getQuestionId());
+    }
+
 }
