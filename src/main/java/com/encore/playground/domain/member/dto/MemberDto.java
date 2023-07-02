@@ -20,7 +20,7 @@ public class MemberDto {
     private String curriculum;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private String role;
+    private UserRole role;
 
 
     /**
@@ -38,7 +38,7 @@ public class MemberDto {
         this.curriculum = member.getCurriculum();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
-        this.role = String.valueOf(member.getRole());
+        this.role = member.getRole();
     }
 
     public Member toEntity(){
@@ -52,7 +52,7 @@ public class MemberDto {
                 .curriculum(curriculum)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
-                .role(UserRole.valueOf(role))
+                .role(role)
                 .build();
     }
 }
