@@ -26,7 +26,7 @@ public class LikesService {
         MemberDto memberDto = memberService.getMember(MemberGetIdDto.builder().id(likesGetIdDto.getMemberId()).build());
         likesRepository.save(LikesDto.builder()
                 .feed(feedDto.toEntity())
-                .member(memberDto.toMember())
+                .member(memberDto.toEntity())
                 .likesDate(LocalDateTime.now())
                 .build().toEntity()
         );
@@ -35,6 +35,6 @@ public class LikesService {
     public void likesCancel(LikesGetIdDto likesGetIdDto) {
         FeedDto feedDto = feedService.getFeed(FeedGetIdDto.builder().id(likesGetIdDto.getFeedId()).build());
         MemberDto memberDto = memberService.getMember(MemberGetIdDto.builder().id(likesGetIdDto.getMemberId()).build());
-        likesRepository.deleteByFeedAndMember(feedDto.toEntity(), memberDto.toMember());
+        likesRepository.deleteByFeedAndMember(feedDto.toEntity(), memberDto.toEntity());
     }
 }

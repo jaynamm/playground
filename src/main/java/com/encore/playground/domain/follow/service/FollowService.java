@@ -23,8 +23,8 @@ public class FollowService {
         MemberDto fromMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getFromId()).build());
         MemberDto toMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getToId()).build());
         followRepository.save(FollowDto.builder()
-                .fromMember(fromMember.toMember())
-                .toMember(toMember.toMember())
+                .fromMember(fromMember.toEntity())
+                .toMember(toMember.toEntity())
                 .followDate(LocalDateTime.now())
                 .build().toEntity()
         );
@@ -34,7 +34,7 @@ public class FollowService {
     public void unfollow(FollowGetIdDto followGetIdDto) {
         MemberDto fromMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getFromId()).build());
         MemberDto toMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getToId()).build());
-        followRepository.deleteByFromMemberAndToMember(fromMember.toMember(), toMember.toMember());
+        followRepository.deleteByFromMemberAndToMember(fromMember.toEntity(), toMember.toEntity());
     }
 
 }
