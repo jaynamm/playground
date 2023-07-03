@@ -66,7 +66,8 @@ public class QuestionService {
 
     /**
      * qna 게시물을 작성한다.
-     * @param questionDto
+     * @param questionWriteDto
+     * @param memberIdDto
      * @return List<QuestionDto> (qna 메인)
      */
     public List<QuestionDto> writeQuestion(QuestionWriteDto questionWriteDto, MemberGetMemberIdDto memberIdDto) {
@@ -97,7 +98,8 @@ public class QuestionService {
 
     /**
      * qna 게시물 삭제
-     * @param questionDto
+     * @param questionDeleteDto
+     * @param memberIdDto
      * @return questionList();
      */
     public List<QuestionDto> deleteQuestion(QuestionDeleteDto questionDeleteDto, MemberGetMemberIdDto memberIdDto) {
