@@ -102,8 +102,8 @@ public class QuestionService {
      * @param memberIdDto
      * @return questionList();
      */
-    public List<QuestionDto> deleteQuestion(QuestionDeleteDto questionDeleteDto, MemberGetMemberIdDto memberIdDto) {
-        questionRepository.deleteById(questionDeleteDto.getId());
+    public List<QuestionDto> deleteQuestion(QuestionGetIdDto questionIdDto, MemberGetMemberIdDto memberIdDto) {
+        questionRepository.deleteById(questionIdDto.getId());
         return questionList();
     }
 

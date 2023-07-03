@@ -109,10 +109,10 @@ public class QuestionController {
 
 
     @PostMapping("/question/delete")
-    public ResponseEntity<?> questionDelete(@RequestBody QuestionDeleteDto questionDeleteDto, HttpServletRequest request) {
+    public ResponseEntity<?> questionDelete(@RequestBody QuestionGetIdDto questionIdDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (questionService.isQuestionWriter(questionDeleteDto.getId(), memberIdDto)) {
-            questionService.deleteQuestion(questionDeleteDto, memberIdDto);
+        if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
+            questionService.deleteQuestion(questionIdDto, memberIdDto);
 
             return new ResponseEntity(
                     DefaultResponse.res(
