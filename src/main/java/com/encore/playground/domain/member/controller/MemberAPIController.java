@@ -67,9 +67,10 @@ public class MemberAPIController {
         // header에 access token을 넣어서 보내고 body에 refresh token을 넣어서 보낸다.
 
         // API 로 보낼 데이터를 HashMap 에 담아서 보낸다.
+        // body에 refresh token을 넣어서 보낸다.
         Map<String, String> loginRes = new HashMap<>();
-        loginRes.put("userid", userid);
-        loginRes.put("nickname", nickname);
+//        loginRes.put("userid", userid);
+//        loginRes.put("nickname", nickname);
         loginRes.put("refresh-token", refreshToken);
 
         // 헤더에 access 토큰을 저장한다.

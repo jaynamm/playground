@@ -1,5 +1,6 @@
 package com.encore.playground.domain.qna.dto;
 
+import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.qna.entity.Answer;
 import com.encore.playground.domain.qna.entity.Question;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.List;
 public class QuestionDto {
     private Long id;
     private String title;
-    private String memberId;
+    private Member member;
     private String content;
     private LocalDateTime createdDate;
 
@@ -26,7 +27,7 @@ public class QuestionDto {
     public QuestionDto (Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
-        this.memberId = question.getMemberId();
+        this.member = question.getMember();
         this.content = question.getContent();
         this.createdDate = question.getCreatedDate();
     }
@@ -39,7 +40,7 @@ public class QuestionDto {
         return Question.builder()
                 .id(id)
                 .title(title)
-                .memberId(memberId)
+                .member(member)
                 .content(content)
                 .createdDate(createdDate)
                 .build();

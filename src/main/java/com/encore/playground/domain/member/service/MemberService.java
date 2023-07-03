@@ -1,6 +1,7 @@
 package com.encore.playground.domain.member.service;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -129,10 +130,14 @@ public class MemberService {
             memberDto.setPassword(passwordEncoder.encode(randomPassword));
             // @LastModifiedDate 로 자동으로 수정시 시간이 변경됨
             // memberDto.setModifiedDate(LocalDateTime.now());
-            memberRepository.save(memberDto.toMember());
+            memberRepository.save(memberDto.toEntity());
         }
 
         return randomPassword;
+    }
+
+    public MemberDto getMember(MemberGetIdDto memberGetIdDto) {
+        return new MemberDto(memberRepository.findById(memberGetIdDto.getId()).get());
     }
 
     /**
@@ -147,6 +152,6 @@ public class MemberService {
         // 비밀번호 변경
         memberDto.setPassword(passwordEncoder.encode(password));
         // member DB에 저장
-        memberRepository.save(memberDto.toMember());
+        memberRepository.save(memberDto.toEntity());
     }
 }

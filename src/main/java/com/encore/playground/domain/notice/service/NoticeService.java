@@ -1,6 +1,12 @@
 package com.encore.playground.domain.notice.service;
 
+import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.member.service.MemberService;
+import com.encore.playground.domain.notice.dto.NoticeGetIdDto;
 import com.encore.playground.domain.notice.dto.NoticeDto;
+import com.encore.playground.domain.notice.dto.NoticeModifyDto;
+import com.encore.playground.domain.notice.dto.NoticeWriteDto;
 import com.encore.playground.domain.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -14,6 +20,8 @@ import java.util.List;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final MemberService memberService;
+
 
     // notice CRUD
 
@@ -27,27 +35,32 @@ public class NoticeService {
             return noticeDtoList;
     }
 
+    public boolean isNoticeWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        return memberIdDto.getUserid().equals(noticeRepository.findById(id).get().getMember().getUserid());
+    }
+
     /**
      * 공지사항 게시물을 조회한다.
-     * @param noticeDto
+     * @param noticeId, memberIdDto
      * @return NoticeDto
      */
-    public NoticeDto readNotice(Long noticeId) {
+    public NoticeDto readNotice(Long noticeId, MemberGetMemberIdDto memberIdDto) {
         return new NoticeDto(noticeRepository.findById(noticeId).get());
     }
 
     /**
      * Create
      * 공지사항 게시물을 작성한다.
-     * @param noticeDto
+     * @param noticeWriteDto, memberIdDto
      * @return List<NoticeDto> (공지사항 메인)
      */
 
-    public List<NoticeDto> writeNotice(NoticeDto noticeDto) {
+    public List<NoticeDto> writeNotice(NoticeWriteDto noticeWriteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         noticeRepository.save(NoticeDto.builder()
-                .title(noticeDto.getTitle())
-                .memberId(noticeDto.getMemberId())
-                .content(noticeDto.getContent())
+                .title(noticeWriteDto.getTitle())
+                .member(memberDto.toEntity())
+                .content(noticeWriteDto.getContent())
                 .createdDate(LocalDateTime.now())
                 .viewCount(0)
                 .build().toEntity()
@@ -57,11 +70,11 @@ public class NoticeService {
 
     /**
      * Update
-     * @param newNoticeDto
+     * @param newNoticeDto, memberIdDto
      * @return List<NoticeDto> (공지사항 메인)
      */
 
-    public List<NoticeDto> modifyNotice(NoticeDto newNoticeDto) {
+    public List<NoticeDto> modifyNotice(NoticeModifyDto newNoticeDto, MemberGetMemberIdDto memberIdDto) {
         NoticeDto noticeDto = new NoticeDto(noticeRepository.findById(newNoticeDto.getId()).get());
         noticeDto.setTitle(newNoticeDto.getTitle());
         noticeDto.setContent(newNoticeDto.getContent());
@@ -72,12 +85,12 @@ public class NoticeService {
 
     /**
      * Delete
-     * @param noticeId
+     * @param noticeGetIdDto, memberIdDto
      * @return List<NoticeDto> (공지사항 메인)
      */
 
-    public List<NoticeDto> deleteNotice(NoticeDto noticeDto) {
-        noticeRepository.deleteById(noticeDto.getId());
+    public List<NoticeDto> deleteNotice(NoticeGetIdDto noticeGetIdDto, MemberGetMemberIdDto memberIdDto) {
+        noticeRepository.deleteById(noticeGetIdDto.getId());
         return noticeList();
     }
 
