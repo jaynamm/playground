@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FollowGetIdDto {
-    private Long fromId;
     private Long toId;
 }
