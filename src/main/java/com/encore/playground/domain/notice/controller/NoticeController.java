@@ -2,7 +2,7 @@ package com.encore.playground.domain.notice.controller;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.dto.MemberGetRoleDto;
-import com.encore.playground.domain.notice.dto.NoticeDeleteDto;
+import com.encore.playground.domain.notice.dto.NoticeGetIdDto;
 import com.encore.playground.domain.notice.dto.NoticeDto;
 import com.encore.playground.domain.notice.dto.NoticeModifyDto;
 import com.encore.playground.domain.notice.dto.NoticeWriteDto;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -57,15 +56,30 @@ public class NoticeController {
     }
 
 
+    @GetMapping("/notice/modify")
+    public String noticeModifyButton(@RequestBody NoticeGetIdDto noticeIdDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (noticeService.isNoticeWriter(noticeIdDto.getId(), memberIdDto)) {
+            return "forward:/notice/modify";
+        } else {
+            return "redirect:/notice";
+        }
+    }
+
     @PostMapping("/notice/modify")
     public List<NoticeDto> noticeModify(@RequestBody NoticeModifyDto noticeModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return noticeService.modifyNotice(noticeModifyDto, memberIdDto);
+        if (noticeService.isNoticeWriter(noticeModifyDto.getId(), memberIdDto)) {
+            return noticeService.modifyNotice(noticeModifyDto, memberIdDto);
+        } else {
+            return noticeService.noticeList();
+        }
+
     }
 
     @PostMapping("/notice/delete")
-    public List<NoticeDto> noticeDelete(@RequestBody NoticeDeleteDto noticeDeleteDto, HttpServletRequest request) {
+    public List<NoticeDto> noticeDelete(@RequestBody NoticeGetIdDto noticeGetIdDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return noticeService.deleteNotice(noticeDeleteDto, memberIdDto);
+        return noticeService.deleteNotice(noticeGetIdDto, memberIdDto);
     }
 }

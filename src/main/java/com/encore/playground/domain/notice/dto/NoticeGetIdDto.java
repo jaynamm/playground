@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDeleteDto {
+public class NoticeGetIdDto {
     private Long id;
 }

@@ -3,7 +3,7 @@ package com.encore.playground.domain.notice.service;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
-import com.encore.playground.domain.notice.dto.NoticeDeleteDto;
+import com.encore.playground.domain.notice.dto.NoticeGetIdDto;
 import com.encore.playground.domain.notice.dto.NoticeDto;
 import com.encore.playground.domain.notice.dto.NoticeModifyDto;
 import com.encore.playground.domain.notice.dto.NoticeWriteDto;
@@ -33,6 +33,10 @@ public class NoticeService {
     public List<NoticeDto> noticeList() {
             List<NoticeDto> noticeDtoList = noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream().map(NoticeDto::new).toList();
             return noticeDtoList;
+    }
+
+    public boolean isNoticeWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        return memberIdDto.getUserid().equals(noticeRepository.findById(id).get().getMember().getUserid());
     }
 
     /**
@@ -81,12 +85,12 @@ public class NoticeService {
 
     /**
      * Delete
-     * @param noticeDeleteDto, memberIdDto
+     * @param noticeGetIdDto, memberIdDto
      * @return List<NoticeDto> (공지사항 메인)
      */
 
-    public List<NoticeDto> deleteNotice(NoticeDeleteDto noticeDeleteDto, MemberGetMemberIdDto memberIdDto) {
-        noticeRepository.deleteById(noticeDeleteDto.getId());
+    public List<NoticeDto> deleteNotice(NoticeGetIdDto noticeGetIdDto, MemberGetMemberIdDto memberIdDto) {
+        noticeRepository.deleteById(noticeGetIdDto.getId());
         return noticeList();
     }
 
