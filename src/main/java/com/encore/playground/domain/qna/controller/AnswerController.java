@@ -1,10 +1,7 @@
 package com.encore.playground.domain.qna.controller;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.qna.dto.AnswerDeleteDto;
-import com.encore.playground.domain.qna.dto.AnswerDto;
-import com.encore.playground.domain.qna.dto.AnswerModifyDto;
-import com.encore.playground.domain.qna.dto.AnswerWriteDto;
+import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.service.AnswerService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -53,18 +50,32 @@ public class AnswerController {
         return answerService.createAnswer(answerWriteDto, memberIdDto);
     }
 
+
+    @GetMapping("/answer/modify")
+    private String modifyAnswerButton(@RequestBody AnswerGetIdDto answerIdDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (answerService.isAnswerWriter(answerIdDto.getId(), memberIdDto)) {
+            return "forward:/answer/modify";
+        } else {
+            return "redirect:/answer/list";
+        }
+    }
+
     /**
      * Post - 질문에 대한 답변을 수정
      * @param answerModifyDto
      * @param request
      * @return List<AnswerDto>
      */
-
     @PostMapping("/answer/modify")
     private List<AnswerDto> modifyAnswer(@RequestBody AnswerModifyDto answerModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (answerService.isAnswerWriter(answerModifyDto.getId(), memberIdDto)) {
+            return answerService.modifyAnswer(answerModifyDto, memberIdDto);
+        } else {
+            return answerService.answerList(answerModifyDto.getQuestionId());
+        }
 
-        return answerService.modifyAnswer(answerModifyDto, memberIdDto);
     }
 
     /**
