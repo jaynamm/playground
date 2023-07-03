@@ -46,8 +46,8 @@ public class AnswerController {
      * @param request
      * @return List<AnswerDTO>
      */
-    @PostMapping("/answer/create")
-    private List<AnswerDto> createAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
+    @PostMapping("/answer/write")
+    private List<AnswerDto> writeAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
 
         return answerService.createAnswer(answerWriteDto, memberIdDto);
