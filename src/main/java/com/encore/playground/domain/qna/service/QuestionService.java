@@ -3,10 +3,7 @@ package com.encore.playground.domain.qna.service;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
-import com.encore.playground.domain.qna.dto.QuestionDeleteDto;
-import com.encore.playground.domain.qna.dto.QuestionDto;
-import com.encore.playground.domain.qna.dto.QuestionModifyDto;
-import com.encore.playground.domain.qna.dto.QuestionWriteDto;
+import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.entity.Question;
 import com.encore.playground.domain.qna.repository.QuestionRepository;
 import com.encore.playground.global.exception.DataNotFoundException;
@@ -35,6 +32,13 @@ public class QuestionService {
     public List<QuestionDto> questionList() {
         List<QuestionDto> questionDtoList = questionRepository.findAll().stream().map(QuestionDto::new).toList();
         return questionDtoList;
+    }
+
+    public boolean isQuestionWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        return memberIdDto.getUserid().equals(questionRepository.findById(id).get().getMember().getUserid());
+    }
+    public QuestionDto getQuestion(QuestionGetIdDto questionIdDto) {
+        return new QuestionDto(questionRepository.findById(questionIdDto.getId()).get());
     }
 
     /**

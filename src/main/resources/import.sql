@@ -12,6 +12,6 @@ insert into notice(title, content, created_date, modified_date, member_id) value
 insert into notice(title, content, created_date, modified_date, member_id) values ("[자격증] 정보처리기사 접수 일정 ", "접수일정: 2023.06.17.(월) 10:00 ~ 2023.06.20.(목) 18:00", 20230518151726, 20230518151726, 1);
 insert into notice(title, content, created_date, modified_date, member_id) values ("[신청]  LET'S PLAY 현직자 Session 사전조사 ", "의견을 반영하고자 사전 설문조사를 진행하고자 하니 사전조사 설문에 참여해주십시오.", 20230518224202, 20230518224202, 1);
 
-insert into question(title, content, member_id, created_date) values ("공가 사용에 대해 질문이 있습니다.", "한번에 공가를 몇개까지 사용할 수 있나요? ", "남민우", 20230518091726);
-insert into question(title, content, member_id, created_date) values ("독산 캠퍼스 운영시간이 궁금합니다.", "몇시까지 운영하나요? ", "김희주", 20230519221726);
-insert into question(title, content, member_id, created_date) values ("도서 대출 관련 질문입니다.", "책 대여기간은 며칠인가요?", "유수빈", 20230519231726);
+insert into question(title, content, member_id, created_date) values ("공가 사용에 대해 질문이 있습니다.", "한번에 공가를 몇개까지 사용할 수 있나요? ", 2, 20230518091726);
+insert into question(title, content, member_id, created_date) values ("독산 캠퍼스 운영시간이 궁금합니다.", "몇시까지 운영하나요? ", 2, 20230519221726);
+insert into question(title, content, member_id, created_date) values ("도서 대출 관련 질문입니다.", "책 대여기간은 며칠인가요?", 2, 20230519231726);

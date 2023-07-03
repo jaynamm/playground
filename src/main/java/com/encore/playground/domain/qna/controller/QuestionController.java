@@ -1,10 +1,7 @@
 package com.encore.playground.domain.qna.controller;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.qna.dto.QuestionDeleteDto;
-import com.encore.playground.domain.qna.dto.QuestionDto;
-import com.encore.playground.domain.qna.dto.QuestionModifyDto;
-import com.encore.playground.domain.qna.dto.QuestionWriteDto;
+import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.service.QuestionService;
 import com.encore.playground.global.api.DefaultResponse;
 import com.encore.playground.global.api.ResponseMessage;
@@ -62,19 +59,54 @@ public class QuestionController {
         );
     }
 
+    @GetMapping("/question/modify")
+    public ResponseEntity<?> questionModifyButton(@RequestBody QuestionGetIdDto questionIdDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.QNA_MODIFY_ACCESS
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.QNA_MODIFY_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
+
+    }
+
+
     @PostMapping("/question/modify")
     public ResponseEntity<?> questionModify(@RequestBody QuestionModifyDto questionModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        questionService.modifyQuestion(questionModifyDto, memberIdDto);
+        if (questionService.isQuestionWriter(questionModifyDto.getId(), memberIdDto)) {
+            questionService.modifyQuestion(questionModifyDto, memberIdDto);
 
-        return new ResponseEntity(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.QNA_MODIFY
-                ),
-                HttpStatus.OK
-        );
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.QNA_MODIFY
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.QNA_MODIFY_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
+
 
     @PostMapping("/question/delete")
     public ResponseEntity<?> questionDelete(@RequestBody QuestionDeleteDto questionDeleteDto, HttpServletRequest request) {
