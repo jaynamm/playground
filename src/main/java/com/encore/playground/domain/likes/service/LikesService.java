@@ -8,6 +8,7 @@ import com.encore.playground.domain.likes.dto.LikesGetIdDto;
 import com.encore.playground.domain.likes.repository.LikesRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetIdDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,9 @@ public class LikesService {
     private final FeedService feedService;
     private final MemberService memberService;
 
-    public void likes(LikesGetIdDto likesGetIdDto) {
+    public void likes(LikesGetIdDto likesGetIdDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = feedService.getFeed(FeedGetIdDto.builder().id(likesGetIdDto.getFeedId()).build());
-        MemberDto memberDto = memberService.getMember(MemberGetIdDto.builder().id(likesGetIdDto.getMemberId()).build());
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         likesRepository.save(LikesDto.builder()
                 .feed(feedDto.toEntity())
                 .member(memberDto.toEntity())
@@ -32,9 +33,9 @@ public class LikesService {
         );
     }
 
-    public void likesCancel(LikesGetIdDto likesGetIdDto) {
+    public void likesCancel(LikesGetIdDto likesGetIdDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = feedService.getFeed(FeedGetIdDto.builder().id(likesGetIdDto.getFeedId()).build());
-        MemberDto memberDto = memberService.getMember(MemberGetIdDto.builder().id(likesGetIdDto.getMemberId()).build());
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         likesRepository.deleteByFeedAndMember(feedDto.toEntity(), memberDto.toEntity());
     }
 }

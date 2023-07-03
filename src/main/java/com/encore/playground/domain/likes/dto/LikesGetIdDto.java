@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LikesGetIdDto {
     private Long feedId;
-    private Long memberId;
 }
