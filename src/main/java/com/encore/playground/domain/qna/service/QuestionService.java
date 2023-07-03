@@ -37,9 +37,6 @@ public class QuestionService {
     public boolean isQuestionWriter(Long id, MemberGetMemberIdDto memberIdDto) {
         return memberIdDto.getUserid().equals(questionRepository.findById(id).get().getMember().getUserid());
     }
-    public QuestionDto getQuestion(QuestionGetIdDto questionIdDto) {
-        return new QuestionDto(questionRepository.findById(questionIdDto.getId()).get());
-    }
 
     /**
      * id에 해당하는 작성자가 작성한 qna 게시물 목록을 가져온다.

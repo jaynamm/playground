@@ -15,6 +15,7 @@ public class ResponseMessage {
     public static final String QNA_MODIFY_FAILED = "질문 수정 실패";
     public static final String QNA_MODIFY_ACCESS = "질문 수정 접근 성공";
     public static final String QNA_DELETE = "질문 삭제 성공";
+    public static final String QNA_DELETE_FAILED = "질문 삭제 실패";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
 }

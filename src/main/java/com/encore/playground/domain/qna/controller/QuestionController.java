@@ -111,14 +111,25 @@ public class QuestionController {
     @PostMapping("/question/delete")
     public ResponseEntity<?> questionDelete(@RequestBody QuestionDeleteDto questionDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        questionService.deleteQuestion(questionDeleteDto, memberIdDto);
+        if (questionService.isQuestionWriter(questionDeleteDto.getId(), memberIdDto)) {
+            questionService.deleteQuestion(questionDeleteDto, memberIdDto);
 
-        return new ResponseEntity(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.QNA_DELETE
-                ),
-                HttpStatus.OK
-        );
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.QNA_DELETE
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.QNA_DELETE_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
+
     }
 }
