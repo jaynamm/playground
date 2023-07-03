@@ -1,4 +1,4 @@
-package com.encore.playground.global.dto;
+package com.encore.playground.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshTokenValidateDto {
-    private String refreshToken;
-//    private String memberId;
+@Builder
+public class MemberGetIdDto {
+    private Long id;
 }

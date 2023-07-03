@@ -86,4 +86,8 @@ public class TokenService {
             return false;
         }
     }
+
+    public String getMemberIdFromRefreshToken(RefreshTokenValidateDto refreshTokenValidateDto) {
+        return refreshTokenRepository.findByRefreshToken(refreshTokenValidateDto.getRefreshToken()).get().getMemberId();
+    }
 }

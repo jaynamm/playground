@@ -1,7 +1,9 @@
 package com.encore.playground.domain.qna.controller;
 
-import com.encore.playground.domain.qna.dto.AnswerDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.service.AnswerService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +39,59 @@ public class AnswerController {
 
     /**
      * POST - 질문 답변 생성
-     * @param id
-     * @param answerDTO
+     * @param answerWriteDto
+     * @param request
      * @return List<AnswerDTO>
      */
-    @PostMapping("/answer/create/{id}")
-    private List<AnswerDto> createAnswer(@PathVariable Long id, @RequestBody AnswerDto answerDTO) {
-        return answerService.create(answerDTO, id);
+    @PostMapping("/answer/write")
+    private List<AnswerDto> writeAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+
+        return answerService.createAnswer(answerWriteDto, memberIdDto);
+    }
+
+
+    @GetMapping("/answer/modify")
+    private String modifyAnswerButton(@RequestBody AnswerGetIdDto answerIdDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (answerService.isAnswerWriter(answerIdDto.getId(), memberIdDto)) {
+            return "forward:/answer/modify";
+        } else {
+            return "redirect:/answer/list";
+        }
+    }
+
+    /**
+     * Post - 질문에 대한 답변을 수정
+     * @param answerModifyDto
+     * @param request
+     * @return List<AnswerDto>
+     */
+    @PostMapping("/answer/modify")
+    private List<AnswerDto> modifyAnswer(@RequestBody AnswerModifyDto answerModifyDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (answerService.isAnswerWriter(answerModifyDto.getId(), memberIdDto)) {
+            return answerService.modifyAnswer(answerModifyDto, memberIdDto);
+        } else {
+            return answerService.answerList(answerModifyDto.getQuestionId());
+        }
+
+    }
+
+    /**
+     * Post - 질문에 대한 답변 삭제
+     * @param answerDeleteDto
+     * @param request
+     * @return List<AnswerDto>
+     */
+
+    @PostMapping("/answer/delete")
+    private List<AnswerDto> deleteAnswer(@RequestBody AnswerDeleteDto answerDeleteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (answerService.isAnswerWriter(answerDeleteDto.getId(), memberIdDto)) {
+            return answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+        } else {
+            return answerService.answerList(answerDeleteDto.getQuestionId());
+        }
     }
 }

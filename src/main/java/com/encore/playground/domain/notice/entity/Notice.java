@@ -1,5 +1,6 @@
 package com.encore.playground.domain.notice.entity;
 
+import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,9 @@ public class Notice {
     private Long id;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
-    private String memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)

@@ -68,6 +68,11 @@ public class FeedService {
         return countComments(new FeedListDto(feed));
     }
 
+    public FeedDto getFeed(FeedGetIdDto feedGetIdDto) {
+        Feed feed = feedRepository.findById(feedGetIdDto.getId()).get();
+        return new FeedDto(feed);
+    }
+
     /**
      * FeedDto를 사용하여 FeedDto를 반환하는 메소드(백엔드 내부 로직에 사용)
      * @param feedDto

@@ -1,6 +1,7 @@
 package com.encore.playground.domain.member.service;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -150,6 +151,10 @@ public class MemberService {
         }
 
         return randomPassword;
+    }
+
+    public MemberDto getMember(MemberGetIdDto memberGetIdDto) {
+        return new MemberDto(memberRepository.findById(memberGetIdDto.getId()).get());
     }
 
     /**
