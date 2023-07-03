@@ -80,6 +80,10 @@ public class NoticeController {
     @PostMapping("/notice/delete")
     public List<NoticeDto> noticeDelete(@RequestBody NoticeGetIdDto noticeGetIdDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return noticeService.deleteNotice(noticeGetIdDto, memberIdDto);
+        if (noticeService.isNoticeWriter(noticeGetIdDto.getId(), memberIdDto)) {
+            return noticeService.deleteNotice(noticeGetIdDto, memberIdDto);
+        } else {
+            return noticeService.noticeList();
+        }
     }
 }
