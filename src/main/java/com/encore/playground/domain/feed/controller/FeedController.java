@@ -28,15 +28,15 @@ public class FeedController {
     }
     // 게시글 작성
     @PostMapping(value = "/write")
-    public String write(String id, String article, Model model) {
-        List<FeedListDto> feedAfterWrite = feedService.write(id, article);
+    public String write(String memberId, String content, Model model) {
+        List<FeedListDto> feedAfterWrite = feedService.write(memberId, content);
         model.addAttribute("feeds", feedAfterWrite);
         return "feed/feed_main";
     }
 
     // 게시글 수정 페이지로 이동
     @GetMapping(value = "/modify")
-    public String modify(long feedNo, Model model) {
+    public String modify(Long feedNo, Model model) {
         FeedListDto feedToModify = feedService.getFeed(feedNo);
         model.addAttribute("feed", feedToModify);
         return "feed/feed_modify";
@@ -44,16 +44,16 @@ public class FeedController {
 
     // 게시글 수정
     @PostMapping(value = "/modify")
-    public String modify(long feedNo, String article, Model model) {
-        List<FeedListDto> feedAfterModify = feedService.modify(feedNo, article);
+    public String modify(Long id, String content, Model model) {
+        List<FeedListDto> feedAfterModify = feedService.modify(id, content);
         model.addAttribute("feeds", feedAfterModify);
         return "feed/feed_main";
     }
 
     // 게시글 삭제
     @GetMapping(value = "/delete")
-    public String delete(long feedNo, Model model) {
-        List<FeedListDto> feedAfterDel = feedService.delete(feedNo);
+    public String delete(Long id, Model model) {
+        List<FeedListDto> feedAfterDel = feedService.delete(id);
         model.addAttribute("feeds", feedAfterDel);
         return "feed/feed_main";
     }

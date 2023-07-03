@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "피드 상세화면, 마이페이지에서 댓글을 조회하는 DTO")
 public class CommentReadDto {
     @Schema(description = "댓글이 달린 피드의 feedId", example = "1")
-    private long feedId;
-    @Schema(description = "댓글 작성자의 memberId", example = "댓글 작성자")
-    private String memberId;
+    private Long feedId;
+    @Schema(description = "댓글 작성자의 userId", example = "1")
+    private String userId;
 }

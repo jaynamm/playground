@@ -11,14 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FeedDto {
-    private long id;
+    private Long id;
     private Member member;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private int likeCount;
-    private int commentCount;
-    private int commentTotalCount;
-    private int viewCount;
+    private Integer likeCount;
+    private Integer commentCount;
+    private Integer viewCount;
     private String content;
 
     public Feed toEntity() { // FeedDto를 Feed 엔티티로 변환
@@ -28,8 +27,6 @@ public class FeedDto {
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
                 .likeCount(likeCount)
-                .commentCount(commentCount)
-                .commentTotalCount(commentTotalCount)
                 .viewCount(viewCount)
                 .content(content)
                 .build();
@@ -41,8 +38,6 @@ public class FeedDto {
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.likeCount = entity.getLikeCount();
-        this.commentCount = entity.getCommentCount();
-        this.commentTotalCount = entity.getCommentTotalCount();
         this.viewCount = entity.getViewCount();
         this.content = entity.getContent();
     }

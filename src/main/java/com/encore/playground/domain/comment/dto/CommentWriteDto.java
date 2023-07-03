@@ -17,9 +17,9 @@ public class CommentWriteDto {
     @Schema(description = "댓글을 작성할 피드의 feedId", example = "1")
     private Long feedId;
 
-    @NotBlank(message = "댓글 작성자의 memberId를 입력해 주십시오.")
-    @Schema(description = "댓글 작성자의 memberId", example = "댓글 작성자")
-    private String memberId;
+//    @NotBlank(message = "댓글 작성자의 memberId를 입력해 주십시오.")
+    @Schema(description = "댓글 작성자의 member 테이블 id", example = "1")
+    private Long memberId;
 
     @NotBlank(message = "댓글의 내용을 입력해 주십시오.")
     @Schema(description = "댓글 내용", example = "댓글 내용")

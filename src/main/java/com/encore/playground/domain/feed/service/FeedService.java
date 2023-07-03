@@ -1,5 +1,6 @@
 package com.encore.playground.domain.feed.service;
 
+import com.encore.playground.domain.comment.repository.CommentRepository;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
@@ -19,6 +20,16 @@ import java.util.List;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final MemberService memberService;
+    private final CommentRepository commentRepository;
+
+    /**
+     * 피드 갯수
+     */
+    public FeedListDto countComments(FeedListDto feedListDto) {
+        Long id = feedListDto.getId();
+        feedListDto.setCommentCount(commentRepository.countByFeed_Id(id));
+        return feedListDto;
+    }
 
     /**
      * 피드 메인페이지<br>
@@ -27,7 +38,12 @@ public class FeedService {
      */
     public List<FeedListDto> feedPage() {
         List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
-        List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).toList();
+        List<FeedListDto> feedDtoList = feedList.stream()
+                // Feed Entity를 FeedListDto로 변환
+                .map(FeedListDto::new)
+                // FeedListDto들에 commentCount 값 입력
+                .map(this::countComments)
+                .toList();
         return feedDtoList;
     }
 
@@ -38,7 +54,7 @@ public class FeedService {
      */
     public List<FeedListDto> getFeedListByMember(String id) {
         List<Feed> feedList = feedRepository.findByMemberId(id).get();
-        List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).toList();
+        List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).map(this::countComments).toList();
         return feedDtoList;
     }
 
@@ -49,7 +65,7 @@ public class FeedService {
      */
     public FeedListDto getFeed(Long id) {
         Feed feed = feedRepository.findById(id).get();
-        return new FeedListDto(feed);
+        return countComments(new FeedListDto(feed));
     }
 
     /**
@@ -73,9 +89,6 @@ public class FeedService {
         FeedDto feedToWrite = FeedDto.builder()
                 .member(memberDto.toEntity())
                 .createdDate(LocalDateTime.now())
-                .likeCount(0)
-                .commentCount(0)
-                .commentTotalCount(0)
                 .viewCount(0)
                 .content(content)
                 .build();
@@ -90,9 +103,6 @@ public class FeedService {
         feedRepository.save(FeedDto.builder()
                 .member(memberDto.toEntity())
                 .createdDate(LocalDateTime.now())
-                .likeCount(0)
-                .commentCount(0)
-                .commentTotalCount(0)
                 .viewCount(0)
                 .content(feedWriteDto.getContent())
                 .build().toEntity());
@@ -105,7 +115,7 @@ public class FeedService {
      * @param content: 수정할 글 내용
      * @return 글 수정 이후의 피드 객체 List
      */
-    public List<FeedListDto> modify(long id, String content) {
+    public List<FeedListDto> modify(Long id, String content) {
         Feed feedToModify = feedRepository.findById(id).get();
         FeedDto feedDto = new FeedDto(feedToModify);
         feedDto.setContent(content);

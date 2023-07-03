@@ -17,6 +17,23 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 멤버 테이블 id를 통해 멤버를 가져오는 메소드
+     * @param id
+     * @return MemberDto
+     */
+    public MemberDto getMemberById(Long id) {
+        Optional<Member> _member = memberRepository.findById(id);
+
+        // 멤버 유무 확인
+        if (_member.isEmpty()) {
+            throw new UsernameNotFoundException("사용자가 존재하지 않습니다.");
+        }
+        // 멤버가 있으면 멤버를 가져온다.
+        MemberDto memberDto = new MemberDto(_member.get());
+
+        return memberDto;
+    }
 
     /**
      * 로그인시 userid 를 통해 멤버 확인 후 가져옴

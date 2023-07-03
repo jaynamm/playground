@@ -26,7 +26,7 @@ public class Feed {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false) // 외래키 이름
-    private Member member; // 멤버 id
+    private Member member; // 작성자의 멤버 id
 
     @CreatedDate
     @Column(nullable = false)
@@ -35,21 +35,13 @@ public class Feed {
     @LastModifiedDate
     private LocalDateTime modifiedDate; // 수정일자
 
-    @Column(nullable = false)
+    // TODO: 좋아요 수를 Like 테이블에서 join하여 가져오는 작업 예정
     @ColumnDefault("0")
-    private int likeCount; // 좋아요 수
+    private Integer likeCount; // 좋아요 수
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private int commentCount; // 댓글 수
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private int commentTotalCount; // 댓글이 저장된 횟수. 댓글 번호를 지정하기 위하여 사용
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private int viewCount; // 조회 수
+    private Integer viewCount; // 조회 수
 
     @Column(nullable = false, length = 1000)
     private String content; // 글 내용

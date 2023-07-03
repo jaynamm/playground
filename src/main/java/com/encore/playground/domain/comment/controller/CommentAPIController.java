@@ -41,7 +41,7 @@ public class CommentAPIController {
     @Parameter(name="memberId", description="댓글 작성자의 memberId", example="작성자", required = true)
     @GetMapping("/list/user/{memberId}")
     public List<CommentListDto> getCommentsByUser(@PathVariable String memberId) {
-        return commentService.getCommentsByUser(CommentReadDto.builder().memberId(memberId).build());
+        return commentService.getCommentsByUser(CommentReadDto.builder().userId(memberId).build());
     }
 
     /**
