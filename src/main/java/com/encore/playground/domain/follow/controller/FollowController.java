@@ -25,8 +25,4 @@ public class FollowController {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         followService.unfollow(followGetIdDto, memberIdDto);
     }
-
-
-
-
 }

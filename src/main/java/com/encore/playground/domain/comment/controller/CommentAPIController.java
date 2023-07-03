@@ -2,11 +2,13 @@ package com.encore.playground.domain.comment.controller;
 
 import com.encore.playground.domain.comment.dto.*;
 import com.encore.playground.domain.comment.service.CommentService;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,7 @@ public class CommentAPIController {
     @Operation(summary = "댓글 목록 가져오기 (피드 상세화면용)", description = "피드 글번호를 입력하면 해당 글에 달린 댓글들을 모두 가져온다.")
     @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
     @GetMapping("/list/{feedId}")
-    public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId) {
+    public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId, HttpServletRequest request) {
         return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build());
     }
 
@@ -40,8 +42,9 @@ public class CommentAPIController {
     @Operation(summary = "해당 유저가 작성한 댓글 목록 가져오기 (마이페이지용)", description = "회원의 id를 입력하면 해당 사용자가 작성한 댓글들을 모두 가져온다.")
     @Parameter(name="memberId", description="댓글 작성자의 memberId", example="작성자", required = true)
     @GetMapping("/list/user/{memberId}")
-    public List<CommentListDto> getCommentsByUser(@PathVariable String memberId) {
-        return commentService.getCommentsByUser(CommentReadDto.builder().userId(memberId).build());
+    public List<CommentListDto> getCommentsByUser(@PathVariable String memberId, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return commentService.getCommentsByUser(memberIdDto);
     }
 
     /**
@@ -58,8 +61,9 @@ public class CommentAPIController {
             content = @Content(schema = @Schema(implementation = CommentWriteDto.class))
     )
     @PostMapping(value = "/write")
-    public void write(@RequestBody CommentWriteDto commentWriteDto) {
-        commentService.writeComment(commentWriteDto);
+    public void write(@RequestBody CommentWriteDto commentWriteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        commentService.writeComment(commentWriteDto, memberIdDto);
     }
 
     /**
@@ -75,8 +79,9 @@ public class CommentAPIController {
             content = @Content(schema = @Schema(implementation = CommentModifyDto.class))
     )
     @PostMapping(value = "/modify")
-    public void modify(@RequestBody CommentModifyDto commentModifyDto) {
-        commentService.modifyComment(commentModifyDto);
+    public void modify(@RequestBody CommentModifyDto commentModifyDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        commentService.modifyComment(commentModifyDto, memberIdDto);
     }
 
     /**
@@ -91,7 +96,8 @@ public class CommentAPIController {
             content = @Content(schema = @Schema(implementation = CommentDeleteDto.class))
     )
     @PostMapping(value = "/delete")
-    public void delete(@RequestBody CommentDeleteDto commentDeleteDto) {
-        commentService.deleteComment(commentDeleteDto);
+    public void delete(@RequestBody CommentDeleteDto commentDeleteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        commentService.deleteComment(commentDeleteDto, memberIdDto);
     }
 }

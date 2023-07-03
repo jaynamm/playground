@@ -5,6 +5,8 @@ import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -49,11 +51,12 @@ public class FeedService {
 
     /**
      * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드 (마이페이지에서 사용할 용도)
-     * @param id 사용자 memberId
+     * @param memberIdDto: jwt로부터 추출한 memberId가 들어있는 DTO
      * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
      */
-    public List<FeedListDto> getFeedListByMember(String id) {
-        List<Feed> feedList = feedRepository.findByMemberId(id).get();
+    public List<FeedListDto> getFeedListByMember(MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        List<Feed> feedList = feedRepository.findByMemberId(memberDto.getId()).get();
         List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).map(this::countComments).toList();
         return feedDtoList;
     }
@@ -101,10 +104,8 @@ public class FeedService {
         return feedPage();
     }
 
-    public List<FeedListDto> write(FeedWriteDto feedWriteDto) {
-        // TODO: jwt에서 memberId를 추출하여 사용하도록 수정 필요
-        String memberId = "qwer";
-        MemberDto memberDto = memberService.getMemberByUserid(memberId);
+    public List<FeedListDto> write(FeedWriteDto feedWriteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         feedRepository.save(FeedDto.builder()
                 .member(memberDto.toEntity())
                 .createdDate(LocalDateTime.now())
@@ -128,7 +129,8 @@ public class FeedService {
         return feedPage();
     }
 
-    public List<FeedListDto> modify(FeedModifyDto feedModifyDto) {
+    public List<FeedListDto> modify(FeedModifyDto feedModifyDto, MemberGetMemberIdDto memberIdDto) {
+        // TODO: 수정할 글이 해당 사용자의 글인지 확인하는 로직 필요
         FeedDto feedDto = new FeedDto(feedRepository.findById(feedModifyDto.getId()).get());
         feedDto.setContent(feedModifyDto.getContent());
         feedRepository.save(feedDto.toEntity());
@@ -147,7 +149,8 @@ public class FeedService {
         return feedPage();
     }
 
-    public List<FeedListDto> delete(FeedDeleteDto feedDeleteDto) {
+    public List<FeedListDto> delete(FeedDeleteDto feedDeleteDto, MemberGetMemberIdDto memberIdDto) {
+        // TODO: 삭제할 글이 해당 사용자의 글인지 확인하는 로직 필요
         FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDeleteDto.getId()).get());
         feedRepository.delete(feedToDelete.toEntity());
         return feedPage();

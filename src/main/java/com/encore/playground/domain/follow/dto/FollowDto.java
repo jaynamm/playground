@@ -42,7 +42,4 @@ public class FollowDto {
         this.toMember = follow.getToMember();
         this.followDate = follow.getFollowDate();
     }
-
-
-
 }

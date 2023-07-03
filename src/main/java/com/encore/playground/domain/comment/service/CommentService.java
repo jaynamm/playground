@@ -1,10 +1,12 @@
 package com.encore.playground.domain.comment.service;
 
 import com.encore.playground.domain.comment.dto.*;
+import com.encore.playground.domain.comment.entity.Comment;
 import com.encore.playground.domain.comment.repository.CommentRepository;
 import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +37,12 @@ public class CommentService {
 
     /**
      * 유저 id를 사용하여 해당 유저가 작성한 댓글들 가져오기
-     * @param commentReadDto 해당 프로퍼티를 가진 Dto<br>
-     *                   memberId: 멤버 테이블 id<br>
+     * @param memberIdDto 해당 프로퍼티를 가진 Dto<br>
+     *                   userId: 멤버 테이블 id<br>
      * @return 해당 유저가 작성한 댓글 목록
      */
-    public List<CommentListDto> getCommentsByUser(CommentReadDto commentReadDto) {
-        Member member = memberService.getMemberByUserid(commentReadDto.getUserId()).toEntity();
+    public List<CommentListDto> getCommentsByUser(MemberGetMemberIdDto memberIdDto) {
+        Member member = memberService.getMemberByUserid(memberIdDto.getUserid()).toEntity();
         return commentRepository.findByMemberId(member.getId()).get()
                 .stream().map(CommentListDto::new).toList();
     }
@@ -52,10 +54,10 @@ public class CommentService {
      *                   memberId: 유저 id<br>
      *                   content: 댓글 내용
      */
-    public void writeComment(CommentWriteDto commentWriteDto) {
+    public void writeComment(CommentWriteDto commentWriteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         Long feedId = commentWriteDto.getFeedId();
         FeedDto feedDto = feedService.getFeed(FeedDto.builder().id(feedId).build());
-        MemberDto memberDto = memberService.getMemberById(commentWriteDto.getMemberId());
         commentRepository.save(CommentDto.builder()
                         .feed(feedDto.toEntity())
                         .member(memberDto.toEntity())
@@ -69,7 +71,10 @@ public class CommentService {
      *                   id: 댓글 번호<br>
      *                   content: 수정할 댓글 내용<br>
      */
-    public void modifyComment(CommentModifyDto commentModifyDto) {
+    public void modifyComment(CommentModifyDto commentModifyDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        Comment commentToModify = commentRepository.findById(commentModifyDto.getId()).get();
+        // TODO: 수정할 댓글이 해당 유저가 작성한 댓글인지 확인하는 로직 필요
         commentRepository.save(CommentDto.builder()
                 .id(commentModifyDto.getId())
                 .content(commentModifyDto.getContent())
@@ -81,7 +86,10 @@ public class CommentService {
      * @param commentDeleteDto 해당 프로퍼티를 가진 Dto<br>
      *                   id: 댓글 번호<br>
      */
-    public void deleteComment(CommentDeleteDto commentDeleteDto) {
+    public void deleteComment(CommentDeleteDto commentDeleteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        Comment commentToDelete = commentRepository.findById(commentDeleteDto.getId()).get();
+        // TODO: 삭제할 댓글이 해당 유저가 작성한 댓글인지 확인하는 로직 필요
         commentRepository.deleteById(commentDeleteDto.getId());
     }
 }

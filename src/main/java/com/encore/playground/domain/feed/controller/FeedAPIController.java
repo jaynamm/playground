@@ -4,11 +4,13 @@ import com.encore.playground.domain.comment.dto.CommentReadDto;
 import com.encore.playground.domain.comment.service.CommentService;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.service.FeedService;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,11 +42,11 @@ public class FeedAPIController {
      * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드
      */
     // TODO: 사용자 id값을 URL에 노출할 필요가 있는가? jwt를 쓰는데?
-    // TODO: jwt를 이용하여 userid 값을 service 객체의 메소드로 넘기는 작업 예정
     @Operation(summary = "피드 목록 (마이페이지용)", description = "해당 사용자가 작성한 피드 목록을 반환한다.")
     @GetMapping(value = "/list/{id}")
-    public List<FeedListDto> getFeedListByMember(@PathVariable String id) {
-        return feedService.getFeedListByMember(id);
+    public List<FeedListDto> getFeedListByMember(@PathVariable String id, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return feedService.getFeedListByMember(memberIdDto);
     }
 
     /**
@@ -89,8 +91,9 @@ public class FeedAPIController {
             )
     )
     @PostMapping(value = "/write")
-    public List<FeedListDto> write(@RequestBody FeedWriteDto feedWriteDto) {
-        return feedService.write(feedWriteDto);
+    public List<FeedListDto> write(@RequestBody FeedWriteDto feedWriteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return feedService.write(feedWriteDto, memberIdDto);
     }
 
     /**
@@ -110,8 +113,9 @@ public class FeedAPIController {
             )
     )
     @PostMapping(value = "/modify")
-    public List<FeedListDto> modify(@RequestBody FeedModifyDto feedModifyDto) {
-        return feedService.modify(feedModifyDto);
+    public List<FeedListDto> modify(@RequestBody FeedModifyDto feedModifyDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return feedService.modify(feedModifyDto, memberIdDto);
     }
 
     /**
@@ -126,11 +130,12 @@ public class FeedAPIController {
             required = true,
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = FeedModifyDto.class)
+                    schema = @Schema(implementation = FeedDeleteDto.class)
             )
     )
     @PostMapping(value = "/delete")
-    public List<FeedListDto> delete(@RequestBody FeedDeleteDto feedDeleteDto) {
-        return feedService.delete(feedDeleteDto);
+    public List<FeedListDto> delete(@RequestBody FeedDeleteDto feedDeleteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return feedService.delete(feedDeleteDto, memberIdDto);
     }
 }
