@@ -88,7 +88,10 @@ public class AnswerController {
     @PostMapping("/answer/delete")
     private List<AnswerDto> deleteAnswer(@RequestBody AnswerDeleteDto answerDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-
-        return answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+        if (answerService.isAnswerWriter(answerDeleteDto.getId(), memberIdDto)) {
+            return answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+        } else {
+            return answerService.answerList(answerDeleteDto.getQuestionId());
+        }
     }
 }
