@@ -17,7 +17,7 @@ public class FollowDto {
     private Long id;
     private Member fromMember;
     private Member toMember;
-    private LocalDateTime followDate;
+    private LocalDateTime createdDate;
 
     /**
      * dto -> entity
@@ -28,7 +28,7 @@ public class FollowDto {
               .id(id)
               .fromMember(fromMember)
               .toMember(toMember)
-              .followDate(followDate)
+              .createdDate(createdDate)
               .build();
     }
 
@@ -40,9 +40,6 @@ public class FollowDto {
         this.id = follow.getId();
         this.fromMember = follow.getFromMember();
         this.toMember = follow.getToMember();
-        this.followDate = follow.getFollowDate();
+        this.createdDate = follow.getCreatedDate();
     }
-
-
-
 }

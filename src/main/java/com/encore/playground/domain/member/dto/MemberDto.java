@@ -41,7 +41,7 @@ public class MemberDto {
         this.role = member.getRole();
     }
 
-    public Member toEntity(){
+    public Member toEntity() {
         return Member.builder()
                 .id(id)
                 .userid(userid)

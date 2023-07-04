@@ -28,7 +28,7 @@ public class FollowService {
         followRepository.save(FollowDto.builder()
                 .fromMember(fromMember.toEntity())
                 .toMember(toMember.toEntity())
-                .followDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .build().toEntity()
         );
     }
