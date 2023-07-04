@@ -34,7 +34,7 @@ public class QuestionController {
     }
 
     @GetMapping("/question/list/{memberId}")
-    public List<QuestionDto> questionList(@PathVariable String memberId) {
+    public List<QuestionDto> questionList(@PathVariable Long memberId) {
         return questionService.getQuestionListByMember(memberId);
     }
 

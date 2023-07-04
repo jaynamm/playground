@@ -33,7 +33,7 @@ public class AnswerController {
      * @return List<AnswerDTO>
      */
     @GetMapping("/answer/list/{memberId}")
-    private List<AnswerDto> getAnswerListByMember(@PathVariable String memberId) {
+    private List<AnswerDto> getAnswerListByMember(@PathVariable Long memberId) {
         return answerService.getAnswerListByMember(memberId);
     }
 
