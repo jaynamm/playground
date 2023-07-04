@@ -17,9 +17,16 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<List<Comment>> findByFeed_Id (Long feedId);
 
     /**
+     * 피드 글번호를 이용하여 해당 글에 달린 댓글들의 갯수 가져오기
+     * @param feedId 외래키
+     * @return 해당 글에 달린 댓글의 갯수
+     */
+    Integer countByFeed_Id (Long feedId);
+
+    /**
      * 유저 id를 사용하여 해당 유저가 작성한 댓글들 가져오기
      * @param memberId 유저 id
      * @return 해당 유저가 작성한 댓글 (Optional) 목록
      */
-    Optional<List<Comment>> findByMemberId(String memberId);
+    Optional<List<Comment>> findByMemberId(Long memberId);
 }

@@ -31,6 +31,6 @@ public class Follow {
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime followDate; //팔로우 시각
+    private LocalDateTime createdDate; //팔로우 시각
 
 }

@@ -7,7 +7,6 @@ import com.encore.playground.domain.likes.dto.LikesDto;
 import com.encore.playground.domain.likes.dto.LikesGetIdDto;
 import com.encore.playground.domain.likes.repository.LikesRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
-import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class LikesService {
         likesRepository.save(LikesDto.builder()
                 .feed(feedDto.toEntity())
                 .member(memberDto.toEntity())
-                .likesDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .build().toEntity()
         );
     }

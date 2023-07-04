@@ -32,5 +32,5 @@ public class Likes {
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime likesDate;
+    private LocalDateTime createdDate;
 }

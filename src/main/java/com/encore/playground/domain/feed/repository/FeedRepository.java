@@ -10,5 +10,5 @@ import java.util.Optional;
  * 피드 글을 저장하는 리포지토리
  */
 public interface FeedRepository extends JpaRepository<Feed, Long> {
-    Optional<List<Feed>> findByMemberId(String memberId);
+    Optional<List<Feed>> findByMemberId(Long memberId);
 }
