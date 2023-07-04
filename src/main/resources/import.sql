@@ -20,7 +20,16 @@ insert into question(title, content, member_id, created_date) values ("공가 �
 insert into question(title, content, member_id, created_date) values ("독산 캠퍼스 운영시간이 궁금합니다.", "몇시까지 운영하나요? ", 3, 20230519221726);
 insert into question(title, content, member_id, created_date) values ("도서 대출 관련 질문입니다.", "책 대여기간은 며칠인가요?", 1, 20230519231726);
 
+insert into answer(content, created_date, member_id, question_id) values ("10시입니다.", 20230519222526, 1, 2);
+
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (2, '댓글 내용', '2023-05-17 19:37:35.890895', 1, '2023-05-17 19:37:35.890895', 1);
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (3, '다', '2023-05-17 19:37:36.881436', 2, '2023-05-17 19:37:36.881436', 1);
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (4, '난 댓글이야', '2023-05-17 19:37:38.571587', 3, '2023-05-17 19:37:38.571587', 1);
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (5, '난 피자가 싫어', '2023-05-17 19:37:37.770748', 4, '2023-05-17 19:37:37.770748', 1);
+
+insert into follow (from_member, to_member, created_date) values (1, 3, 20230519221726);
+insert into follow (from_member, to_member, created_date) values (1, 2, 20230519221726);
+insert into follow (from_member, to_member, created_date) values (1, 4, 20230519221726);
+insert into follow (from_member, to_member, created_date) values (4, 1, 20230519221726);
+insert into follow (from_member, to_member, created_date) values (2, 1, 20230519221726);
+

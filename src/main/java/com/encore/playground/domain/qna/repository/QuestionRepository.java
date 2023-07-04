@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    Optional<List<Question>> findByMemberId(String memberId);
+    Optional<List<Question>> findByMemberId(Long memberId);
 }

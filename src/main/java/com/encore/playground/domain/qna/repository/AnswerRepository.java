@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Optional<List<Answer>> findAnswerByQuestion_Id(Long questionId);
-    Optional<List<Answer>> findByMemberId(String memberId);
+    Optional<List<Answer>> findByMemberId(Long memberId);
 }

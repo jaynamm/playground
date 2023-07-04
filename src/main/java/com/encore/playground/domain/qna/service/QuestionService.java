@@ -44,7 +44,7 @@ public class QuestionService {
      * @return List<QuestionDto>
      */
 
-    public List<QuestionDto> getQuestionListByMember(String memberId) {
+    public List<QuestionDto> getQuestionListByMember(Long memberId) {
         List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberId).get().stream().map(QuestionDto::new).toList();
         return questionDtoList;
     }

@@ -29,7 +29,7 @@ public class AnswerService {
         return memberIdDto.getUserid().equals(answerRepository.findById(id).get().getMember().getUserid());
     }
 
-    public List<AnswerDto> getAnswerListByMember(String memberId) {
+    public List<AnswerDto> getAnswerListByMember(Long memberId) {
         return answerRepository.findByMemberId(memberId).get().stream().map(AnswerDto::new).toList();
     }
 
