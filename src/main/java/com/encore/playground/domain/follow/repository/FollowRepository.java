@@ -19,6 +19,10 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     // 사용자가 팔로우하는 List
     List<Follow> findByFromMember(Member fromMember);
+
+    // 사용자를 팔로우하는 List
+    List<Follow> findByToMember(Member toMember);
+
     // 언팔로우 했을 때, delete
     @Transactional
     void deleteByFromMemberAndToMember(Member fromMember, Member toMember);

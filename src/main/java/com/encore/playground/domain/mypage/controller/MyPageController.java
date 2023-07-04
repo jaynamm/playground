@@ -16,10 +16,10 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-//    @GetMapping("/mypage")
-//    public MyPageDto myPageMain(HttpServletRequest request) {
-//        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-//        return myPageService.myPage(memberIdDto);
-//    }
+    @GetMapping("/mypage")
+    public MyPageDto myPageMain(HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return myPageService.myPage(memberIdDto);
+    }
 
 }

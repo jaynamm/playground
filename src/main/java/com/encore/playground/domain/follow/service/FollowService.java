@@ -3,6 +3,7 @@ package com.encore.playground.domain.follow.service;
 
 import com.encore.playground.domain.follow.dto.FollowDto;
 import com.encore.playground.domain.follow.dto.FollowGetIdDto;
+import com.encore.playground.domain.follow.dto.FollowMyPageDto;
 import com.encore.playground.domain.follow.repository.FollowRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetIdDto;
@@ -20,6 +21,7 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     private final MemberService memberService;
+
     // 사용자가 다른 사용자를 follow
     public void follow(FollowGetIdDto followGetIdDto, MemberGetMemberIdDto memberIdDto) {
 
@@ -53,12 +55,26 @@ public class FollowService {
     }
 
     // 사용자가 follow하는 사용자 List
-//    public List<MemberDto> getFollowingList(MemberDto memberDto) {
-//        List<FollowDto> followList = followRepository.findByFromMember(memberDto.toEntity()).stream().map(FollowDto::new).toList();
-//        List<MemberDto> followingMemberList =
-//    }
+    public List<MemberDto> getFollowingList(MemberDto memberDto) {
+        List<FollowDto> followDtoList = followRepository.findByFromMember(memberDto.toEntity()).stream().map(FollowDto::new).toList();
+        return followDtoList.stream().map(FollowDto::getToMember).map(MemberDto::new).toList();
+    }
 
+    // 사용자를 follow하는 사용자 List
+    public List<MemberDto> getFollowerList(MemberDto memberDto) {
+        List<FollowDto> followDtoList = followRepository.findByToMember(memberDto.toEntity()).stream().map(FollowDto::new).toList();
+        return followDtoList.stream().map(FollowDto::getFromMember).map(MemberDto::new).toList();
+    }
 
+    // FollowMyPageDto build
+    public FollowMyPageDto getFollowMyPageDto(MemberDto memberDto) {
+        return FollowMyPageDto.builder()
+                .followingCount(getFollowingCount(memberDto))
+                .followerCount(getFollowerCount(memberDto))
+                .followingList(getFollowingList(memberDto))
+                .followerList(getFollowerList(memberDto))
+                .build();
+    }
 
 
 }

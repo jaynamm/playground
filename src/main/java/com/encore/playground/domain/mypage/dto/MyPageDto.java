@@ -1,7 +1,7 @@
 package com.encore.playground.domain.mypage.dto;
 
-import com.encore.playground.domain.comment.dto.CommentDto;
-import com.encore.playground.domain.feed.dto.FeedDto;
+import com.encore.playground.domain.comment.dto.CommentListDto;
+import com.encore.playground.domain.feed.dto.FeedListDto;
 import com.encore.playground.domain.follow.dto.FollowMyPageDto;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.qna.dto.AnswerDto;
@@ -20,8 +20,8 @@ import java.util.List;
 public class MyPageDto {
     private MemberDto memberDto;
     private FollowMyPageDto followMyPageDto;
-    private List<FeedDto> myPageFeedDtoList;
-    private List<CommentDto> myPageCommentDtoList;
+    private List<FeedListDto> myPageFeedDtoList;
+    private List<CommentListDto> myPageCommentDtoList;
     private List<QuestionDto> myPageQuestionDtoList;
     private List<AnswerDto> myPageAnswerDtoList;
 
