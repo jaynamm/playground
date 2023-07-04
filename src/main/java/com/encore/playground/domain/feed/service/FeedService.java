@@ -4,11 +4,11 @@ import com.encore.playground.domain.comment.repository.CommentRepository;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
+import com.encore.playground.domain.follow.service.FollowService;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,7 @@ import java.util.List;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final MemberService memberService;
+    private final FollowService followService;
     private final CommentRepository commentRepository;
 
     /**
@@ -35,13 +36,29 @@ public class FeedService {
         return feedListDto;
     }
 
+    public List<FeedListDto> feedPageAll() {
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
+        List<FeedListDto> feedDtoList = feedList.stream()
+                // Feed Entity를 FeedListDto로 변환
+                .map(FeedListDto::new)
+                // FeedListDto들에 commentCount 값 입력
+                .map(this::countComments)
+                .toList();
+        return feedDtoList;
+    }
+
     /**
      * 피드 메인페이지<br>
      * 현재 모든 글을 반환하고 있으나, 추후 페이징 처리(검색 갯수 제한) 필요
      * @return 피드 피드 객체 List
      */
-    public List<FeedListDto> feedPage() {
-        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
+    public List<FeedListDto> feedPage(MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        List<MemberDto> followerListDto = followService.getFollowingList(memberDto);
+        followerListDto.add(memberDto); // 자신의 피드도 보여주기 위해 현재 사용자의 MemberDto를 추가
+        List<Feed> feedList = feedRepository.findByMemberInOrderByIdDesc(
+                followerListDto.stream().map(MemberDto::toEntity).toList())
+                .get();
         List<FeedListDto> feedDtoList = feedList.stream()
                 // Feed Entity를 FeedListDto로 변환
                 .map(FeedListDto::new)
@@ -103,7 +120,7 @@ public class FeedService {
                 .content(content)
                 .build();
         feedRepository.save(feedToWrite.toEntity());
-        return feedPage();
+        return feedPage(MemberGetMemberIdDto.builder().userid(memberId).build());
     }
 
     public List<FeedListDto> write(FeedWriteDto feedWriteDto, MemberGetMemberIdDto memberIdDto) {
@@ -114,7 +131,7 @@ public class FeedService {
                 .viewCount(0)
                 .content(feedWriteDto.getContent())
                 .build().toEntity());
-        return feedPage();
+        return feedPage(memberIdDto);
     }
 
     /**
@@ -140,14 +157,14 @@ public class FeedService {
         FeedDto feedDto = new FeedDto(feedToModify);
         feedDto.setContent(content);
         feedRepository.save(feedDto.toEntity());
-        return feedPage();
+        return feedPageAll();
     }
 
     public List<FeedListDto> modify(FeedModifyDto feedModifyDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = new FeedDto(feedRepository.findById(feedModifyDto.getId()).get());
         feedDto.setContent(feedModifyDto.getContent());
         feedRepository.save(feedDto.toEntity());
-        return feedPage();
+        return feedPage(memberIdDto);
     }
 
     /**
@@ -159,12 +176,12 @@ public class FeedService {
         Feed feedToDelete = feedRepository.findById(id).get();
         FeedDto feedDto = new FeedDto(feedToDelete);
         feedRepository.delete(feedDto.toEntity());
-        return feedPage();
+        return feedPageAll();
     }
 
     public List<FeedListDto> delete(FeedDeleteDto feedDeleteDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDeleteDto.getId()).get());
         feedRepository.delete(feedToDelete.toEntity());
-        return feedPage();
+        return feedPage(memberIdDto);
     }
 }
