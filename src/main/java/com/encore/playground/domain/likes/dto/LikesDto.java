@@ -18,7 +18,7 @@ public class LikesDto {
     private Long id;
     private Feed feed;
     private Member member;
-    private LocalDateTime likesDate;
+    private LocalDateTime createdDate;
 
     /**
      *  dto -> entity
@@ -29,7 +29,7 @@ public class LikesDto {
                 .id(id)
                 .feed(feed)
                 .member(member)
-                .likesDate(likesDate)
+                .createdDate(createdDate)
                 .build();
     }
 
@@ -40,7 +40,7 @@ public class LikesDto {
         this.id = likes.getId();
         this.feed = likes.getFeed();
         this.member = likes.getMember();
-        this.likesDate = likes.getLikesDate();
+        this.createdDate = likes.getCreatedDate();
     }
 
 }

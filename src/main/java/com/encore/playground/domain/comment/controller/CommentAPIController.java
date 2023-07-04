@@ -3,6 +3,9 @@ package com.encore.playground.domain.comment.controller;
 import com.encore.playground.domain.comment.dto.*;
 import com.encore.playground.domain.comment.service.CommentService;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.global.api.DefaultResponse;
+import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,9 +84,26 @@ public class CommentAPIController {
             content = @Content(schema = @Schema(implementation = CommentModifyDto.class))
     )
     @PostMapping(value = "/modify")
-    public void modify(@RequestBody CommentModifyDto commentModifyDto, HttpServletRequest request) {
+    public ResponseEntity<?> modify(@RequestBody CommentModifyDto commentModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        commentService.modifyComment(commentModifyDto, memberIdDto);
+        if (commentService.isCommentWriter(commentModifyDto.getId(), memberIdDto)) {
+            commentService.modifyComment(commentModifyDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.COMMENT_MODIFY
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.COMMENT_MODIFY_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 
     /**
@@ -96,8 +118,25 @@ public class CommentAPIController {
             content = @Content(schema = @Schema(implementation = CommentDeleteDto.class))
     )
     @PostMapping(value = "/delete")
-    public void delete(@RequestBody CommentDeleteDto commentDeleteDto, HttpServletRequest request) {
+    public ResponseEntity<?> delete(@RequestBody CommentDeleteDto commentDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        commentService.deleteComment(commentDeleteDto, memberIdDto);
+        if (commentService.isCommentWriter(commentDeleteDto.getId(), memberIdDto)) {
+            commentService.deleteComment(commentDeleteDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.COMMENT_DELETE
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.COMMENT_DELETE_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 }

@@ -6,9 +6,9 @@ import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,9 @@ public class FeedService {
     private final CommentRepository commentRepository;
 
     /**
-     * 피드 갯수
+     * 피드에 달린 댓글 갯수를 세어서 feedListDto에 commentCount로 넣어주는 메소드
+     * @param feedListDto 댓글 갯수를 표시해야 하는 피드(들)의 feedListDto
+     * @return 댓글 갯수(commentCount) 값이 추가된 feedListDto
      */
     public FeedListDto countComments(FeedListDto feedListDto) {
         Long id = feedListDto.getId();
@@ -116,6 +118,18 @@ public class FeedService {
     }
 
     /**
+     * 글 상세보기를 누른 멤버가 해당 글을 작성한 멤버인지 확인하는 boolean 메소드
+     * @param id 피드 번호
+     * @param memberIdDto jwt로부터 추출한 memberId가 들어있는 DTO
+     * @return 해당 글을 작성한 멤버인지 true/false
+     */
+    public boolean isFeedWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        FeedDto feedDto = getFeed(FeedDto.builder().id(id).build());
+        return memberDto.getId().equals(feedDto.getMember().getId());
+    }
+
+    /**
      * 글 수정기능
      * @param id: 글 번호
      * @param content: 수정할 글 내용
@@ -130,7 +144,6 @@ public class FeedService {
     }
 
     public List<FeedListDto> modify(FeedModifyDto feedModifyDto, MemberGetMemberIdDto memberIdDto) {
-        // TODO: 수정할 글이 해당 사용자의 글인지 확인하는 로직 필요
         FeedDto feedDto = new FeedDto(feedRepository.findById(feedModifyDto.getId()).get());
         feedDto.setContent(feedModifyDto.getContent());
         feedRepository.save(feedDto.toEntity());
@@ -150,7 +163,6 @@ public class FeedService {
     }
 
     public List<FeedListDto> delete(FeedDeleteDto feedDeleteDto, MemberGetMemberIdDto memberIdDto) {
-        // TODO: 삭제할 글이 해당 사용자의 글인지 확인하는 로직 필요
         FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDeleteDto.getId()).get());
         feedRepository.delete(feedToDelete.toEntity());
         return feedPage();

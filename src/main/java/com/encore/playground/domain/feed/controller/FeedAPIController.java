@@ -5,6 +5,9 @@ import com.encore.playground.domain.comment.service.CommentService;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.service.FeedService;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.global.api.DefaultResponse;
+import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -113,9 +118,27 @@ public class FeedAPIController {
             )
     )
     @PostMapping(value = "/modify")
-    public List<FeedListDto> modify(@RequestBody FeedModifyDto feedModifyDto, HttpServletRequest request) {
+    public ResponseEntity<?> modify(@RequestBody FeedModifyDto feedModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.modify(feedModifyDto, memberIdDto);
+        if (feedService.isFeedWriter(feedModifyDto.getId(), memberIdDto)){
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.FEED_MODIFY,
+                            feedService.modify(feedModifyDto, memberIdDto)
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.FEED_MODIFY_FAILED,
+                            feedService.feedPage()
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 
     /**
@@ -134,8 +157,26 @@ public class FeedAPIController {
             )
     )
     @PostMapping(value = "/delete")
-    public List<FeedListDto> delete(@RequestBody FeedDeleteDto feedDeleteDto, HttpServletRequest request) {
+    public ResponseEntity<?> delete(@RequestBody FeedDeleteDto feedDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.delete(feedDeleteDto, memberIdDto);
+        if (feedService.isFeedWriter(feedDeleteDto.getId(), memberIdDto)){
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.FEED_DELETE,
+                            feedService.delete(feedDeleteDto, memberIdDto)
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.FEED_DELETE_FAILED,
+                            feedService.feedPage()
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 }

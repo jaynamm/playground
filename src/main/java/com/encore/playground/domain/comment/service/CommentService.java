@@ -66,15 +66,21 @@ public class CommentService {
     }
 
     /**
+     * 댓글 수정/삭제 시 해당 유저가 작성한 댓글인지 확인하는 boolean 메소드
+     */
+    public boolean isCommentWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        CommentDto commentDto = new CommentDto(commentRepository.findById(id).get());
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        return commentDto.getMember().getId().equals(memberDto.getId());
+    }
+
+    /**
      * 댓글 수정
      * @param commentModifyDto 해당 프로퍼티를 가진 Dto<br>
      *                   id: 댓글 번호<br>
      *                   content: 수정할 댓글 내용<br>
      */
     public void modifyComment(CommentModifyDto commentModifyDto, MemberGetMemberIdDto memberIdDto) {
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
-        Comment commentToModify = commentRepository.findById(commentModifyDto.getId()).get();
-        // TODO: 수정할 댓글이 해당 유저가 작성한 댓글인지 확인하는 로직 필요
         commentRepository.save(CommentDto.builder()
                 .id(commentModifyDto.getId())
                 .content(commentModifyDto.getContent())
