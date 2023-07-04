@@ -7,14 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.beans.Transient;
+import java.util.List;
+
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     // 팔로잉 수 count하기
-    Long countByFromMember(Member FromMember);
+    Long countByFromMember(Member fromMember);
 
     // 팔로워 수 count하기
-    Long countByToMember(Member ToMember);
+    Long countByToMember(Member toMember);
 
+    // 사용자가 팔로우하는 List
+    List<Follow> findByFromMember(Member fromMember);
     // 언팔로우 했을 때, delete
     @Transactional
     void deleteByFromMemberAndToMember(Member fromMember, Member toMember);

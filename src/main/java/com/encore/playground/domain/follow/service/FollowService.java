@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +39,26 @@ public class FollowService {
         MemberDto toMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getToId()).build());
         followRepository.deleteByFromMemberAndToMember(fromMember.toEntity(), toMember.toEntity());
     }
+
+    // mypage에서 조회할 follow 정보
+
+    // 사용자가 follow하는 다른 사용자 count
+    public Long getFollowingCount(MemberDto memberDto) {
+        return followRepository.countByFromMember(memberDto.toEntity());
+    }
+
+    // 사용자를 follow하는 다른 사용자 count
+    public Long getFollowerCount(MemberDto memberDto) {
+        return followRepository.countByToMember(memberDto.toEntity());
+    }
+
+    // 사용자가 follow하는 사용자 List
+//    public List<MemberDto> getFollowingList(MemberDto memberDto) {
+//        List<FollowDto> followList = followRepository.findByFromMember(memberDto.toEntity()).stream().map(FollowDto::new).toList();
+//        List<MemberDto> followingMemberList =
+//    }
+
+
+
 
 }
