@@ -1,20 +1,17 @@
 package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberPasswordDto;
 import com.encore.playground.domain.member.dto.MemberSearchDto;
-import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.domain.member.service.MemberService;
-import com.encore.playground.global.api.DefaultResponse;
-import com.encore.playground.global.api.ResponseMessage;
-import com.encore.playground.global.api.StatusCode;
+import com.encore.playground.global.dto.AccessTokenDto;
+import com.encore.playground.global.dto.RefreshTokenDto;
 import com.encore.playground.global.service.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,19 +55,27 @@ public class MemberAPIController {
         }
 
         // 로그인해서 아이디 확인하고 패스워드 맞는지 확인 후에 토큰 생성
-        String token = tokenService.generateToken(userid);
+        AccessTokenDto accessTokenDto = tokenService.generateAccessToken(userid);
+        RefreshTokenDto refreshTokenDto = tokenService.generateRefreshToken(userid);
+
+
+        String accessToken = accessTokenDto.getAccessToken();
+        String refreshToken = refreshTokenDto.getRefreshToken();
+
 
         // TODO : 로그인할 때 보내줘야할 데이터 - 아이디, 닉네임, 이메일, 토큰(헤더로 보내기 때문에 이후에 제외해도 될듯)
+        // header에 access token을 넣어서 보내고 body에 refresh token을 넣어서 보낸다.
 
         // API 로 보낼 데이터를 HashMap 에 담아서 보낸다.
+        // body에 refresh token을 넣어서 보낸다.
         Map<String, String> loginRes = new HashMap<>();
-        loginRes.put("userid", userid);
-        loginRes.put("nickname", nickname);
-        loginRes.put("token", token);
+//        loginRes.put("userid", userid);
+//        loginRes.put("nickname", nickname);
+        loginRes.put("refresh-token", refreshToken);
 
-        // 헤더에 토큰을 저장한다.
+        // 헤더에 access 토큰을 저장한다.
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
+        headers.add("Authorization", "Bearer " + accessToken);
 
         // TODO : statusCode 와 responseMessage 를 어떻게 구분해서 보낼 것인가
 
@@ -143,5 +148,20 @@ public class MemberAPIController {
         randomPassword.put("randomPassword", getRandomPassword);
 
         return new ResponseEntity<>(randomPassword, HttpStatus.OK);
+    }
+
+    /**
+     * 비밀번호 변경 기능
+     * @param memberPasswordDto - userid, password
+     * @return ? - 비밀번호 변경 성공 여부
+     */
+    @PostMapping("/password")
+    public ResponseEntity<?> changePassword(@RequestBody MemberPasswordDto memberPasswordDto) {
+        String userid = memberPasswordDto.getUserid();
+        String password = memberPasswordDto.getPassword();
+
+        memberService.changePassword(userid, password);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -2,7 +2,19 @@ package com.encore.playground.domain.comment.controller;
 
 import com.encore.playground.domain.comment.dto.*;
 import com.encore.playground.domain.comment.service.CommentService;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
+import com.encore.playground.global.api.DefaultResponse;
+import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
 @RestController
+@Tag(name="Comment", description = "댓글 기능 관련 API")
 public class CommentAPIController {
     private final CommentService commentService;
 
@@ -19,12 +32,10 @@ public class CommentAPIController {
      * @param feedId 피드 글번호
      * @return 해당 글에 달린 댓글들 List
      */
-//    @RequestMapping(value = "/getcommentsinfeed")
+    @Operation(summary = "댓글 목록 가져오기 (피드 상세화면용)", description = "피드 글번호를 입력하면 해당 글에 달린 댓글들을 모두 가져온다.")
+    @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
     @GetMapping("/list/{feedId}")
-    public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId
-//            , @RequestBody CommentReadDto commentReadDto
-    )
-    {
+    public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId, HttpServletRequest request) {
         return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build());
     }
 
@@ -33,10 +44,12 @@ public class CommentAPIController {
      * @param memberId 유저 id
      * @return 해당 유저가 작성한 댓글 목록
      */
-//    @RequestMapping(value = "/getcommentsbyuser")
+    @Operation(summary = "해당 유저가 작성한 댓글 목록 가져오기 (마이페이지용)", description = "회원의 id를 입력하면 해당 사용자가 작성한 댓글들을 모두 가져온다.")
+    @Parameter(name="memberId", description="댓글 작성자의 memberId", example="작성자", required = true)
     @GetMapping("/list/user/{memberId}")
-    public List<CommentListDto> getCommentsByUser(@PathVariable String memberId) {
-        return commentService.getCommentsByUser(CommentReadDto.builder().memberId(memberId).build());
+    public List<CommentListDto> getCommentsByUser(@PathVariable String memberId, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return commentService.getCommentsByUser(memberIdDto);
     }
 
     /**
@@ -46,9 +59,16 @@ public class CommentAPIController {
      *                   memberId: 유저 id<br>
      *                   content: 댓글 내용
      */
-    @RequestMapping(value = "/write")
-    public void write(@RequestBody CommentWriteDto commentWriteDto) {
-        commentService.writeComment(commentWriteDto);
+    @Operation(summary = "댓글 작성", description = "피드 글 번호에 해당하는 피드에 댓글을 작성한다.<br>axios의 data란에 아래 예시(Request Body)와 같이 피드 번호, 작성자, 댓글 내용을 입력해야 한다.")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 작성에 필요한 정보<br>feedId: 댓글을 적을 피드 글번호<br>memberId: <br>content: 댓글 내용",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentWriteDto.class))
+    )
+    @PostMapping(value = "/write")
+    public void write(@RequestBody CommentWriteDto commentWriteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        commentService.writeComment(commentWriteDto, memberIdDto);
     }
 
     /**
@@ -57,9 +77,33 @@ public class CommentAPIController {
      *                   id: 댓글 테이블 id<br>
      *                   content: 수정할 댓글 내용
      */
-    @RequestMapping(value = "/modify")
-    public void modify(@RequestBody CommentModifyDto commentModifyDto) {
-        commentService.modifyComment(commentModifyDto);
+    @Operation(summary = "댓글 수정", description = "댓글 테이블 id에 해당하는 댓글을 수정한다.")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 수정에 필요한 정보<br>id: 댓글 테이블 id<br>content: 수정할 댓글 내용",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentModifyDto.class))
+    )
+    @PostMapping(value = "/modify")
+    public ResponseEntity<?> modify(@RequestBody CommentModifyDto commentModifyDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (commentService.isCommentWriter(commentModifyDto.getId(), memberIdDto)) {
+            commentService.modifyComment(commentModifyDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.COMMENT_MODIFY
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.COMMENT_MODIFY_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 
     /**
@@ -67,8 +111,32 @@ public class CommentAPIController {
      * @param commentDeleteDto 해당 프로퍼티를 가진 Dto<br>
      *                   id: 댓글 테이블 id<br>
      */
-    @RequestMapping(value = "/delete")
-    public void delete(@RequestBody CommentDeleteDto commentDeleteDto) {
-        commentService.deleteComment(commentDeleteDto);
+    @Operation(summary = "댓글 삭제", description = "댓글 테이블 id에 해당하는 댓글을 삭제한다.")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "댓글 삭제에 필요한 댓글 번호<br>id: 삭제할 댓글 테이블 id",
+            required = true,
+            content = @Content(schema = @Schema(implementation = CommentDeleteDto.class))
+    )
+    @PostMapping(value = "/delete")
+    public ResponseEntity<?> delete(@RequestBody CommentDeleteDto commentDeleteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        if (commentService.isCommentWriter(commentDeleteDto.getId(), memberIdDto)) {
+            commentService.deleteComment(commentDeleteDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.COMMENT_DELETE
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.COMMENT_DELETE_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
     }
 }

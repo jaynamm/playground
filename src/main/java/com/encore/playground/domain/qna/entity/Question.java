@@ -25,8 +25,9 @@ public class Question {
     private String title;
 
     // TODO: author 를 member_id 로 참조해서 가져와야한다.
-    @Column(nullable = false)
-    private String memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private String content;
@@ -38,6 +39,6 @@ public class Question {
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answerList;
+//    @OneToMany(mappedBy = "question")
+//    private List<Answer> answerList;
 }

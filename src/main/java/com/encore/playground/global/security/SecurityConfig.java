@@ -2,6 +2,7 @@ package com.encore.playground.global.security;
 
 import com.encore.playground.global.jwt.JwtAuthenticationFilter;
 import com.encore.playground.global.jwt.JwtTokenProvider;
+import com.encore.playground.global.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +20,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //기본적인 보안을 활성화
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenService tokenService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers(
                         new AntPathRequestMatcher("/**")).permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, tokenService),
                         UsernamePasswordAuthenticationFilter.class)
 
                 // 로그인 구현
@@ -55,11 +57,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //암호화에 필요한 PasswordEncoder Bean 등록
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // authenticationManager Bean 등록
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

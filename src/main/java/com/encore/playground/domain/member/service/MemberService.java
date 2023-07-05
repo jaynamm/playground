@@ -1,6 +1,7 @@
 package com.encore.playground.domain.member.service;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -18,6 +18,23 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 멤버 테이블 id를 통해 멤버를 가져오는 메소드
+     * @param id
+     * @return MemberDto
+     */
+    public MemberDto getMemberById(Long id) {
+        Optional<Member> _member = memberRepository.findById(id);
+
+        // 멤버 유무 확인
+        if (_member.isEmpty()) {
+            throw new UsernameNotFoundException("사용자가 존재하지 않습니다.");
+        }
+        // 멤버가 있으면 멤버를 가져온다.
+        MemberDto memberDto = new MemberDto(_member.get());
+
+        return memberDto;
+    }
 
     /**
      * 로그인시 userid 를 통해 멤버 확인 후 가져옴
@@ -52,7 +69,7 @@ public class MemberService {
     }
 
     /**
-     * 회원 가입 시 파라미터를 전달받아 Entity 로 변환
+     * 회원 가입 시 파라미터를 전달받아 Entity로 변환
      * Repository 를 통해 DB 에 저장
      * @param memberDTO
      */
@@ -130,9 +147,28 @@ public class MemberService {
             memberDto.setPassword(passwordEncoder.encode(randomPassword));
             // @LastModifiedDate 로 자동으로 수정시 시간이 변경됨
             // memberDto.setModifiedDate(LocalDateTime.now());
-            memberRepository.save(memberDto.toMember());
+            memberRepository.save(memberDto.toEntity());
         }
 
         return randomPassword;
+    }
+
+    public MemberDto getMember(MemberGetIdDto memberGetIdDto) {
+        return new MemberDto(memberRepository.findById(memberGetIdDto.getId()).get());
+    }
+
+    /**
+     * 비밀번호 변경 기능 - 이미 로그인한 사용자가 비밀번호를 변경하는 기능
+     * @param userid   로그인한 유저의 id
+     * @param password 변경할 비밀번호
+     */
+
+    public void changePassword(String userid, String password) {
+        // userid로 멤버 찾기
+        MemberDto memberDto = this.getMemberByUserid(userid);
+        // 비밀번호 변경
+        memberDto.setPassword(passwordEncoder.encode(password));
+        // member DB에 저장
+        memberRepository.save(memberDto.toEntity());
     }
 }

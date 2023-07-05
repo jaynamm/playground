@@ -12,7 +12,18 @@ public class ResponseMessage {
     public static final String QNA_WRITE_SUCCESS = "질문 등록 성공";
     public static final String QNA_VIEW_SUCCESS = "질문 가져오기 성공";
     public static final String QNA_MODIFY = "질문 수정 성공";
+    public static final String QNA_MODIFY_FAILED = "질문 수정 실패";
+    public static final String QNA_MODIFY_ACCESS = "질문 수정 접근 성공";
     public static final String QNA_DELETE = "질문 삭제 성공";
+    public static final String QNA_DELETE_FAILED = "질문 삭제 실패";
+    public static final String FEED_DELETE = "피드 삭제 성공";
+    public static final String FEED_DELETE_FAILED = "피드 삭제 실패";
+    public static final String FEED_MODIFY = "피드 수정 성공";
+    public static final String FEED_MODIFY_FAILED = "피드 수정 실패";
+    public static final String COMMENT_DELETE = "댓글 삭제 성공";
+    public static final String COMMENT_DELETE_FAILED = "댓글 삭제 실패";
+    public static final String COMMENT_MODIFY = "댓글 수정 성공";
+    public static final String COMMENT_MODIFY_FAILED = "댓글 수정 실패";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
 }

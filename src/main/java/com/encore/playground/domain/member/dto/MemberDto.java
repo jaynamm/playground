@@ -1,6 +1,7 @@
 package com.encore.playground.domain.member.dto;
 
 import com.encore.playground.domain.member.entity.Member;
+import com.encore.playground.global.security.UserRole;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class MemberDto {
     private String curriculum;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private UserRole role;
 
 
     /**
@@ -36,9 +38,10 @@ public class MemberDto {
         this.curriculum = member.getCurriculum();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
+        this.role = member.getRole();
     }
 
-    public Member toMember(){
+    public Member toEntity() {
         return Member.builder()
                 .id(id)
                 .userid(userid)
@@ -49,6 +52,7 @@ public class MemberDto {
                 .curriculum(curriculum)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
+                .role(role)
                 .build();
     }
 }

@@ -1,12 +1,13 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
   <h1>피드 수정 페이지입니다.</h1>
-  <form th:if="${#authentication.principal.username}==${feed.userid}" th:action="@{/feed/modify}" method="post">
-    <p th:text="'해당 글 번호: '+${feed.feedNo}"></p>
-    <input type="hidden" name="feedNo" th:value="${feed.feedNo}">
+  <!--th:if="${#authentication.principal.userid}==${feed.memberId}"-->
+  <form th:action="@{/feed/modify}" method="post">
+    <p th:text="'해당 글 번호: '+${feed.id}"></p>
+    <input type="hidden" name="id" th:value="${feed.id}">
     <div class="mb-3">
-      <label for="article" class="form-label">내용을 수정하세요 </label>
-      <input type="text" name="article" id="article" class="form-control" th:value="${feed.article}">
+      <label for="content" class="form-label">내용을 수정하세요 </label>
+      <input type="text" name="content" id="content" class="form-control" th:value="${feed.content}">
     </div>
     <button type="submit" class="btn btn-primary">수정</button>
   </form>

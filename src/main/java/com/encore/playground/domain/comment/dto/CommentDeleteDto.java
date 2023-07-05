@@ -1,6 +1,8 @@
 package com.encore.playground.domain.comment.dto;
 
 import com.encore.playground.domain.comment.entity.Comment;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Schema(description = "댓글 삭제용 DTO")
 public class CommentDeleteDto {
-    private long feedid;
+    @NotBlank(message = "삭제할 댓글의 id를 입력해주세요.")
+    @Schema(description = "삭제할 댓글의 댓글 테이블 id", example = "1")
     private long id;
-
-    public CommentDeleteDto(Comment entity) {
-        this.feedid = entity.getFeed().getId();
-        this.id = entity.getId();
-    }
 }

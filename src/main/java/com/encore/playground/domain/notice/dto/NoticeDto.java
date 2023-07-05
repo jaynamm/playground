@@ -1,5 +1,6 @@
 package com.encore.playground.domain.notice.dto;
 
+import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.notice.entity.Notice;
 import lombok.*;
 
@@ -13,9 +14,10 @@ import java.time.LocalDateTime;
 public class NoticeDto {
     private Long id;
     private String title;
-    private String memberId;
+    private Member member;
     private String content;
     private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private int viewCount;
 
     /**
@@ -25,7 +27,7 @@ public class NoticeDto {
     public NoticeDto (Notice notice) {
         this.id = notice.getId();
         this.title = notice.getTitle();
-        this.memberId =  notice.getMemberId();
+        this.member =  notice.getMember();
         this.content = notice.getContent();
         this.createdDate = notice.getCreatedDate();
         this.viewCount = notice.getViewCount();
@@ -39,7 +41,7 @@ public class NoticeDto {
         return Notice.builder()
                 .id(id)
                 .title(title)
-                .memberId(memberId)
+                .member(member)
                 .content(content)
                 .createdDate(createdDate)
                 .viewCount(viewCount)
