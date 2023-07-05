@@ -4,6 +4,7 @@ import com.encore.playground.domain.comment.dto.CommentReadDto;
 import com.encore.playground.domain.comment.service.CommentService;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.service.FeedService;
+import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.global.api.DefaultResponse;
 import com.encore.playground.global.api.ResponseMessage;
@@ -39,8 +40,9 @@ public class FeedAPIController {
     // TODO: 팔로우 여부에 따라 해당 사용자의 피드만 묶어서 반환하도록 수정 필요
     @Operation(summary = "피드 메인페이지", description = "메인 페이지 접속 시 피드 목록을 반환한다.")
     @GetMapping(value = "/list")
-    public List<FeedListDto> feedMain() {
-        return feedService.feedPage();
+    public List<FeedListDto> feedMain(HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return feedService.feedPage(memberIdDto);
     }
 
     /**
@@ -134,7 +136,7 @@ public class FeedAPIController {
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
                             ResponseMessage.FEED_MODIFY_FAILED,
-                            feedService.feedPage()
+                            feedService.feedPage(memberIdDto)
                     ),
                     HttpStatus.UNAUTHORIZED
             );
@@ -173,7 +175,7 @@ public class FeedAPIController {
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
                             ResponseMessage.FEED_DELETE_FAILED,
-                            feedService.feedPage()
+                            feedService.feedPage(memberIdDto)
                     ),
                     HttpStatus.UNAUTHORIZED
             );
