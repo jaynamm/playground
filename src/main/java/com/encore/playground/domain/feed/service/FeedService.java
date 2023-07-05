@@ -9,6 +9,8 @@ import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +106,11 @@ public class FeedService {
     public FeedDto getFeed(FeedDto feedDto) {
         Feed feed = feedRepository.findById(feedDto.getId()).get();
         return new FeedDto(feed);
+    }
+
+    public Slice<FeedListDto> getFeedTest(Pageable pageable) {
+        Slice<Feed> feedSlice = feedRepository.findAllByOrderByIdDesc(pageable);
+        return feedSlice.map(FeedListDto::new).map(this::countComments);
     }
 
     /**

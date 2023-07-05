@@ -4,7 +4,6 @@ import com.encore.playground.domain.comment.dto.CommentReadDto;
 import com.encore.playground.domain.comment.service.CommentService;
 import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.service.FeedService;
-import com.encore.playground.domain.member.dto.MemberGetIdDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.global.api.DefaultResponse;
 import com.encore.playground.global.api.ResponseMessage;
@@ -16,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,17 +47,6 @@ public class FeedAPIController {
     }
 
     /**
-     * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드
-     */
-    // TODO: 사용자 id값을 URL에 노출할 필요가 있는가? jwt를 쓰는데?
-    @Operation(summary = "피드 목록 (마이페이지용)", description = "해당 사용자가 작성한 피드 목록을 반환한다.")
-    @GetMapping(value = "/list/{id}")
-    public List<FeedListDto> getFeedListByMember(@PathVariable String id, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.getFeedListByMember(memberIdDto);
-    }
-
-    /**
      * 클릭한 피드의 상세 내용 및 그 피드의 댓글 목록을 반환하는 메소드
      * @param id: 상세보기 할 피드의 글 번호
      * @return {
@@ -78,6 +68,12 @@ public class FeedAPIController {
                 )
         );
         return feedAndComments;
+    }
+
+    @GetMapping(value = "/test")
+    public Slice<FeedListDto> getFeedTest(@PageableDefault(size=10) Pageable pageable){
+        System.out.println(pageable);
+        return feedService.getFeedTest(pageable);
     }
 
     /**
