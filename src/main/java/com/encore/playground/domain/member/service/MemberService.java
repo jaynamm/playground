@@ -2,6 +2,7 @@ package com.encore.playground.domain.member.service;
 
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetIdDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,16 @@ public class MemberService {
         MemberDto memberDto = new MemberDto(_member.get());
 
         return memberDto;
+    }
+
+    /**
+     * 회원가입 중 중복확인
+     * @param memberIdDto userid가 들어있는 DTO
+     * @return 있으면 True 없으면 False
+     */
+    public Boolean isExistUserid(MemberGetMemberIdDto memberIdDto) {
+        Optional<Member> member = memberRepository.findByUserid(memberIdDto.getUserid());
+        return member.isPresent();
     }
 
     /**

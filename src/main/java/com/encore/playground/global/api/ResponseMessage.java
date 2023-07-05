@@ -26,4 +26,6 @@ public class ResponseMessage {
     public static final String COMMENT_MODIFY_FAILED = "댓글 수정 실패";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
+    public static final String USERID_EXIST = "이미 존재하는 ID입니다.";
+    public static final String USERID_USEABLE = "사용할 수 있는 ID입니다.";
 }
