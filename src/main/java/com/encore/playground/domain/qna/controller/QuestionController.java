@@ -28,15 +28,9 @@ public class QuestionController {
 
     @GetMapping("/question/list")
     public List<QuestionDto> questionMain() {
-        System.out.println("[/api/qna/question] ::: 질문 목록 가져가기");
-
         return questionService.questionList();
     }
 
-    @GetMapping("/question/list/{memberId}")
-    public List<QuestionDto> questionList(@PathVariable Long memberId) {
-        return questionService.getQuestionListByMember(memberId);
-    }
 
     @GetMapping("/question/view/{id}")
     public ResponseEntity<?> viewQuestion(@PathVariable Long id, HttpServletRequest request) {
@@ -44,62 +38,47 @@ public class QuestionController {
         QuestionDto questionDto = questionService.readQuestion(id, memberIdDto);
         Map<String, QuestionDto> questionDtoMap = new HashMap<>();
         questionDtoMap.put("question", questionDto);
-
-        return new ResponseEntity(questionDtoMap, HttpStatus.OK);
-    }
-
-    @PostMapping("/question/write")
-    public ResponseEntity<?> questionWrite(@RequestBody QuestionWriteDto questionWriteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        questionService.writeQuestion(questionWriteDto, memberIdDto);
-
-        return new ResponseEntity(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.QNA_WRITE_SUCCESS
-                ),
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping("/question/modify")
-    public ResponseEntity<?> questionModifyButton(@RequestBody QuestionGetIdDto questionIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
-            return new ResponseEntity(
+        if (questionService.isQuestionWriter(id, memberIdDto)) {
+            return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.QNA_MODIFY_ACCESS
+                            ResponseMessage.QUESTION_WRITER_ACCESS,
+                            questionDtoMap
                     ),
                     HttpStatus.OK
             );
         } else {
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.QNA_MODIFY_FAILED
+                            StatusCode.OK,
+                            ResponseMessage.QUESTION_WRITER_ACCESS_FAILED,
+                            questionDtoMap
                     ),
-                    HttpStatus.UNAUTHORIZED
+                    HttpStatus.OK
             );
         }
     }
 
+    @PostMapping("/question/write")
+    public void questionWrite(@RequestBody QuestionWriteDto questionWriteDto, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        questionService.writeQuestion(questionWriteDto, memberIdDto);
+    }
 
     @PostMapping("/question/modify")
     public ResponseEntity<?> questionModify(@RequestBody QuestionModifyDto questionModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (questionService.isQuestionWriter(questionModifyDto.getId(), memberIdDto)) {
             questionService.modifyQuestion(questionModifyDto, memberIdDto);
-
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.QNA_MODIFY
+                            ResponseMessage.QNA_MODIFY_SUCCESS
                     ),
                     HttpStatus.OK
             );
         } else {
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
                             ResponseMessage.QNA_MODIFY_FAILED
@@ -115,16 +94,15 @@ public class QuestionController {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
             questionService.deleteQuestion(questionIdDto, memberIdDto);
-
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.QNA_DELETE
+                            ResponseMessage.QNA_DELETE_SUCCESS
                     ),
                     HttpStatus.OK
             );
         } else {
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
                             ResponseMessage.QNA_DELETE_FAILED

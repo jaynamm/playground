@@ -2,6 +2,7 @@ package com.encore.playground.global.jwt;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.dto.MemberGetRoleDto;
+import com.encore.playground.global.api.ResponseMessage;
 import com.encore.playground.global.dto.RefreshTokenValidateDto;
 import com.encore.playground.global.service.TokenService;
 import jakarta.servlet.*;
@@ -44,6 +45,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
             } else {
                 // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
                 System.out.println("refresh token이 유효하지 않습니다.");
+                httpResponse.setHeader("responseMessage", ResponseMessage.LOG_OUT);
+                httpResponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             }
         }
 
@@ -81,9 +84,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
         } else if (!jwtTokenProvider.validateAccessToken(token)) {
             // access token이 유효하지 않음을 클라이언트에 전달한다.
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.setHeader("responseMessage", ResponseMessage.ACCESS_TOKEN_EXPIRED);
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 만료됐습니다.");
-            // 초기 페이지로 강제 이동
-            httpResponse.sendRedirect("/");
         }
 
         chain.doFilter(request, response);

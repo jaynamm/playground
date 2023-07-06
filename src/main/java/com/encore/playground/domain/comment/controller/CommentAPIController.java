@@ -39,18 +39,6 @@ public class CommentAPIController {
         return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build());
     }
 
-    /**
-     * 유저 id를 사용하여 해당 유저가 작성한 댓글들 가져오기
-     * @param memberId 유저 id
-     * @return 해당 유저가 작성한 댓글 목록
-     */
-    @Operation(summary = "해당 유저가 작성한 댓글 목록 가져오기 (마이페이지용)", description = "회원의 id를 입력하면 해당 사용자가 작성한 댓글들을 모두 가져온다.")
-    @Parameter(name="memberId", description="댓글 작성자의 memberId", example="작성자", required = true)
-    @GetMapping("/list/user/{memberId}")
-    public List<CommentListDto> getCommentsByUser(@PathVariable String memberId, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return commentService.getCommentsByUser(memberIdDto);
-    }
 
     /**
      * 댓글 작성
