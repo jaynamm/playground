@@ -24,6 +24,12 @@ public class ResponseMessage {
     public static final String COMMENT_DELETE_FAILED = "댓글 삭제 실패";
     public static final String COMMENT_MODIFY = "댓글 수정 성공";
     public static final String COMMENT_MODIFY_FAILED = "댓글 수정 실패";
+    public static final String NOTICE_ADMIN_ACCESS = "공지사항 작성 가능";
+    public static final String NOTICE_USER_ACCESS = "공지사항 작성 불가";
+    public static final String NOTICE_WRITER_ACCESS = "공지사항 수정 가능";
+    public static final String NOTICE_WRITER_ACCESS_FAILED ="공지사항 수정 불가";
+    public static final String NOTICE_DELETE_SUCCESS = "공지사항 삭제 성공";
+    public static final String NOTICE_DELETE_FAILED = "공지사항 삭제 실패";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";
 }
