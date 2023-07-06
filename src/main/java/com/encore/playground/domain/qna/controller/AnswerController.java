@@ -66,10 +66,10 @@ public class AnswerController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.ANSWER_MODIFY_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
@@ -96,10 +96,10 @@ public class AnswerController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.ANSWER_DELETE_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }

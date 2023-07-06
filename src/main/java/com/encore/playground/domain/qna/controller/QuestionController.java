@@ -80,10 +80,10 @@ public class QuestionController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.QNA_MODIFY_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
@@ -104,10 +104,10 @@ public class QuestionController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.QNA_DELETE_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }

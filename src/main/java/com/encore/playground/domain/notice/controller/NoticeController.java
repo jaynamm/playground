@@ -89,11 +89,11 @@ public class NoticeController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.NOTICE_USER_ACCESS,
                             noticeService.noticeList()
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
@@ -114,10 +114,10 @@ public class NoticeController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.NOTICE_WRITER_ACCESS_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
 
@@ -138,10 +138,10 @@ public class NoticeController {
         } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
-                            StatusCode.OK,
+                            StatusCode.UNAUTHORIZED,
                             ResponseMessage.NOTICE_DELETE_FAILED
                     ),
-                    HttpStatus.OK
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
