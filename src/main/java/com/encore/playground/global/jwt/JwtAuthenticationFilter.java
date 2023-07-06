@@ -84,9 +84,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
         } else if (!jwtTokenProvider.validateAccessToken(token)) {
             // access token이 유효하지 않음을 클라이언트에 전달한다.
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.setHeader("responseMessage", ResponseMessage.ACCESS_TOKEN_EXPIRED);
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 만료됐습니다.");
-            // 초기 페이지로 강제 이동
-            httpResponse.sendRedirect("/");
         }
 
         chain.doFilter(request, response);

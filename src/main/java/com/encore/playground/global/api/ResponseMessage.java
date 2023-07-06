@@ -10,6 +10,7 @@ public class ResponseMessage {
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String UNREGISTER_USER = "회원 탈퇴 성공";
     public static final String LOG_OUT = "로그아웃";
+    public static final String ACCESS_TOKEN_EXPIRED = "ACCESS TOKEN EXPIRED";
     public static final String QNA_WRITE_SUCCESS = "질문 등록 성공";
     public static final String QNA_VIEW_SUCCESS = "질문 가져오기 성공";
     public static final String QNA_MODIFY = "질문 수정 성공";
