@@ -33,7 +33,7 @@ public class AnswerService {
         return answerRepository.findByMemberId(memberDto.getId()).get().stream().map(AnswerDto::new).toList();
     }
 
-    public List<AnswerDto> createAnswer(AnswerWriteDto answerWriteDto, MemberGetMemberIdDto memberIdDto) {
+    public void createAnswer(AnswerWriteDto answerWriteDto, MemberGetMemberIdDto memberIdDto) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         QuestionDto questionDto = questionService.readQuestion(answerWriteDto.getQuestionId(), memberIdDto);
         answerRepository.save(AnswerDto.builder()
@@ -42,20 +42,16 @@ public class AnswerService {
                 .createdDate(LocalDateTime.now())
                 .question(questionDto.toEntity())
                 .build().toEntity());
-
-        return answerList(answerWriteDto.getQuestionId());
     }
 
-    public List<AnswerDto> modifyAnswer(AnswerModifyDto newAnswerDto, MemberGetMemberIdDto memberIdDto) {
+    public void modifyAnswer(AnswerModifyDto newAnswerDto, MemberGetMemberIdDto memberIdDto) {
         AnswerDto answerDto = new AnswerDto(answerRepository.findById(newAnswerDto.getId()).get());
         answerDto.setContent(newAnswerDto.getContent());
         answerRepository.save(answerDto.toEntity());
-        return answerList(newAnswerDto.getQuestionId());
     }
 
-    public List<AnswerDto> deleteAnswer(AnswerDeleteDto answerDeleteDto, MemberGetMemberIdDto memberIdDto) {
+    public void deleteAnswer(AnswerDeleteDto answerDeleteDto, MemberGetMemberIdDto memberIdDto) {
         answerRepository.delete(answerRepository.findById(answerDeleteDto.getId()).get());
-        return answerList(answerDeleteDto.getQuestionId());
     }
 
 }
