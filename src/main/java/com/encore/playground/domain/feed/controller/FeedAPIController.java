@@ -22,8 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/feed")
@@ -41,9 +39,9 @@ public class FeedAPIController {
     // TODO: 팔로우 여부에 따라 해당 사용자의 피드만 묶어서 반환하도록 수정 필요
     @Operation(summary = "피드 메인페이지", description = "메인 페이지 접속 시 피드 목록을 반환한다.")
     @GetMapping(value = "/list")
-    public List<FeedListDto> feedMain(HttpServletRequest request) {
+    public Slice<FeedListDto> feedMain(HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.feedPage(memberIdDto);
+        return feedService.feedPage(memberIdDto, pageable);
     }
 
     /**
@@ -57,9 +55,11 @@ public class FeedAPIController {
     @Operation(summary = "피드 상세보기", description = "클릭한 피드의 상세 내용 및 그 피드의 댓글 목록을 반환한다.")
     @Parameter(name = "id", description = "피드 글 번호", example = "1", required = true)
     @GetMapping(value = "/view/{id}")
-    public Map<String, Object> getFeed(@PathVariable Long id) {
+    public ResponseEntity<?> getFeed(@PathVariable Long id, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         HashMap<String, Object> feedAndComments = new HashMap<>();
-        feedAndComments.put("feed", feedService.getFeed(id));
+        FeedListDto feedListDto = feedService.getFeed(id);
+        feedAndComments.put("feed", feedListDto);
         feedAndComments.put("comments",
                 commentService.getCommentsInFeed(
                         CommentReadDto.builder()
@@ -67,12 +67,28 @@ public class FeedAPIController {
                         .build()
                 )
         );
-        return feedAndComments;
+        String responseMessage = "";
+        if (feedService.isFeedWriter(feedListDto.getId(), memberIdDto)) {
+            responseMessage = ResponseMessage.FEED_DETAIL_SUCCESS;
+        } else {
+            responseMessage = ResponseMessage.FEED_DETAIL_FAILED;
+        }
+        return new ResponseEntity<>(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        responseMessage,
+                        feedAndComments
+                ),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping(value = "/test")
     public Slice<FeedListDto> getFeedTest(@PageableDefault(size=10) Pageable pageable){
         System.out.println(pageable);
+        // 첫 페이지가 들어왔을 경우 0번 페이지
+        // 이후 페이지를 보낸 적이 있을 경우 pageable.next()를 통해 다음 페이지로 이동
+
         return feedService.getFeedTest(pageable);
     }
 
@@ -94,9 +110,9 @@ public class FeedAPIController {
             )
     )
     @PostMapping(value = "/write")
-    public List<FeedListDto> write(@RequestBody FeedWriteDto feedWriteDto, HttpServletRequest request) {
+    public void write(@RequestBody FeedWriteDto feedWriteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.write(feedWriteDto, memberIdDto);
+        feedService.write(feedWriteDto, memberIdDto);
     }
 
     /**
@@ -119,11 +135,11 @@ public class FeedAPIController {
     public ResponseEntity<?> modify(@RequestBody FeedModifyDto feedModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (feedService.isFeedWriter(feedModifyDto.getId(), memberIdDto)){
+            feedService.modify(feedModifyDto, memberIdDto);
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.FEED_MODIFY,
-                            feedService.modify(feedModifyDto, memberIdDto)
+                            ResponseMessage.FEED_MODIFY_SUCCESS
                     ),
                     HttpStatus.OK
             );
@@ -131,8 +147,7 @@ public class FeedAPIController {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
-                            ResponseMessage.FEED_MODIFY_FAILED,
-                            feedService.feedPage(memberIdDto)
+                            ResponseMessage.FEED_MODIFY_FAILED
                     ),
                     HttpStatus.UNAUTHORIZED
             );
@@ -158,11 +173,11 @@ public class FeedAPIController {
     public ResponseEntity<?> delete(@RequestBody FeedDeleteDto feedDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (feedService.isFeedWriter(feedDeleteDto.getId(), memberIdDto)){
+            feedService.delete(feedDeleteDto, memberIdDto);
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.FEED_DELETE,
-                            feedService.delete(feedDeleteDto, memberIdDto)
+                            ResponseMessage.FEED_DELETE_SUCCESS
                     ),
                     HttpStatus.OK
             );
@@ -170,8 +185,7 @@ public class FeedAPIController {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
-                            ResponseMessage.FEED_DELETE_FAILED,
-                            feedService.feedPage(memberIdDto)
+                            ResponseMessage.FEED_DELETE_FAILED
                     ),
                     HttpStatus.UNAUTHORIZED
             );

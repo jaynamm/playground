@@ -55,19 +55,16 @@ public class FeedService {
      * 현재 모든 글을 반환하고 있으나, 추후 페이징 처리(검색 갯수 제한) 필요
      * @return 피드 피드 객체 List
      */
-    public List<FeedListDto> feedPage(MemberGetMemberIdDto memberIdDto) {
+    public Slice<FeedListDto> feedPage(MemberGetMemberIdDto memberIdDto, Pageable pageable) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         ArrayList<MemberDto> followerListDto = new ArrayList<>(followService.getFollowingList(memberDto));
         followerListDto.add(memberDto); // 자신의 피드도 보여주기 위해 현재 사용자의 MemberDto를 추가
-        List<Feed> feedList = feedRepository.findByMemberInOrderByIdDesc(
-                followerListDto.stream().map(MemberDto::toEntity).toList())
-                .get();
-        List<FeedListDto> feedDtoList = feedList.stream()
-                // Feed Entity를 FeedListDto로 변환
-                .map(FeedListDto::new)
-                // FeedListDto들에 commentCount 값 입력
-                .map(this::countComments)
-                .toList();
+        Slice<Feed> feedList = feedRepository.findAllByMemberInOrderByIdDesc(
+                followerListDto.stream().map(MemberDto::toEntity).toList(),
+                pageable
+        );
+        feedList.forEach(Feed::readFeed); // 목록에 추가된 피드 조회수 증가
+        Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new).map(this::countComments);
         return feedDtoList;
     }
 
@@ -110,6 +107,7 @@ public class FeedService {
 
     public Slice<FeedListDto> getFeedTest(Pageable pageable) {
         Slice<Feed> feedSlice = feedRepository.findAllByOrderByIdDesc(pageable);
+        feedSlice.forEach(Feed::readFeed);
         return feedSlice.map(FeedListDto::new).map(this::countComments);
     }
 
@@ -128,29 +126,28 @@ public class FeedService {
                 .content(content)
                 .build();
         feedRepository.save(feedToWrite.toEntity());
-        return feedPage(MemberGetMemberIdDto.builder().userid(memberId).build());
+        return feedPageAll();
     }
 
-    public List<FeedListDto> write(FeedWriteDto feedWriteDto, MemberGetMemberIdDto memberIdDto) {
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+    public void write(FeedWriteDto feedWriteDto, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid((memberIdDto.getUserid()));
         feedRepository.save(FeedDto.builder()
                 .member(memberDto.toEntity())
                 .createdDate(LocalDateTime.now())
                 .viewCount(0)
                 .content(feedWriteDto.getContent())
                 .build().toEntity());
-        return feedPage(memberIdDto);
     }
 
     /**
-     * 글 상세보기를 누른 멤버가 해당 글을 작성한 멤버인지 확인하는 boolean 메소드
-     * @param id 피드 번호
+     * (백엔드 내부 로직) 글 상세보기를 누른 멤버가 해당 글을 작성한 멤버인지 확인하는 boolean 메소드
+     * @param feedId 피드 번호
      * @param memberIdDto jwt로부터 추출한 memberId가 들어있는 DTO
      * @return 해당 글을 작성한 멤버인지 true/false
      */
-    public boolean isFeedWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+    public boolean isFeedWriter(Long feedId, MemberGetMemberIdDto memberIdDto) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
-        FeedDto feedDto = getFeed(FeedDto.builder().id(id).build());
+        FeedDto feedDto = getFeed(FeedDto.builder().id(feedId).build());
         return memberDto.getId().equals(feedDto.getMember().getId());
     }
 
@@ -164,15 +161,16 @@ public class FeedService {
         Feed feedToModify = feedRepository.findById(id).get();
         FeedDto feedDto = new FeedDto(feedToModify);
         feedDto.setContent(content);
+        feedDto.setModifiedDate(LocalDateTime.now());
         feedRepository.save(feedDto.toEntity());
         return feedPageAll();
     }
 
-    public List<FeedListDto> modify(FeedModifyDto feedModifyDto, MemberGetMemberIdDto memberIdDto) {
+    public void modify(FeedModifyDto feedModifyDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = new FeedDto(feedRepository.findById(feedModifyDto.getId()).get());
         feedDto.setContent(feedModifyDto.getContent());
+        feedDto.setModifiedDate(LocalDateTime.now());
         feedRepository.save(feedDto.toEntity());
-        return feedPage(memberIdDto);
     }
 
     /**
@@ -187,9 +185,8 @@ public class FeedService {
         return feedPageAll();
     }
 
-    public List<FeedListDto> delete(FeedDeleteDto feedDeleteDto, MemberGetMemberIdDto memberIdDto) {
+    public void delete(FeedDeleteDto feedDeleteDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedToDelete = new FeedDto(feedRepository.findById(feedDeleteDto.getId()).get());
         feedRepository.delete(feedToDelete.toEntity());
-        return feedPage(memberIdDto);
     }
 }

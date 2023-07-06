@@ -16,10 +16,10 @@ public class ResponseMessage {
     public static final String QNA_MODIFY_ACCESS = "질문 수정 접근 성공";
     public static final String QNA_DELETE = "질문 삭제 성공";
     public static final String QNA_DELETE_FAILED = "질문 삭제 실패";
-    public static final String FEED_DELETE = "피드 삭제 성공";
-    public static final String FEED_DELETE_FAILED = "피드 삭제 실패";
-    public static final String FEED_MODIFY = "피드 수정 성공";
-    public static final String FEED_MODIFY_FAILED = "피드 수정 실패";
+    public static final String FEED_DELETE_SUCCESS = "FEED_DELETE_SUCCESS";
+    public static final String FEED_DELETE_FAILED = "FEED_DELETE_FAILED";
+    public static final String FEED_MODIFY_SUCCESS = "FEED_MODIFY_SUCCESS";
+    public static final String FEED_MODIFY_FAILED = "FEED_MODIFY_FAILED";
     public static final String COMMENT_DELETE = "댓글 삭제 성공";
     public static final String COMMENT_DELETE_FAILED = "댓글 삭제 실패";
     public static final String COMMENT_MODIFY = "댓글 수정 성공";
@@ -28,4 +28,7 @@ public class ResponseMessage {
     public static final String DB_ERROR = "데이터베이스 에러";
     public static final String USERID_EXIST = "이미 존재하는 ID입니다.";
     public static final String USERID_USEABLE = "사용할 수 있는 ID입니다.";
+    /********************************************************************/
+    public static final String FEED_DETAIL_SUCCESS = "FEED_DETAIL_SUCCESS";
+    public static final String FEED_DETAIL_FAILED = "FEED_DETAIL_FAILED";
 }

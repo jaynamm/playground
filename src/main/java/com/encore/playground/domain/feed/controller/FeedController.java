@@ -1,6 +1,5 @@
 package com.encore.playground.domain.feed.controller;
 
-import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.dto.FeedListDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
@@ -26,7 +25,7 @@ public class FeedController {
     @GetMapping(value = {"", "/"})
     public String feedMain(Model model, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        model.addAttribute("feeds", feedService.feedPage(memberIdDto));
+        model.addAttribute("feeds", feedService.feedPageAll());
         return "feed/feed_main";
     }
     // 게시글 작성
