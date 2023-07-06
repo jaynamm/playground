@@ -81,10 +81,9 @@ public class CommentService {
      *                   content: 수정할 댓글 내용<br>
      */
     public void modifyComment(CommentModifyDto commentModifyDto, MemberGetMemberIdDto memberIdDto) {
-        commentRepository.save(CommentDto.builder()
-                .id(commentModifyDto.getId())
-                .content(commentModifyDto.getContent())
-                .build().toEntity());
+        CommentDto commentDto = new CommentDto(commentRepository.findById(commentModifyDto.getId()).get());
+        commentDto.setContent(commentModifyDto.getContent());
+        commentRepository.save(commentDto.toEntity());
     }
 
     /**
@@ -95,7 +94,6 @@ public class CommentService {
     public void deleteComment(CommentDeleteDto commentDeleteDto, MemberGetMemberIdDto memberIdDto) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         Comment commentToDelete = commentRepository.findById(commentDeleteDto.getId()).get();
-        // TODO: 삭제할 댓글이 해당 유저가 작성한 댓글인지 확인하는 로직 필요
         commentRepository.deleteById(commentDeleteDto.getId());
     }
 }
