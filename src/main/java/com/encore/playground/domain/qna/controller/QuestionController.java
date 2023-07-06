@@ -60,16 +60,9 @@ public class QuestionController {
     }
 
     @PostMapping("/question/write")
-    public ResponseEntity<?> questionWrite(@RequestBody QuestionWriteDto questionWriteDto, HttpServletRequest request) {
+    public void questionWrite(@RequestBody QuestionWriteDto questionWriteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         questionService.writeQuestion(questionWriteDto, memberIdDto);
-        return new ResponseEntity<>(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.QNA_WRITE_SUCCESS
-                ),
-                HttpStatus.OK
-        );
     }
 
     @PostMapping("/question/modify")
