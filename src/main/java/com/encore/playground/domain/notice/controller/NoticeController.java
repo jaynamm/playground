@@ -78,11 +78,11 @@ public class NoticeController {
         MemberGetRoleDto memberRoleDto = (MemberGetRoleDto) request.getAttribute("memberRoleDto");
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (memberRoleDto.getRole().equals("ROLE_ADMIN")) {
+            noticeService.writeNotice(noticeWriteDto, memberIdDto);
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.NOTICE_ADMIN_ACCESS,
-                            noticeService.writeNotice(noticeWriteDto, memberIdDto)
+                            ResponseMessage.NOTICE_ADMIN_ACCESS
                     ),
                     HttpStatus.OK
             );
@@ -103,11 +103,11 @@ public class NoticeController {
     public ResponseEntity<?> noticeModify(@RequestBody NoticeModifyDto noticeModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (noticeService.isNoticeWriter(noticeModifyDto.getId(), memberIdDto)) {
+            noticeService.modifyNotice(noticeModifyDto, memberIdDto);
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.NOTICE_WRITER_ACCESS,
-                            noticeService.modifyNotice(noticeModifyDto, memberIdDto)
+                            ResponseMessage.NOTICE_WRITER_ACCESS
                     ),
                     HttpStatus.OK
             );
@@ -115,8 +115,7 @@ public class NoticeController {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.NOTICE_WRITER_ACCESS_FAILED,
-                            noticeService.noticeList()
+                            ResponseMessage.NOTICE_WRITER_ACCESS_FAILED
                     ),
                     HttpStatus.OK
             );
@@ -128,11 +127,11 @@ public class NoticeController {
     public ResponseEntity<?> noticeDelete(@RequestBody NoticeGetIdDto noticeGetIdDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (noticeService.isNoticeWriter(noticeGetIdDto.getId(), memberIdDto)) {
+            noticeService.deleteNotice(noticeGetIdDto, memberIdDto);
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.NOTICE_DELETE_SUCCESS,
-                            noticeService.deleteNotice(noticeGetIdDto, memberIdDto)
+                            ResponseMessage.NOTICE_DELETE_SUCCESS
                     ),
                     HttpStatus.OK
             );
@@ -140,8 +139,7 @@ public class NoticeController {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.OK,
-                            ResponseMessage.NOTICE_DELETE_FAILED,
-                            noticeService.noticeList()
+                            ResponseMessage.NOTICE_DELETE_FAILED
                     ),
                     HttpStatus.OK
             );
