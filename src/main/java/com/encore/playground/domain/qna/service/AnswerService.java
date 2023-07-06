@@ -29,8 +29,8 @@ public class AnswerService {
         return memberIdDto.getUserid().equals(answerRepository.findById(id).get().getMember().getUserid());
     }
 
-    public List<AnswerDto> getAnswerListByMember(Long memberId) {
-        return answerRepository.findByMemberId(memberId).get().stream().map(AnswerDto::new).toList();
+    public List<AnswerDto> getAnswerListByMember(MemberDto memberDto) {
+        return answerRepository.findByMemberId(memberDto.getId()).get().stream().map(AnswerDto::new).toList();
     }
 
     public List<AnswerDto> createAnswer(AnswerWriteDto answerWriteDto, MemberGetMemberIdDto memberIdDto) {

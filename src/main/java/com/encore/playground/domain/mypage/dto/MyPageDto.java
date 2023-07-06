@@ -4,6 +4,7 @@ import com.encore.playground.domain.comment.dto.CommentListDto;
 import com.encore.playground.domain.feed.dto.FeedListDto;
 import com.encore.playground.domain.follow.dto.FollowMyPageDto;
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberMyPageDto;
 import com.encore.playground.domain.qna.dto.AnswerDto;
 import com.encore.playground.domain.qna.dto.QuestionDto;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MyPageDto {
-    private MemberDto memberDto;
+    private MemberMyPageDto memberMyPageDto;
     private FollowMyPageDto followMyPageDto;
     private List<FeedListDto> myPageFeedDtoList;
     private List<CommentListDto> myPageCommentDtoList;

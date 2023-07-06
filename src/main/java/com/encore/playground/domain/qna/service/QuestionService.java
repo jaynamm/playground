@@ -44,8 +44,8 @@ public class QuestionService {
      * @return List<QuestionDto>
      */
 
-    public List<QuestionDto> getQuestionListByMember(Long memberId) {
-        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberId).get().stream().map(QuestionDto::new).toList();
+    public List<QuestionDto> getQuestionListByMember(MemberDto memberDto) {
+        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberDto.getId()).get().stream().map(QuestionDto::new).toList();
         return questionDtoList;
     }
 

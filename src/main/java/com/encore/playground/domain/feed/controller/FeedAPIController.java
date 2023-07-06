@@ -45,16 +45,6 @@ public class FeedAPIController {
         return feedService.feedPage(memberIdDto);
     }
 
-    /**
-     * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드
-     */
-    // TODO: 사용자 id값을 URL에 노출할 필요가 있는가? jwt를 쓰는데?
-    @Operation(summary = "피드 목록 (마이페이지용)", description = "해당 사용자가 작성한 피드 목록을 반환한다.")
-    @GetMapping(value = "/list/{id}")
-    public List<FeedListDto> getFeedListByMember(@PathVariable String id, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.getFeedListByMember(memberIdDto);
-    }
 
     /**
      * 클릭한 피드의 상세 내용 및 그 피드의 댓글 목록을 반환하는 메소드

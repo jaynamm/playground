@@ -37,13 +37,12 @@ public class CommentService {
 
     /**
      * 유저 id를 사용하여 해당 유저가 작성한 댓글들 가져오기
-     * @param memberIdDto 해당 프로퍼티를 가진 Dto<br>
-     *                   userId: 멤버 테이블 id<br>
+     * @param memberDto 해당 프로퍼티를 가진 Dto<br>
+     *                   Id: 멤버 테이블 pk<br>
      * @return 해당 유저가 작성한 댓글 목록
      */
-    public List<CommentListDto> getCommentsByUser(MemberGetMemberIdDto memberIdDto) {
-        Member member = memberService.getMemberByUserid(memberIdDto.getUserid()).toEntity();
-        return commentRepository.findByMemberId(member.getId()).get()
+    public List<CommentListDto> getCommentListByMember(MemberDto memberDto) {
+        return commentRepository.findByMemberId(memberDto.getId()).get()
                 .stream().map(CommentListDto::new).toList();
     }
 

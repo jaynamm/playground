@@ -27,15 +27,6 @@ public class AnswerController {
         return answerService.answerList(questionId);
     }
 
-    /**
-     * GET - memberId에 해당하는 답변 목록 조회
-     * @param memberId
-     * @return List<AnswerDTO>
-     */
-    @GetMapping("/answer/list/{memberId}")
-    private List<AnswerDto> getAnswerListByMember(@PathVariable Long memberId) {
-        return answerService.getAnswerListByMember(memberId);
-    }
 
     /**
      * POST - 질문 답변 생성
