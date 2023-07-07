@@ -45,11 +45,11 @@ INSERT INTO feed (content, created_date, like_count, member_id, modified_date, v
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 영화 마라톤을 열 예정!', '2023-06-29T18:36:14.208459', 0, 4, '2023-06-29T18:36:14.208459', 0);
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 새로운 레시피로 요리 도전!', '2023-06-30T16:20:57.992564', 0, 5, '2023-06-30T16:20:57.992564', 0);
 
-insert into notice(title, content, created_date, modified_date, member_id) values ('[안내] 캠퍼스 이전 관련 공지입니다.', '현재 운영 중인 독산 캠퍼스를 수원으로 이전하게 되었습니다.', 20230512120122, 20230512120122, 1);
-insert into notice(title, content, created_date, modified_date, member_id) values ('[긴급] 교재 수령 안내', '21기 수강생 여러분들은 빠른 시일 내에 교재를 받지 않으면 큰일이 납니다.', 20230516200134, 20230516200134, 1);
-insert into notice(title, content, created_date, modified_date, member_id) values ('[안내] 캠퍼스 휴무일 공지', '독산 캠퍼스는 매주 월요일 쉬기로 결정했습니다.', 20230518091726, 20230518091726, 1);
-insert into notice(title, content, created_date, modified_date, member_id) values ('[자격증] 정보처리기사 접수 일정 ', '접수일정: 2023.06.17.(월) 10:00 ~ 2023.06.20.(목) 18:00', 20230518151726, 20230518151726, 1);
-insert into notice(title, content, created_date, modified_date, member_id) values ('[신청]  LET\'S PLAY 현직자 Session 사전조사 ', '의견을 반영하고자 사전 설문조사를 진행하고자 하니 사전조사 설문에 참여해주십시오.', 20230518224202, 20230518224202, 1);
+insert into notice(title, content, created_date, modified_date, member_id) values ('[안내] 캠퍼스 이전 관련 공지입니다.', '현재 운영 중인 독산 캠퍼스를 수원으로 이전하게 되었습니다.', 20230512120122, 20230512120122, 8);
+insert into notice(title, content, created_date, modified_date, member_id) values ('[긴급] 교재 수령 안내', '21기 수강생 여러분들은 빠른 시일 내에 교재를 받지 않으면 큰일이 납니다.', 20230516200134, 20230516200134, 8);
+insert into notice(title, content, created_date, modified_date, member_id) values ('[안내] 캠퍼스 휴무일 공지', '독산 캠퍼스는 매주 월요일 쉬기로 결정했습니다.', 20230518091726, 20230518091726, 8);
+insert into notice(title, content, created_date, modified_date, member_id) values ('[자격증] 정보처리기사 접수 일정 ', '접수일정: 2023.06.17.(월) 10:00 ~ 2023.06.20.(목) 18:00', 20230518151726, 20230518151726, 8);
+insert into notice(title, content, created_date, modified_date, member_id) values ('[신청]  LET\'S PLAY 현직자 Session 사전조사 ', '의견을 반영하고자 사전 설문조사를 진행하고자 하니 사전조사 설문에 참여해주십시오.', 20230518224202, 20230518224202, 8);
 
 insert into question(title, content, member_id, created_date) values ('공가 사용에 대해 질문이 있습니다.', '한번에 공가를 몇개까지 사용할 수 있나요?', 2, 20230518091726);
 insert into question(title, content, member_id, created_date) values ('독산 캠퍼스 운영시간이 궁금합니다.', '몇시까지 운영하나요?', 3, 20230519221726);

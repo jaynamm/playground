@@ -52,10 +52,10 @@ public class NoticeService {
      * Create
      * 공지사항 게시물을 작성한다.
      * @param noticeWriteDto, memberIdDto
-     * @return List<NoticeDto> (공지사항 메인)
+     * @return void
      */
 
-    public List<NoticeDto> writeNotice(NoticeWriteDto noticeWriteDto, MemberGetMemberIdDto memberIdDto) {
+    public void writeNotice(NoticeWriteDto noticeWriteDto, MemberGetMemberIdDto memberIdDto) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         noticeRepository.save(NoticeDto.builder()
                 .title(noticeWriteDto.getTitle())
@@ -65,33 +65,31 @@ public class NoticeService {
                 .viewCount(0)
                 .build().toEntity()
         );
-        return noticeList();
+//        return noticeList();
     }
 
     /**
      * Update
      * @param newNoticeDto, memberIdDto
-     * @return List<NoticeDto> (공지사항 메인)
+     * @return void
      */
 
-    public List<NoticeDto> modifyNotice(NoticeModifyDto newNoticeDto, MemberGetMemberIdDto memberIdDto) {
+    public void modifyNotice(NoticeModifyDto newNoticeDto, MemberGetMemberIdDto memberIdDto) {
         NoticeDto noticeDto = new NoticeDto(noticeRepository.findById(newNoticeDto.getId()).get());
         noticeDto.setTitle(newNoticeDto.getTitle());
         noticeDto.setContent(newNoticeDto.getContent());
         noticeRepository.save(noticeDto.toEntity());
-        return noticeList();
 
     }
 
     /**
      * Delete
      * @param noticeGetIdDto, memberIdDto
-     * @return List<NoticeDto> (공지사항 메인)
+     * @return void
      */
 
-    public List<NoticeDto> deleteNotice(NoticeGetIdDto noticeGetIdDto, MemberGetMemberIdDto memberIdDto) {
+    public void deleteNotice(NoticeGetIdDto noticeGetIdDto, MemberGetMemberIdDto memberIdDto) {
         noticeRepository.deleteById(noticeGetIdDto.getId());
-        return noticeList();
     }
 
 }
