@@ -40,12 +40,12 @@ public class QuestionService {
 
     /**
      * id에 해당하는 작성자가 작성한 qna 게시물 목록을 가져온다.
-     * @param memberId
+     * @param memberDto
      * @return List<QuestionDto>
      */
 
-    public List<QuestionDto> getQuestionListByMember(Long memberId) {
-        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberId).get().stream().map(QuestionDto::new).toList();
+    public List<QuestionDto> getQuestionListByMember(MemberDto memberDto) {
+        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberDto.getId()).get().stream().map(QuestionDto::new).toList();
         return questionDtoList;
     }
 
@@ -68,9 +68,9 @@ public class QuestionService {
      * qna 게시물을 작성한다.
      * @param questionWriteDto
      * @param memberIdDto
-     * @return List<QuestionDto> (qna 메인)
+     * @return void
      */
-    public List<QuestionDto> writeQuestion(QuestionWriteDto questionWriteDto, MemberGetMemberIdDto memberIdDto) {
+    public void writeQuestion(QuestionWriteDto questionWriteDto, MemberGetMemberIdDto memberIdDto) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         questionRepository.save(QuestionDto.builder()
                 .title(questionWriteDto.getTitle())
@@ -79,32 +79,29 @@ public class QuestionService {
                 .createdDate(LocalDateTime.now())
                 .build().toEntity()
         );
-        return questionList();
     }
 
     /**
      * qna 게시글을 수정한다 (update)
      * @param newQuestionDto
-     * @return List<QuestionDto> (qna 메인)
+     * @return void
      */
 
-    public List<QuestionDto> modifyQuestion(QuestionModifyDto newQuestionDto, MemberGetMemberIdDto memberIdDto) {
+    public void modifyQuestion(QuestionModifyDto newQuestionDto, MemberGetMemberIdDto memberIdDto) {
         QuestionDto questionDto = new QuestionDto(questionRepository.findById(newQuestionDto.getId()).get());
         questionDto.setTitle(newQuestionDto.getTitle());
         questionDto.setContent(newQuestionDto.getContent());
         questionRepository.save(questionDto.toEntity());
-        return questionList();
     }
 
     /**
      * qna 게시물 삭제
-     * @param questionDeleteDto
+     * @param questionIdDto
      * @param memberIdDto
-     * @return questionList();
+     * @return void
      */
-    public List<QuestionDto> deleteQuestion(QuestionGetIdDto questionIdDto, MemberGetMemberIdDto memberIdDto) {
+    public void deleteQuestion(QuestionGetIdDto questionIdDto, MemberGetMemberIdDto memberIdDto) {
         questionRepository.deleteById(questionIdDto.getId());
-        return questionList();
     }
 
 }

@@ -16,7 +16,9 @@ public class FeedListDto {
     @Schema(description = "피드 테이블 id", example = "1") // 각 속성에 대한 설명
     private Long id;
 
-    // userId와 nickname은 member 테이블에 join하여 가져온다.
+    @Schema(description = "피드 작성자의 테이블 id", example = "1")
+    private Long memberId;
+
     @Schema(description = "피드 작성자의 userId", example = "피드 작성자")
     private String userId;
 
@@ -43,6 +45,7 @@ public class FeedListDto {
 
     public FeedListDto(Feed entity) {
         this.id = entity.getId();
+        this.memberId = entity.getMember().getId();
         this.userId = entity.getMember().getUserid();
         this.nickname = entity.getMember().getNickname();
         this.createdDate = entity.getCreatedDate();

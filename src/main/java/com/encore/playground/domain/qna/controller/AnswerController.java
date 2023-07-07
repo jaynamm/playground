@@ -3,8 +3,13 @@ package com.encore.playground.domain.qna.controller;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.service.AnswerService;
+import com.encore.playground.global.api.DefaultResponse;
+import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,80 +23,85 @@ public class AnswerController {
 
     /**
      * POST - id에 해당하는 질문의 답변 목록 조회
-     * @param getQuestionId - question_id
+     * @param questionGetIdDto - question_id
      * @return  List<AnswerDTO>
      */
     @PostMapping("/answer/list")
-    private List<AnswerDto> answerList(@RequestBody Map<String, Long> getQuestionId) {
-        Long questionId = getQuestionId.get("question_id");
-        return answerService.answerList(questionId);
+    private List<AnswerListDto> answerList(@RequestBody QuestionGetIdDto questionGetIdDto, HttpServletRequest request) {
+        Long questionId = questionGetIdDto.getId();
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return answerService.getAnswerList(questionId, memberIdDto);
     }
 
-    /**
-     * GET - memberId에 해당하는 답변 목록 조회
-     * @param memberId
-     * @return List<AnswerDTO>
-     */
-    @GetMapping("/answer/list/{memberId}")
-    private List<AnswerDto> getAnswerListByMember(@PathVariable Long memberId) {
-        return answerService.getAnswerListByMember(memberId);
-    }
 
     /**
      * POST - 질문 답변 생성
      * @param answerWriteDto
      * @param request
-     * @return List<AnswerDTO>
+     * @return void
      */
     @PostMapping("/answer/write")
-    private List<AnswerDto> writeAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
+    private void writeAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-
-        return answerService.createAnswer(answerWriteDto, memberIdDto);
-    }
-
-
-    @GetMapping("/answer/modify")
-    private String modifyAnswerButton(@RequestBody AnswerGetIdDto answerIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (answerService.isAnswerWriter(answerIdDto.getId(), memberIdDto)) {
-            return "forward:/answer/modify";
-        } else {
-            return "redirect:/answer/list";
-        }
+        answerService.createAnswer(answerWriteDto, memberIdDto);
     }
 
     /**
      * Post - 질문에 대한 답변을 수정
      * @param answerModifyDto
      * @param request
-     * @return List<AnswerDto>
+     * @return ResponseEntity
      */
     @PostMapping("/answer/modify")
-    private List<AnswerDto> modifyAnswer(@RequestBody AnswerModifyDto answerModifyDto, HttpServletRequest request) {
+    private ResponseEntity<?> modifyAnswer(@RequestBody AnswerModifyDto answerModifyDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (answerService.isAnswerWriter(answerModifyDto.getId(), memberIdDto)) {
-            return answerService.modifyAnswer(answerModifyDto, memberIdDto);
+            answerService.modifyAnswer(answerModifyDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.ANSWER_MODIFY_SUCCESS
+                    ),
+                    HttpStatus.OK
+            );
         } else {
-            return answerService.answerList(answerModifyDto.getQuestionId());
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.ANSWER_MODIFY_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
         }
-
     }
 
     /**
      * Post - 질문에 대한 답변 삭제
      * @param answerDeleteDto
      * @param request
-     * @return List<AnswerDto>
+     * @return ResponseEntity
      */
 
     @PostMapping("/answer/delete")
-    private List<AnswerDto> deleteAnswer(@RequestBody AnswerDeleteDto answerDeleteDto, HttpServletRequest request) {
+    private ResponseEntity<?> deleteAnswer(@RequestBody AnswerDeleteDto answerDeleteDto, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         if (answerService.isAnswerWriter(answerDeleteDto.getId(), memberIdDto)) {
-            return answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+            answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.ANSWER_DELETE_SUCCESS
+                    ),
+                    HttpStatus.OK
+            );
         } else {
-            return answerService.answerList(answerDeleteDto.getQuestionId());
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.ANSWER_DELETE_FAILED
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
         }
     }
 }

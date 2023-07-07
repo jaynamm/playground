@@ -16,12 +16,14 @@ import java.time.LocalDateTime;
 @Schema(description = "댓글 목록 조회용 DTO")
 public class CommentListDto {
     @Schema(description = "댓글 테이블 id", example = "1")
-    private long id;
+    private Long id;
 
     @Schema(description = "이 댓글이 달린 피드의 feedId", example = "1")
-    private long feedId;
+    private Long feedId;
 
-    // userId와 nickname은 member 테이블에 join하여 가져온다.
+    @Schema(description = "댓글 작성자의 memberId", example = "1")
+    private Long memberId;
+
     @Schema(description = "댓글 작성자의 userId", example = "댓글 작성자")
     private String userId;
 
@@ -34,20 +36,21 @@ public class CommentListDto {
     @Schema(description = "댓글 수정일자", example = "2023-05-17 19:37:35.890895")
     private LocalDateTime modifiedDate;
 
-//    @Schema(description = "댓글 좋아요 수", example = "0")
-//    private int likeCount;
-
     @Schema(description = "댓글 내용", example = "댓글 내용")
     private String content;
+
+    @Schema(description = "댓글에 수정/삭제 버튼 보여줄지 여부", example = "true")
+    private boolean isEditable;
 
     public CommentListDto(Comment entity) {
         this.id = entity.getId();
         this.feedId = entity.getFeed().getId();
+        this.memberId = entity.getMember().getId();
         this.userId = entity.getMember().getUserid();
         this.nickname = entity.getMember().getNickname();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
-//        this.likeCount = entity.getLikeCount();
         this.content = entity.getContent();
+        this.isEditable = false;
     }
 }

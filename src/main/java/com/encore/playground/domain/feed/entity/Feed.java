@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -45,4 +46,9 @@ public class Feed {
 
     @Column(nullable = false, length = 1000)
     private String content; // 글 내용
+
+    @Transactional
+    public void readFeed() { // 조회수 증가
+        this.viewCount++;
+    }
 }
