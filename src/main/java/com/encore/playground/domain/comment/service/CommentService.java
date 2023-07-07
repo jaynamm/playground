@@ -7,9 +7,10 @@ import com.encore.playground.domain.feed.dto.FeedDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +25,46 @@ public class CommentService {
     private final MemberService memberService;
 
     /**
+     * 해당 댓글에 수정/삭제 버튼 보여줄지 여부를 체크하기
+     * @param commentDto 가져온 댓글
+     * @param memberDto 현재 로그인한 새용자
+     * @return isEditable이 적용된 commentListDto
+     */
+    public CommentListDto isCommentWriter (CommentDto commentDto, MemberDto memberDto) {
+        CommentListDto commentListDto = new CommentListDto(commentDto.toEntity());
+        // 댓글 작성자와 로그인한 사용자가 같은지 확인한다.
+        if (commentDto.getMember().getId().equals(memberDto.getId())) {
+            // 같으면 isEditable을 true로 만든다.
+            commentListDto.setEditable(true);
+        }
+        return commentListDto;
+    }
+
+    /**
+     * 댓글 수정/삭제 시 해당 유저가 작성한 댓글인지 확인하는 boolean 메소드
+     */
+    public boolean isCommentWriter(Long id, MemberGetMemberIdDto memberIdDto) {
+        CommentDto commentDto = new CommentDto(commentRepository.findById(id).get());
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        return commentDto.getMember().getId().equals(memberDto.getId());
+    }
+
+
+    /**
      * 피드 글번호를 이용하여 해당 글에 달린 댓글들 가져오기
      *
      * @param commentReadDto 해당 프로퍼티를 가진 Dto<br>
      *                       feedId: 피드 글번호<br>
      * @return 해당 글에 달린 댓글들
      */
-    public List<CommentListDto> getCommentsInFeed(CommentReadDto commentReadDto) {
-        return commentRepository.findByFeed_Id(commentReadDto.getFeedId()).get()
-                .stream().map(CommentListDto::new).toList();
+    public Slice<CommentListDto> getCommentsInFeed(CommentReadDto commentReadDto, MemberGetMemberIdDto memberIdDto, Pageable pageable) {
+        // 리포지토리에서 feedId에 해당하는 댓글을 가져온다
+        Slice<Comment> comments = commentRepository.findAllByFeed_IdOrderById(commentReadDto.getFeedId(), pageable);
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        // 댓글들 중 로그인한 사용자가 작성한 댓글이 있는지 확인한다. 있으면 플래그를 true로 만든다.
+        Slice<CommentListDto> commentList = comments.map(CommentDto::new).map(CommentDto -> this.isCommentWriter(CommentDto, memberDto));
+        // 댓글들을 CommentListDto로 변환한다.
+        return commentList;
     }
 
     /**
@@ -63,16 +95,6 @@ public class CommentService {
                         .content(commentWriteDto.getContent())
                         .build().toEntity());
     }
-
-    /**
-     * 댓글 수정/삭제 시 해당 유저가 작성한 댓글인지 확인하는 boolean 메소드
-     */
-    public boolean isCommentWriter(Long id, MemberGetMemberIdDto memberIdDto) {
-        CommentDto commentDto = new CommentDto(commentRepository.findById(id).get());
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
-        return commentDto.getMember().getId().equals(memberDto.getId());
-    }
-
     /**
      * 댓글 수정
      * @param commentModifyDto 해당 프로퍼티를 가진 Dto<br>

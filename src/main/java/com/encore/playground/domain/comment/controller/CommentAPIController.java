@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +38,9 @@ public class CommentAPIController {
     @Operation(summary = "댓글 목록 가져오기 (피드 상세화면용)", description = "피드 글번호를 입력하면 해당 글에 달린 댓글들을 모두 가져온다.")
     @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
     @GetMapping("/list/{feedId}")
-    public List<CommentListDto> getCommentsInFeed(@PathVariable Long feedId, HttpServletRequest request) {
-        return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build());
+    public Slice<CommentListDto> getCommentsInFeed(@PathVariable Long feedId, HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build(), memberIdDto, pageable);
     }
 
 

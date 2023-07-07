@@ -47,7 +47,7 @@ public class FeedAPIController {
     /**
      * 클릭한 피드의 상세 내용 및 그 피드의 댓글 목록을 반환하는 메소드
      * @param id: 상세보기 할 피드의 글 번호
-     * @return {
+     * @return JSON 객체: {
      *     feed: 피드 상세 내용,
      *     comments: 해당 피드에 달린 댓글 목록(Array)
      * }
@@ -62,9 +62,9 @@ public class FeedAPIController {
         feedAndComments.put("feed", feedListDto);
         feedAndComments.put("comments",
                 commentService.getCommentsInFeed(
-                        CommentReadDto.builder()
-                        .feedId(id)
-                        .build()
+                        CommentReadDto.builder().feedId(id).build(),
+                        memberIdDto,
+                        Pageable.unpaged()
                 )
         );
         String responseMessage = "";
