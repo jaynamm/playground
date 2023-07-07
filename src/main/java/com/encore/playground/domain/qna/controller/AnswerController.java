@@ -23,13 +23,14 @@ public class AnswerController {
 
     /**
      * POST - id에 해당하는 질문의 답변 목록 조회
-     * @param getQuestionId - question_id
+     * @param questionGetIdDto - question_id
      * @return  List<AnswerDTO>
      */
     @PostMapping("/answer/list")
-    private List<AnswerDto> answerList(@RequestBody Map<String, Long> getQuestionId) {
-        Long questionId = getQuestionId.get("question_id");
-        return answerService.answerList(questionId);
+    private List<AnswerListDto> answerList(@RequestBody QuestionGetIdDto questionGetIdDto, HttpServletRequest request) {
+        Long questionId = questionGetIdDto.getId();
+        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        return answerService.getAnswerList(questionId, memberIdDto);
     }
 
 

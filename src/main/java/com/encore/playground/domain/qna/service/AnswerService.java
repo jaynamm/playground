@@ -5,7 +5,6 @@ import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
 import com.encore.playground.domain.qna.dto.*;
 import com.encore.playground.domain.qna.repository.AnswerRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +20,23 @@ public class AnswerService {
     private final QuestionService questionService;
     private final MemberService memberService;
 
-    public List<AnswerDto> answerList(Long questionId) {
-        return answerRepository.findAnswerByQuestion_Id(questionId).get().stream().map(AnswerDto::new).toList();
+    public AnswerListDto isAnswerWriter (AnswerDto answerDto, MemberGetMemberIdDto memberIdDto) {
+        AnswerListDto answerListDto = new AnswerListDto(answerDto.toEntity());
+        answerListDto.setEditable(answerListDto.getUserId().equals(memberIdDto.getUserid()));
+        return answerListDto;
     }
 
     public boolean isAnswerWriter(Long id, MemberGetMemberIdDto memberIdDto) {
         return memberIdDto.getUserid().equals(answerRepository.findById(id).get().getMember().getUserid());
+    }
+
+    public List<AnswerListDto> getAnswerList(Long questionId, MemberGetMemberIdDto memberIdDto) {
+        List<AnswerDto> answerDtoList = answerList(questionId);
+        return answerDtoList.stream().map(AnswerDto -> isAnswerWriter(AnswerDto, memberIdDto)).toList();
+    }
+
+    public List<AnswerDto> answerList(Long questionId) {
+        return answerRepository.findAnswerByQuestion_Id(questionId).get().stream().map(AnswerDto::new).toList();
     }
 
     public List<AnswerDto> getAnswerListByMember(MemberDto memberDto) {

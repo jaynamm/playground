@@ -39,6 +39,16 @@ public class MemberService {
     }
 
     /**
+     * 회원가입 중 중복확인
+     * @param memberIdDto userid가 들어있는 DTO
+     * @return 있으면 True 없으면 False
+     */
+    public Boolean isExistUserid(MemberGetMemberIdDto memberIdDto) {
+        Optional<Member> member = memberRepository.findByUserid(memberIdDto.getUserid());
+        return member.isPresent();
+    }
+
+    /**
      * 로그인시 userid 를 통해 멤버 확인 후 가져옴
      * @param userid
      * @return MemberDto

@@ -1,10 +1,12 @@
 package com.encore.playground.domain.member.controller;
 
 import com.encore.playground.domain.member.dto.MemberDto;
+import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.dto.MemberPasswordDto;
 import com.encore.playground.domain.member.dto.MemberSearchDto;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.domain.member.service.MemberService;
+import com.encore.playground.global.api.ResponseMessage;
 import com.encore.playground.global.dto.AccessTokenDto;
 import com.encore.playground.global.dto.RefreshTokenDto;
 import com.encore.playground.global.service.TokenService;
@@ -80,6 +82,24 @@ public class MemberAPIController {
         // TODO : statusCode 와 responseMessage 를 어떻게 구분해서 보낼 것인가
 
         return new ResponseEntity<>(loginRes, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 회원가입 화면에서 아이디 중복 체크
+     * @param memberIdDto 사용자가 입력한 userId가 들어있는 Dto
+     * @return ResponseEntity
+     */
+    @PostMapping("/checkid")
+    public Map<String, String> checkUserid(@RequestBody MemberGetMemberIdDto memberIdDto) {
+        Boolean existed = memberService.isExistUserid(memberIdDto);
+        Map<String, String> result = new HashMap<>();
+        // 중복되지 않았을 경우
+        if (!existed) {
+            result.put("responseMessage", ResponseMessage.USERID_USEABLE);
+        } else { // 중복되었을 경우
+            result.put("responseMessage", ResponseMessage.USERID_EXIST);
+        }
+        return result;
     }
 
     /**

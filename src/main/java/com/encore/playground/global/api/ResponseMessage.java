@@ -22,9 +22,9 @@ public class ResponseMessage {
     public static final String QNA_MODIFY_ACCESS = "QNA_MODIFY_ACCESS";
     public static final String QNA_DELETE_SUCCESS = "QNA_DELETE_SUCCESS";
     public static final String QNA_DELETE_FAILED = "QNA_DELETE_FAILED";
-    public static final String FEED_DELETE = "FEED_DELETE";
+    public static final String FEED_DELETE_SUCCESS = "FEED_DELETE_SUCCESS";
     public static final String FEED_DELETE_FAILED = "FEED_DELETE_FAILED";
-    public static final String FEED_MODIFY = "FEED_MODIFY";
+    public static final String FEED_MODIFY_SUCCESS = "FEED_MODIFY_SUCCESS";
     public static final String FEED_MODIFY_FAILED = "FEED_MODIFY_FAILED";
     public static final String COMMENT_DELETE = "COMMENT_DELETE";
     public static final String COMMENT_DELETE_FAILED = "COMMENT_DELETE_FAILED";
@@ -40,5 +40,8 @@ public class ResponseMessage {
     public static final String DB_ERROR = "DB_ERROR";
     public static final String QUESTION_WRITER_ACCESS = "QUESTION_WRITER_ACCESS";
     public static final String QUESTION_WRITER_ACCESS_FAILED = "QUESTION_WRITER_ACCESS_FAILED";
-
+    public static final String FEED_DETAIL_SUCCESS = "FEED_DETAIL_SUCCESS";
+    public static final String FEED_DETAIL_FAILED = "FEED_DETAIL_FAILED";
+    public static final String USERID_EXIST = "USERID_EXIST";
+    public static final String USERID_USEABLE = "USERID_USEABLE";
 }
