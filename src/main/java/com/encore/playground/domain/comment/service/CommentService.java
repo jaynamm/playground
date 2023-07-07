@@ -27,13 +27,13 @@ public class CommentService {
     /**
      * 해당 댓글에 수정/삭제 버튼 보여줄지 여부를 체크하기
      * @param commentDto 가져온 댓글
-     * @param memberDto 현재 로그인한 새용자
-     * @return isEditable이 적용된 commentListDto
+     * @param memberIdDto 현재 로그인한 사용자의 userId
+     * @return isEditable이 적용된 CommentListDto
      */
-    public CommentListDto isCommentWriter (CommentDto commentDto, MemberDto memberDto) {
+    public CommentListDto isCommentWriter (CommentDto commentDto, MemberGetMemberIdDto memberIdDto) {
         CommentListDto commentListDto = new CommentListDto(commentDto.toEntity());
         // 댓글 작성자와 로그인한 사용자가 같은지 확인한다.
-        if (commentDto.getMember().getId().equals(memberDto.getId())) {
+        if (commentDto.getMember().getUserid().equals(memberIdDto.getUserid())) {
             // 같으면 isEditable을 true로 만든다.
             commentListDto.setEditable(true);
         }
@@ -45,8 +45,7 @@ public class CommentService {
      */
     public boolean isCommentWriter(Long id, MemberGetMemberIdDto memberIdDto) {
         CommentDto commentDto = new CommentDto(commentRepository.findById(id).get());
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
-        return commentDto.getMember().getId().equals(memberDto.getId());
+        return commentDto.getMember().getUserid().equals(memberIdDto.getUserid());
     }
 
 
@@ -60,9 +59,8 @@ public class CommentService {
     public Slice<CommentListDto> getCommentsInFeed(CommentReadDto commentReadDto, MemberGetMemberIdDto memberIdDto, Pageable pageable) {
         // 리포지토리에서 feedId에 해당하는 댓글을 가져온다
         Slice<Comment> comments = commentRepository.findAllByFeed_IdOrderById(commentReadDto.getFeedId(), pageable);
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         // 댓글들 중 로그인한 사용자가 작성한 댓글이 있는지 확인한다. 있으면 플래그를 true로 만든다.
-        Slice<CommentListDto> commentList = comments.map(CommentDto::new).map(CommentDto -> this.isCommentWriter(CommentDto, memberDto));
+        Slice<CommentListDto> commentList = comments.map(CommentDto::new).map(CommentDto -> this.isCommentWriter(CommentDto, memberIdDto));
         // 댓글들을 CommentListDto로 변환한다.
         return commentList;
     }
@@ -113,8 +111,6 @@ public class CommentService {
      *                   id: 댓글 번호<br>
      */
     public void deleteComment(CommentDeleteDto commentDeleteDto, MemberGetMemberIdDto memberIdDto) {
-        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
-        Comment commentToDelete = commentRepository.findById(commentDeleteDto.getId()).get();
         commentRepository.deleteById(commentDeleteDto.getId());
     }
 }
