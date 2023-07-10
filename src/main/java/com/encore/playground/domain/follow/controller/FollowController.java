@@ -16,13 +16,17 @@ public class FollowController {
 
     @PostMapping("/follow")
     public void follow(@RequestBody FollowGetIdDto followGetIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        followService.follow(followGetIdDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            followService.follow(followGetIdDto, memberIdDto);
+        }
     }
 
     @PostMapping("/unfollow")
     public void unfollow(@RequestBody FollowGetIdDto followGetIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        followService.unfollow(followGetIdDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            followService.unfollow(followGetIdDto, memberIdDto);
+        }
     }
 }

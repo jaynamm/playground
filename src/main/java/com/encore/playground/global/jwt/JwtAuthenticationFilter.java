@@ -28,27 +28,27 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // refresh token이 있는지 확인하고 존재하면 검증한다.
-        // 클라이언트에 unauthorized error code(401)을 보내서 request로 refresh token이 들어온다.
-        if (httpRequest.getHeader("refresh-token") != null){
-            System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
-            // refresh token을 받아와서 검증한다.
-            System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
-            // refresh token이 유효한 경우,
-            RefreshTokenValidateDto refreshTokenValidateDto = getRefreshToken(httpRequest);
-            if (tokenService.validateRefreshToken(refreshTokenValidateDto)) {
-                // 새로운 access token을 발급해서 보내준다.
-                // 수정 (refreshtoken으로 refreshtoken table의 memberId 가져오기)
-                String newAccessToken = tokenService.generateAccessToken(tokenService.getMemberIdFromRefreshToken(refreshTokenValidateDto)).getAccessToken();
-                httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
-                httpResponse.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
-                System.out.println("refresh token이 유효하지 않습니다.");
-                httpResponse.setHeader("responseMessage", ResponseMessage.LOG_OUT);
-                httpResponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-            }
-        }
+//        // refresh token이 있는지 확인하고 존재하면 검증한다.
+//        // 클라이언트에 unauthorized error code(401)을 보내서 request로 refresh token이 들어온다.
+//        if (httpRequest.getHeader("refresh-token") != null){
+//            System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
+//            // refresh token을 받아와서 검증한다.
+//            System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
+//            // refresh token이 유효한 경우,
+//            RefreshTokenValidateDto refreshTokenValidateDto = getRefreshToken(httpRequest);
+//            if (tokenService.validateRefreshToken(refreshTokenValidateDto)) {
+//                // 새로운 access token을 발급해서 보내준다.
+//                // 수정 (refreshtoken으로 refreshtoken table의 memberId 가져오기)
+//                String newAccessToken = tokenService.generateAccessToken(tokenService.getMemberIdFromRefreshToken(refreshTokenValidateDto)).getAccessToken();
+//                httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
+//                httpResponse.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
+//                System.out.println("refresh token이 유효하지 않습니다.");
+//                httpResponse.setHeader("responseMessage", ResponseMessage.LOG_OUT);
+//                httpResponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+//            }
+//        }
 
 
         // Header 부분에서 JWT 정보를 가져온다.
@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
             System.out.println(memberGetMemberIdDto);
             MemberGetRoleDto memberGetRoleDto = MemberGetRoleDto.builder().role(jwtTokenProvider.getMemberRole(token)).build();
             System.out.println(memberGetRoleDto);// userid만 들어있는 dto를 request에 넣어주기
+            httpRequest.setAttribute("AccessTokenValidation", "true");
             httpRequest.setAttribute("memberIdDto", memberGetMemberIdDto);
             httpRequest.setAttribute("memberRoleDto", memberGetRoleDto);
 
@@ -86,6 +87,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setHeader("responseMessage", ResponseMessage.ACCESS_TOKEN_EXPIRED);
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 만료됐습니다.");
+            httpRequest.setAttribute("AccessTokenValidation", "false");
         }
 
         chain.doFilter(request, response);

@@ -18,8 +18,11 @@ public class MyPageController {
 
     @GetMapping("/mypage")
     public MyPageDto myPageMain(HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return myPageService.myPage(memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            return myPageService.myPage(memberIdDto);
+        } else
+            return null;
     }
 
 }
