@@ -1,9 +1,6 @@
 package com.encore.playground.domain.member.service;
 
-import com.encore.playground.domain.member.dto.MemberDto;
-import com.encore.playground.domain.member.dto.MemberGetIdDto;
-import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.member.dto.MemberMyPageDto;
+import com.encore.playground.domain.member.dto.*;
 import com.encore.playground.domain.member.entity.Member;
 import com.encore.playground.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -174,7 +171,6 @@ public class MemberService {
      * @param userid   로그인한 유저의 id
      * @param password 변경할 비밀번호
      */
-
     public void changePassword(String userid, String password) {
         // userid로 멤버 찾기
         MemberDto memberDto = this.getMemberByUserid(userid);
@@ -194,7 +190,18 @@ public class MemberService {
                 .name(memberDto.getName())
                 .nickname(memberDto.getNickname())
                 .curriculum(memberDto.getCurriculum())
+                .skills(memberDto.getSkills())
                 .build();
+    }
 
+    public void setMemberSkills(String skills, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = this.getMemberByUserid(memberIdDto.getUserid());
+        memberDto.setSkills(skills);
+        memberRepository.save(memberDto.toEntity());
+    }
+
+    public String getMemberSkills(MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = new MemberDto(memberRepository.findByUserid(memberIdDto.getUserid()).get());
+        return memberDto.getSkills();
     }
 }

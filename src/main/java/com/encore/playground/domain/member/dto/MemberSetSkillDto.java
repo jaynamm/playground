@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberMyPageDto {
-    private String userid;
-    private String email;
-    private String name;
-    private String nickname;
-    private String curriculum;
-    private String skills;
+public class MemberSetSkillDto {
+    private Object skill;
 }
