@@ -39,8 +39,11 @@ public class CommentAPIController {
     @Parameter(name="feedId", description="피드 글번호", example="1", required = true)
     @GetMapping("/list/{feedId}")
     public Slice<CommentListDto> getCommentsInFeed(@PathVariable Long feedId, HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build(), memberIdDto, pageable);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build(), memberIdDto, pageable);
+        } else
+            return null;
     }
 
 
@@ -59,8 +62,10 @@ public class CommentAPIController {
     )
     @PostMapping(value = "/write")
     public void write(@RequestBody CommentWriteDto commentWriteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        commentService.writeComment(commentWriteDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            commentService.writeComment(commentWriteDto, memberIdDto);
+        }
     }
 
     /**
@@ -77,25 +82,28 @@ public class CommentAPIController {
     )
     @PostMapping(value = "/modify")
     public ResponseEntity<?> modify(@RequestBody CommentModifyDto commentModifyDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (commentService.isCommentWriter(commentModifyDto.getId(), memberIdDto)) {
-            commentService.modifyComment(commentModifyDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.COMMENT_MODIFY
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.COMMENT_MODIFY_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (commentService.isCommentWriter(commentModifyDto.getId(), memberIdDto)) {
+                commentService.modifyComment(commentModifyDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.COMMENT_MODIFY
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.COMMENT_MODIFY_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 
     /**
@@ -111,24 +119,27 @@ public class CommentAPIController {
     )
     @PostMapping(value = "/delete")
     public ResponseEntity<?> delete(@RequestBody CommentDeleteDto commentDeleteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (commentService.isCommentWriter(commentDeleteDto.getId(), memberIdDto)) {
-            commentService.deleteComment(commentDeleteDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.COMMENT_DELETE
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.COMMENT_DELETE_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (commentService.isCommentWriter(commentDeleteDto.getId(), memberIdDto)) {
+                commentService.deleteComment(commentDeleteDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.COMMENT_DELETE
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.COMMENT_DELETE_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 }

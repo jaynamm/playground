@@ -40,8 +40,11 @@ public class FeedAPIController {
     @Operation(summary = "피드 메인페이지", description = "메인 페이지 접속 시 피드 목록을 반환한다.")
     @GetMapping(value = "/list")
     public Slice<FeedListDto> feedMain(HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return feedService.feedPage(memberIdDto, pageable);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            return feedService.feedPage(memberIdDto, pageable);
+        } else
+            return null;
     }
 
     /**
@@ -56,31 +59,34 @@ public class FeedAPIController {
     @Parameter(name = "id", description = "피드 글 번호", example = "1", required = true)
     @GetMapping(value = "/view/{id}")
     public ResponseEntity<?> getFeed(@PathVariable Long id, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        HashMap<String, Object> feedAndComments = new HashMap<>();
-        FeedListDto feedListDto = feedService.getFeed(id);
-        feedAndComments.put("feed", feedListDto);
-        feedAndComments.put("comments",
-                commentService.getCommentsInFeed(
-                        CommentReadDto.builder().feedId(id).build(),
-                        memberIdDto,
-                        Pageable.unpaged()
-                )
-        );
-        String responseMessage = "";
-        if (feedService.isFeedWriter(feedListDto.getId(), memberIdDto)) {
-            responseMessage = ResponseMessage.FEED_DETAIL_SUCCESS;
-        } else {
-            responseMessage = ResponseMessage.FEED_DETAIL_FAILED;
-        }
-        return new ResponseEntity<>(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        responseMessage,
-                        feedAndComments
-                ),
-                HttpStatus.OK
-        );
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            HashMap<String, Object> feedAndComments = new HashMap<>();
+            FeedListDto feedListDto = feedService.getFeed(id);
+            feedAndComments.put("feed", feedListDto);
+            feedAndComments.put("comments",
+                    commentService.getCommentsInFeed(
+                            CommentReadDto.builder().feedId(id).build(),
+                            memberIdDto,
+                            Pageable.unpaged()
+                    )
+            );
+            String responseMessage = "";
+            if (feedService.isFeedWriter(feedListDto.getId(), memberIdDto)) {
+                responseMessage = ResponseMessage.FEED_DETAIL_SUCCESS;
+            } else {
+                responseMessage = ResponseMessage.FEED_DETAIL_FAILED;
+            }
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            responseMessage,
+                            feedAndComments
+                    ),
+                    HttpStatus.OK
+            );
+        } else
+            return null;
     }
 
     @GetMapping(value = "/test")
@@ -111,8 +117,10 @@ public class FeedAPIController {
     )
     @PostMapping(value = "/write")
     public void write(@RequestBody FeedWriteDto feedWriteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        feedService.write(feedWriteDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            feedService.write(feedWriteDto, memberIdDto);
+        }
     }
 
     /**
@@ -133,25 +141,28 @@ public class FeedAPIController {
     )
     @PostMapping(value = "/modify")
     public ResponseEntity<?> modify(@RequestBody FeedModifyDto feedModifyDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (feedService.isFeedWriter(feedModifyDto.getId(), memberIdDto)){
-            feedService.modify(feedModifyDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.FEED_MODIFY_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.FEED_MODIFY_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (feedService.isFeedWriter(feedModifyDto.getId(), memberIdDto)) {
+                feedService.modify(feedModifyDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.FEED_MODIFY_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.FEED_MODIFY_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 
     /**
@@ -171,24 +182,27 @@ public class FeedAPIController {
     )
     @PostMapping(value = "/delete")
     public ResponseEntity<?> delete(@RequestBody FeedDeleteDto feedDeleteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (feedService.isFeedWriter(feedDeleteDto.getId(), memberIdDto)){
-            feedService.delete(feedDeleteDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.FEED_DELETE_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.FEED_DELETE_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (feedService.isFeedWriter(feedDeleteDto.getId(), memberIdDto)) {
+                feedService.delete(feedDeleteDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.FEED_DELETE_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.FEED_DELETE_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 }

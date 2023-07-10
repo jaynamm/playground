@@ -34,81 +34,92 @@ public class QuestionController {
 
     @GetMapping("/question/view/{id}")
     public ResponseEntity<?> viewQuestion(@PathVariable Long id, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        QuestionDto questionDto = questionService.readQuestion(id, memberIdDto);
-        Map<String, QuestionDto> questionDtoMap = new HashMap<>();
-        questionDtoMap.put("question", questionDto);
-        if (questionService.isQuestionWriter(id, memberIdDto)) {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.QUESTION_WRITER_ACCESS,
-                            questionDtoMap
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.QUESTION_WRITER_ACCESS_FAILED,
-                            questionDtoMap
-                    ),
-                    HttpStatus.OK
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            QuestionDto questionDto = questionService.readQuestion(id, memberIdDto);
+            Map<String, QuestionDto> questionDtoMap = new HashMap<>();
+            questionDtoMap.put("question", questionDto);
+            if (questionService.isQuestionWriter(id, memberIdDto)) {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.QUESTION_WRITER_ACCESS,
+                                questionDtoMap
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.QUESTION_WRITER_ACCESS_FAILED,
+                                questionDtoMap
+                        ),
+                        HttpStatus.OK
+                );
+            }
+        } else
+            return null;
     }
 
     @PostMapping("/question/write")
     public void questionWrite(@RequestBody QuestionWriteDto questionWriteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        questionService.writeQuestion(questionWriteDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            questionService.writeQuestion(questionWriteDto, memberIdDto);
+        }
     }
 
     @PostMapping("/question/modify")
     public ResponseEntity<?> questionModify(@RequestBody QuestionModifyDto questionModifyDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (questionService.isQuestionWriter(questionModifyDto.getId(), memberIdDto)) {
-            questionService.modifyQuestion(questionModifyDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.QNA_MODIFY_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.QNA_MODIFY_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (questionService.isQuestionWriter(questionModifyDto.getId(), memberIdDto)) {
+                questionService.modifyQuestion(questionModifyDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.QNA_MODIFY_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.QNA_MODIFY_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 
 
     @PostMapping("/question/delete")
     public ResponseEntity<?> questionDelete(@RequestBody QuestionGetIdDto questionIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
-            questionService.deleteQuestion(questionIdDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.QNA_DELETE_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.QNA_DELETE_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (questionService.isQuestionWriter(questionIdDto.getId(), memberIdDto)) {
+                questionService.deleteQuestion(questionIdDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.QNA_DELETE_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.QNA_DELETE_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 }
