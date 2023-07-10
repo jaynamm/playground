@@ -41,7 +41,11 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    private String curriculum; // 리스트 선택으로 선택할 수 있게
+    @Column
+    private String curriculum;
+
+    @Column
+    private String skills; // 리스트 선택으로 선택할 수 있게
 
     @CreatedDate
     @Column(nullable = false)

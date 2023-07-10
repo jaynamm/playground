@@ -18,6 +18,7 @@ public class MemberDto {
     private String nickname;
     private String password;
     private String curriculum;
+    private String skills;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private UserRole role;
@@ -36,6 +37,7 @@ public class MemberDto {
         this.nickname = member.getNickname();
         this.password = member.getPassword();
         this.curriculum = member.getCurriculum();
+        this.skills = member.getSkills();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
         this.role = member.getRole();
@@ -50,6 +52,7 @@ public class MemberDto {
                 .nickname(nickname)
                 .password(password)
                 .curriculum(curriculum)
+                .skills(skills)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
                 .role(role)

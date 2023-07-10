@@ -1,15 +1,18 @@
 package com.encore.playground.domain.member.controller;
 
-import com.encore.playground.domain.member.dto.MemberDto;
-import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
-import com.encore.playground.domain.member.dto.MemberPasswordDto;
-import com.encore.playground.domain.member.dto.MemberSearchDto;
+import com.encore.playground.domain.member.dto.*;
 import com.encore.playground.domain.member.service.MemberSecurityService;
 import com.encore.playground.domain.member.service.MemberService;
+import com.encore.playground.global.api.DefaultResponse;
 import com.encore.playground.global.api.ResponseMessage;
+import com.encore.playground.global.api.StatusCode;
 import com.encore.playground.global.dto.AccessTokenDto;
 import com.encore.playground.global.dto.RefreshTokenDto;
 import com.encore.playground.global.service.TokenService;
+import com.google.gson.Gson;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,19 +26,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 @RestController
+@Tag(name = "Member", description = "멤버 테이블 관련 API")
 public class MemberAPIController {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
     private final MemberSecurityService memberSecurityService;
     private final TokenService tokenService;
+    private final Gson gson = new Gson();
 
     /**
      * POST - 로그인 사용자 정보 데이터 전달
      * @param loginData
      * @return ResponseEntity(loginRes, headers, HttpStatus.OK)
      */
-
+    @Operation(hidden = true)
     @PostMapping("/login")
     public ResponseEntity<?> checkLogin(@RequestBody Map<String, String > loginData) {
 
@@ -89,6 +94,7 @@ public class MemberAPIController {
      * @param memberIdDto 사용자가 입력한 userId가 들어있는 Dto
      * @return ResponseEntity
      */
+    @Operation(summary = "회원가입 화면에서 아이디 중복 체크", description = "해당 String이 이미 있는 ID와 중복되는지 체크한다.")
     @PostMapping("/checkid")
     public Map<String, String> checkUserid(@RequestBody MemberGetMemberIdDto memberIdDto) {
         Boolean existed = memberService.isExistUserid(memberIdDto);
@@ -107,7 +113,7 @@ public class MemberAPIController {
      * @param registerMember
      * @return 회원가입 데이터를 가져와서 저장
      */
-
+    @Operation(hidden = true)
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody MemberDto registerMember) {
         System.out.println(registerMember);
@@ -133,7 +139,7 @@ public class MemberAPIController {
      * @param inputEmail
      * @return getIdRes
      */
-
+    @Operation(hidden = true)
     @PostMapping("/search/id")
     public ResponseEntity<?> searchIdByEmail(@RequestBody Map<String, String> inputEmail) {
 
@@ -156,7 +162,7 @@ public class MemberAPIController {
      * @param memberSearchDto
      * @return
      */
-
+    @Operation(hidden = true)
     @PostMapping("/search/password")
     public ResponseEntity<?> searchPasswordByUseridAndEmail(@RequestBody MemberSearchDto memberSearchDto) {
         String userid = memberSearchDto.getUserid();
@@ -175,6 +181,7 @@ public class MemberAPIController {
      * @param memberPasswordDto - userid, password
      * @return ? - 비밀번호 변경 성공 여부
      */
+    @Operation(summary = "비밀번호 변경 기능", description = "이미 로그인한 사용자의 비밀번호를 변경한다.")
     @PostMapping("/password")
     public ResponseEntity<?> changePassword(@RequestBody MemberPasswordDto memberPasswordDto) {
         String userid = memberPasswordDto.getUserid();
@@ -183,5 +190,65 @@ public class MemberAPIController {
         memberService.changePassword(userid, password);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 스킬셋 저장 페이지에서 사용자가 지정한 스킬셋을 멤버 테이블에 저장
+     * @param skill 스킬셋 JSON
+     */
+    @Operation(summary = "스킬셋 저장", description = "스킬셋 저장 페이지에서 사용자가 지정한 스킬셋을 멤버 테이블에 저장한다.")
+    @PostMapping("/skills")
+    public ResponseEntity<?> setSkills(@RequestBody MemberSetSkillDto skill, HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto;
+        try {
+            memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.NOT_FOUND_USER
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
+        String skills = gson.toJson(skill);
+        memberService.setMemberSkills(skills, memberIdDto);
+        return new ResponseEntity<>(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        ResponseMessage.SETSKILL_SUCCESS
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    /**
+     * 채용 추천 시스템에서 해당 멤버가 갖고 있는 스킬셋을 불러오기
+     * @return 스킬셋 JSON
+     */
+    @Operation(summary = "스킬셋 불러오기", description = "채용 추천 시스템에서 해당 멤버가 갖고 있는 스킬셋을 불러온다.")
+    @GetMapping("/skills")
+    public ResponseEntity<?> getSkills(HttpServletRequest request) {
+        MemberGetMemberIdDto memberIdDto;
+        try {
+            memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.UNAUTHORIZED,
+                            ResponseMessage.NOT_FOUND_USER
+                    ),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
+        String skills = memberService.getMemberSkills(memberIdDto);
+        return new ResponseEntity<>(
+                DefaultResponse.res(
+                        StatusCode.OK,
+                        ResponseMessage.GETSKILL_SUCCESS,
+                        gson.fromJson(skills, Map.class)
+                ),
+                HttpStatus.OK
+        );
     }
 }
