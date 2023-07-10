@@ -18,14 +18,18 @@ public class LikesController {
 
     @PostMapping("/likes")
     public void likes(@RequestBody LikesGetIdDto likesGetIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        likesService.likes(likesGetIdDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            likesService.likes(likesGetIdDto, memberIdDto);
+        }
     }
 
     @PostMapping("/likesCancel")
     public void likesCancel(@RequestBody LikesGetIdDto likesGetIdDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        likesService.likesCancel(likesGetIdDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            likesService.likesCancel(likesGetIdDto, memberIdDto);
+        }
     }
 
 

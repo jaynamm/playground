@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
             System.out.println(memberGetMemberIdDto);
             MemberGetRoleDto memberGetRoleDto = MemberGetRoleDto.builder().role(jwtTokenProvider.getMemberRole(token)).build();
             System.out.println(memberGetRoleDto);// userid만 들어있는 dto를 request에 넣어주기
+            httpRequest.setAttribute("AccessTokenValidation", "true");
             httpRequest.setAttribute("memberIdDto", memberGetMemberIdDto);
             httpRequest.setAttribute("memberRoleDto", memberGetRoleDto);
 
@@ -86,6 +87,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setHeader("responseMessage", ResponseMessage.ACCESS_TOKEN_EXPIRED);
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 만료됐습니다.");
+            httpRequest.setAttribute("AccessTokenValidation", "false");
         }
 
         chain.doFilter(request, response);
