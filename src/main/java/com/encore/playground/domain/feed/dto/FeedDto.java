@@ -15,7 +15,6 @@ public class FeedDto {
     private Member member;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private Integer likeCount;
     private Integer commentCount;
     private Integer viewCount;
     private String content;
@@ -26,7 +25,6 @@ public class FeedDto {
                 .member(member)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
-                .likeCount(likeCount)
                 .viewCount(viewCount)
                 .content(content)
                 .build();
@@ -37,7 +35,6 @@ public class FeedDto {
         this.member = entity.getMember();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
-        this.likeCount = entity.getLikeCount();
         this.viewCount = entity.getViewCount();
         this.content = entity.getContent();
     }

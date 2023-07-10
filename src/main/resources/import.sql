@@ -67,3 +67,13 @@ insert into follow (from_member, to_member, created_date) values (1, 2, 20230519
 insert into follow (from_member, to_member, created_date) values (1, 4, 20230519221726);
 insert into follow (from_member, to_member, created_date) values (4, 1, 20230519221726);
 insert into follow (from_member, to_member, created_date) values (2, 1, 20230519221726);
+
+insert into likes (member_id, feed_id, created_date) values (1, 36, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (2, 36, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (1, 34, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (3, 36, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (2, 35, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (3, 36, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (1, 35, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (3, 35, 20230519221726);
+insert into likes (member_id, feed_id, created_date) values (4, 36, 20230519221726);

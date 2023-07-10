@@ -40,6 +40,12 @@ public class FeedListDto {
     @Schema(description = "피드 조회수", example = "0")
     private Integer viewCount;
 
+    @Schema(description = "좋아요를 눌렀는지 여부", example = "false")
+    private boolean isLiked;
+
+    @Schema(description = "해당 피드 작성자 팔로우 여부", example = "false")
+    private boolean isFollowing;
+
     @Schema(description = "피드 내용", example = "피드 내용")
     private String content;
 
@@ -50,7 +56,6 @@ public class FeedListDto {
         this.nickname = entity.getMember().getNickname();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
-        this.likeCount = entity.getLikeCount();
         this.viewCount = entity.getViewCount();
         this.content = entity.getContent();
     }
