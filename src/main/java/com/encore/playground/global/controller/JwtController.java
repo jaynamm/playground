@@ -39,7 +39,13 @@ public class JwtController {
             System.out.println("새롭게 발급된 access token 입니다. " + newAccessToken);
             return new ResponseEntity<>(newAccessToken, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(ResponseMessage.LOG_OUT, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.NOT_ACCEPTABLE,
+                            ResponseMessage.LOG_OUT
+                    ),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
         }
     }
 }
