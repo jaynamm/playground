@@ -28,27 +28,27 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // refresh token이 있는지 확인하고 존재하면 검증한다.
-        // 클라이언트에 unauthorized error code(401)을 보내서 request로 refresh token이 들어온다.
-        if (httpRequest.getHeader("refresh-token") != null){
-            System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
-            // refresh token을 받아와서 검증한다.
-            System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
-            // refresh token이 유효한 경우,
-            RefreshTokenValidateDto refreshTokenValidateDto = getRefreshToken(httpRequest);
-            if (tokenService.validateRefreshToken(refreshTokenValidateDto)) {
-                // 새로운 access token을 발급해서 보내준다.
-                // 수정 (refreshtoken으로 refreshtoken table의 memberId 가져오기)
-                String newAccessToken = tokenService.generateAccessToken(tokenService.getMemberIdFromRefreshToken(refreshTokenValidateDto)).getAccessToken();
-                httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
-                httpResponse.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
-                System.out.println("refresh token이 유효하지 않습니다.");
-                httpResponse.setHeader("responseMessage", ResponseMessage.LOG_OUT);
-                httpResponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-            }
-        }
+//        // refresh token이 있는지 확인하고 존재하면 검증한다.
+//        // 클라이언트에 unauthorized error code(401)을 보내서 request로 refresh token이 들어온다.
+//        if (httpRequest.getHeader("refresh-token") != null){
+//            System.out.println("[JwtAuthenticationFilter] ::: refreshToken이 존재합니다.");
+//            // refresh token을 받아와서 검증한다.
+//            System.out.println("[JwtAuthenticationFilter] ::: refreshToken을 검증합니다.");
+//            // refresh token이 유효한 경우,
+//            RefreshTokenValidateDto refreshTokenValidateDto = getRefreshToken(httpRequest);
+//            if (tokenService.validateRefreshToken(refreshTokenValidateDto)) {
+//                // 새로운 access token을 발급해서 보내준다.
+//                // 수정 (refreshtoken으로 refreshtoken table의 memberId 가져오기)
+//                String newAccessToken = tokenService.generateAccessToken(tokenService.getMemberIdFromRefreshToken(refreshTokenValidateDto)).getAccessToken();
+//                httpResponse.addHeader("Authorization", "Bearer " + newAccessToken);
+//                httpResponse.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                // refresh token이 유효하지 않은 경우, 로그아웃 처리한다.
+//                System.out.println("refresh token이 유효하지 않습니다.");
+//                httpResponse.setHeader("responseMessage", ResponseMessage.LOG_OUT);
+//                httpResponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+//            }
+//        }
 
 
         // Header 부분에서 JWT 정보를 가져온다.

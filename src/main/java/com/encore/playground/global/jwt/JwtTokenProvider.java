@@ -99,8 +99,16 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
+    public String getUserIdByRefreshToken(String refreshToken) {
+        return Jwts.parser().setSigningKey(JWT_REFRESH_TOKEN_SECRET).parseClaimsJws(refreshToken).getBody().getSubject();
+    }
+
     public String getMemberRole(String token) {
         return (String) Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(token).getBody().get("roles");
+    }
+
+    public String getMemberRoleByRefreshToken(String refreshToken) {
+        return (String) Jwts.parser().setSigningKey(JWT_ACCESS_TOKEN_SECRET).parseClaimsJws(refreshToken).getBody().get("roles");
     }
 
 

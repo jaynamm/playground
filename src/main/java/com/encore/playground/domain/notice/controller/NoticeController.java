@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.CustomSQLExceptionTranslatorRegistrar;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class NoticeController {
     public ResponseEntity<?> noticeMain(HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         MemberGetRoleDto memberRoleDto = (MemberGetRoleDto) request.getAttribute("memberRoleDto");
+        if (memberIdDto == null || memberRoleDto == null) {
+            System.out.println("memberIdDto 혹은 memberRoleDto 값이 null입니다.");
+            return null;
+        }
         if (memberRoleDto.getRole().equals("ROLE_ADMIN")) {
             return new ResponseEntity<>(
                     DefaultResponse.res(
