@@ -42,7 +42,7 @@ public class MemberAPIController {
      */
     @Operation(hidden = true)
     @PostMapping("/login")
-    public ResponseEntity<?> checkLogin(@RequestBody Map<String, String > loginData) {
+    public ResponseEntity<?> checkLogin(@RequestBody Map<String, String> loginData) {
 
         System.out.println("[MemberAPIController:/api/member/login] ::: loginCheck()");
 
@@ -178,31 +178,43 @@ public class MemberAPIController {
 
     /**
      * 비밀번호 변경 기능
-     * @param memberPasswordDto - userid, password
+     * @param memberPasswordDto - password
+     * @param request
      * @return ? - 비밀번호 변경 성공 여부
      */
     @Operation(summary = "비밀번호 변경 기능", description = "이미 로그인한 사용자의 비밀번호를 변경한다.")
     @PostMapping("/password")
-    public ResponseEntity<?> changePassword(@RequestBody MemberPasswordDto memberPasswordDto) {
-        String userid = memberPasswordDto.getUserid();
-        String password = memberPasswordDto.getPassword();
-
-        memberService.changePassword(userid, password);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> changePassword(@RequestBody MemberPasswordDto memberPasswordDto, HttpServletRequest request) {
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            String userid = memberIdDto.getUserid();
+            String password = memberPasswordDto.getPassword();
+            memberService.changePassword(userid, password);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return null;
     }
 
     /**
      * 스킬셋 저장 페이지에서 사용자가 지정한 스킬셋을 멤버 테이블에 저장
      * @param skill 스킬셋 JSON
+     * @param request
      */
     @Operation(summary = "스킬셋 저장", description = "스킬셋 저장 페이지에서 사용자가 지정한 스킬셋을 멤버 테이블에 저장한다.")
     @PostMapping("/skills")
     public ResponseEntity<?> setSkills(@RequestBody MemberSetSkillDto skill, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto;
-        try {
-            memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        } catch (Exception e) {
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            String skills = gson.toJson(skill);
+            memberService.setMemberSkills(skills, memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.SETSKILL_SUCCESS
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
@@ -211,28 +223,29 @@ public class MemberAPIController {
                     HttpStatus.UNAUTHORIZED
             );
         }
-        String skills = gson.toJson(skill);
-        memberService.setMemberSkills(skills, memberIdDto);
-        return new ResponseEntity<>(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.SETSKILL_SUCCESS
-                ),
-                HttpStatus.OK
-        );
     }
 
     /**
      * 채용 추천 시스템에서 해당 멤버가 갖고 있는 스킬셋을 불러오기
+     * @param request
      * @return 스킬셋 JSON
      */
+
     @Operation(summary = "스킬셋 불러오기", description = "채용 추천 시스템에서 해당 멤버가 갖고 있는 스킬셋을 불러온다.")
     @GetMapping("/skills")
     public ResponseEntity<?> getSkills(HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto;
-        try {
-            memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        } catch (Exception e) {
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            String skills = memberService.getMemberSkills(memberIdDto);
+            return new ResponseEntity<>(
+                    DefaultResponse.res(
+                            StatusCode.OK,
+                            ResponseMessage.GETSKILL_SUCCESS,
+                            gson.fromJson(skills, Map.class)
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
             return new ResponseEntity<>(
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
@@ -241,14 +254,5 @@ public class MemberAPIController {
                     HttpStatus.UNAUTHORIZED
             );
         }
-        String skills = memberService.getMemberSkills(memberIdDto);
-        return new ResponseEntity<>(
-                DefaultResponse.res(
-                        StatusCode.OK,
-                        ResponseMessage.GETSKILL_SUCCESS,
-                        gson.fromJson(skills, Map.class)
-                ),
-                HttpStatus.OK
-        );
     }
 }
