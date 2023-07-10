@@ -44,4 +44,5 @@ public class ResponseMessage {
     public static final String FEED_DETAIL_FAILED = "FEED_DETAIL_FAILED";
     public static final String USERID_EXIST = "USERID_EXIST";
     public static final String USERID_USEABLE = "USERID_USEABLE";
+    public static final String RECOMMENDED_SUCCESS = "RECOMMENDED_SUCCESS";
 }
