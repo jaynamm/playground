@@ -30,9 +30,12 @@ public class AnswerController {
      */
     @PostMapping("/answer/list")
     private Page<AnswerListDto> answerList(@RequestBody QuestionGetIdDto questionGetIdDto, HttpServletRequest request, Pageable pageable) {
-        Long questionId = questionGetIdDto.getId();
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return answerService.getAnswerList(questionId, memberIdDto, pageable);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            Long questionId = questionGetIdDto.getId();
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            return answerService.getAnswerList(questionId, memberIdDto, pageable);
+        } else
+            return null;
     }
 
 
@@ -44,8 +47,10 @@ public class AnswerController {
      */
     @PostMapping("/answer/write")
     private void writeAnswer(@RequestBody AnswerWriteDto answerWriteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        answerService.createAnswer(answerWriteDto, memberIdDto);
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            answerService.createAnswer(answerWriteDto, memberIdDto);
+        }
     }
 
     /**
@@ -56,25 +61,28 @@ public class AnswerController {
      */
     @PostMapping("/answer/modify")
     private ResponseEntity<?> modifyAnswer(@RequestBody AnswerModifyDto answerModifyDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (answerService.isAnswerWriter(answerModifyDto.getId(), memberIdDto)) {
-            answerService.modifyAnswer(answerModifyDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.ANSWER_MODIFY_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.ANSWER_MODIFY_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (answerService.isAnswerWriter(answerModifyDto.getId(), memberIdDto)) {
+                answerService.modifyAnswer(answerModifyDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.ANSWER_MODIFY_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.ANSWER_MODIFY_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 
     /**
@@ -86,24 +94,27 @@ public class AnswerController {
 
     @PostMapping("/answer/delete")
     private ResponseEntity<?> deleteAnswer(@RequestBody AnswerDeleteDto answerDeleteDto, HttpServletRequest request) {
-        MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        if (answerService.isAnswerWriter(answerDeleteDto.getId(), memberIdDto)) {
-            answerService.deleteAnswer(answerDeleteDto, memberIdDto);
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.OK,
-                            ResponseMessage.ANSWER_DELETE_SUCCESS
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    DefaultResponse.res(
-                            StatusCode.UNAUTHORIZED,
-                            ResponseMessage.ANSWER_DELETE_FAILED
-                    ),
-                    HttpStatus.UNAUTHORIZED
-            );
-        }
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {
+            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+            if (answerService.isAnswerWriter(answerDeleteDto.getId(), memberIdDto)) {
+                answerService.deleteAnswer(answerDeleteDto, memberIdDto);
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.OK,
+                                ResponseMessage.ANSWER_DELETE_SUCCESS
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        DefaultResponse.res(
+                                StatusCode.UNAUTHORIZED,
+                                ResponseMessage.ANSWER_DELETE_FAILED
+                        ),
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+        } else
+            return null;
     }
 }

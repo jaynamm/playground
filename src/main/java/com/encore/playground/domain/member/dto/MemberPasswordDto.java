@@ -8,6 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberPasswordDto {
-    private String userid;
     private String password;
 }
