@@ -17,4 +17,5 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     Optional<List<Feed>> findByMemberInOrderByIdDesc(List<Member> memberList);
     Slice<Feed> findAllByOrderByIdDesc(Pageable pageable);
     Slice<Feed> findAllByMemberInOrderByIdDesc(List<Member> memberList, Pageable pageable);
+    Slice<Feed> findByMemberIdOrderByIdDesc(Long memberId, Pageable pageable);
 }

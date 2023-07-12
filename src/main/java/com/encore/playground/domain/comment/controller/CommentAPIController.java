@@ -46,7 +46,6 @@ public class CommentAPIController {
             return null;
     }
 
-
     /**
      * 댓글 작성
      * @param commentWriteDto 해당 프로퍼티를 가진 Dto<br>

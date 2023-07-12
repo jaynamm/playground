@@ -1,7 +1,6 @@
 package com.encore.playground.domain.comment.repository;
 
 import com.encore.playground.domain.comment.entity.Comment;
-import com.encore.playground.domain.feed.entity.Feed;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

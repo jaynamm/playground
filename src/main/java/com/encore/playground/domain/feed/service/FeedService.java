@@ -5,6 +5,7 @@ import com.encore.playground.domain.feed.dto.*;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.feed.repository.FeedRepository;
 import com.encore.playground.domain.follow.service.FollowService;
+import com.encore.playground.domain.likes.repository.LikesRepository;
 import com.encore.playground.domain.member.dto.MemberDto;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.service.MemberService;
@@ -27,15 +28,49 @@ public class FeedService {
     private final MemberService memberService;
     private final FollowService followService;
     private final CommentRepository commentRepository;
+    private final LikesRepository likesRepository;
 
     /**
      * 피드에 달린 댓글 갯수를 세어서 feedListDto에 commentCount로 넣어주는 메소드
-     * @param feedListDto 댓글 갯수를 표시해야 하는 피드(들)의 feedListDto
+     * @param feedListDto 댓글 갯수를 표시해야 하는 피드의 feedListDto
      * @return 댓글 갯수(commentCount) 값이 추가된 feedListDto
      */
     public FeedListDto countComments(FeedListDto feedListDto) {
         Long id = feedListDto.getId();
         feedListDto.setCommentCount(commentRepository.countByFeed_Id(id));
+        return feedListDto;
+    }
+
+    /**
+     * 피드에 달린 좋아요 갯수를 세어서 feedListDto에 likeCount로 넣어주는 메소드
+     * @param feedListDto 좋아요 갯수를 표시해야 하는 피드의 feedListDto
+     * @return 좋아요 갯수(likeCount) 값이 추가된 feedListDto
+     */
+    public FeedListDto countLikes(FeedListDto feedListDto) {
+        Long id = feedListDto.getId();
+        feedListDto.setLikeCount(likesRepository.countByFeed_Id(id));
+        return feedListDto;
+    }
+
+    /**
+     * 로그인한 사용자가 해당 피드에 좋아요를 눌렀는지 여부를 feedListDto에 isLiked로 넣어주는 메소드
+     * @param feedListDto 좋아요 여부를 표시해야 하는 피드의 feedListDto
+     * @return 좋아요 여부(isLiked) 값이 추가된 feedListDto
+     */
+    public FeedListDto isLiked(FeedListDto feedListDto, MemberDto memberDto) {
+        Long id = feedListDto.getId();
+        feedListDto.setLiked(likesRepository.existsByFeed_IdAndMember_Id(id, memberDto.getId()));
+        return feedListDto;
+    }
+
+    /**
+     * 해당 피드의 작성자가 로그인한 사용자가 팔로우한 멤버인지 여부를 feedListDto에 isFollowed로 넣어주는 메소드
+     * @param feedListDto 팔로우 여부를 표시해야 하는 피드의 feedListDto
+     * @return 팔로우 여부(isFollowing) 값이 추가된 feedListDto
+     */
+    public FeedListDto isFollowing(FeedListDto feedListDto, ArrayList<MemberDto> followerListDto) {
+        Long id = feedListDto.getMemberId();
+        feedListDto.setFollowing(followerListDto.stream().anyMatch(memberDto -> memberDto.getId().equals(id)));
         return feedListDto;
     }
 
@@ -52,7 +87,7 @@ public class FeedService {
 
     /**
      * 피드 메인페이지<br>
-     * 현재 모든 글을 반환하고 있으나, 추후 페이징 처리(검색 갯수 제한) 필요
+     * 로그인한 사용자가 팔로우한 사용자들의 피드를 페이징 처리해서 가져온다.
      * @return 피드 피드 객체 List
      */
     public Slice<FeedListDto> feedPage(MemberGetMemberIdDto memberIdDto, Pageable pageable) {
@@ -64,18 +99,22 @@ public class FeedService {
                 pageable
         );
         feedList.forEach(Feed::readFeed); // 목록에 추가된 피드 조회수 증가
-        Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new).map(this::countComments);
+        Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new)
+                .map(this::countComments)
+                .map(this::countLikes)
+                .map(feedListDto -> isLiked(feedListDto, memberDto))
+                .map(feedListDto -> isFollowing(feedListDto, followerListDto));
         return feedDtoList;
     }
 
     /**
      * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드 (마이페이지에서 사용할 용도)
-     * @param memberIdDto: jwt로부터 추출한 memberId가 들어있는 DTO
+     * @param memberDto: jwt로부터 추출한 memberId가 들어있는 DTO
      * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
      */
-    public List<FeedListDto> getFeedListByMember(MemberDto memberDto) {
-        List<Feed> feedList = feedRepository.findByMemberId(memberDto.getId()).get();
-        List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).map(this::countComments).toList();
+    public Slice<FeedListDto> getFeedListByMember(MemberDto memberDto) {
+        Slice<Feed> feedList = feedRepository.findByMemberIdOrderByIdDesc(memberDto.getId(), Pageable.ofSize(10));
+        Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new).map(this::countComments);
         return feedDtoList;
     }
 
@@ -84,9 +123,13 @@ public class FeedService {
      * @param id: 글 번호
      * @return FeedListDto
      */
-    public FeedListDto getFeed(Long id) {
+    public FeedListDto getFeed(Long id, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         Feed feed = feedRepository.findById(id).get();
-        return countComments(new FeedListDto(feed));
+        FeedListDto feedListDto = countLikes(countComments(new FeedListDto(feed)));
+        feedListDto = isLiked(feedListDto, memberDto);
+        feedListDto = isFollowing(feedListDto, new ArrayList<>(followService.getFollowingList(memberDto)));
+        return feedListDto;
     }
 
     public FeedDto getFeed(FeedGetIdDto feedGetIdDto) {

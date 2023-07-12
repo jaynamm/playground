@@ -17,6 +17,9 @@ import com.encore.playground.domain.qna.dto.QuestionDto;
 import com.encore.playground.domain.qna.service.AnswerService;
 import com.encore.playground.domain.qna.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -40,13 +43,13 @@ public class MyPageService {
         // 사용자의 follow 정보를 가져온다. (팔로잉 수, 팔로워 수, 팔로잉 리스트. 팔로워 리스트)
         FollowMyPageDto followDto = followService.getFollowMyPageDto(memberDto);
         // 사용자가 작성한 feed를 가져온다.
-        List<FeedListDto> feedListDto = feedService.getFeedListByMember(memberDto);
+        Slice<FeedListDto> feedListDto = feedService.getFeedListByMember(memberDto);
         // 사용자가 작성한 comment를 가져온다.
-        List<CommentListDto> commentListDto = commentService.getCommentListByMember(memberDto);
+        Slice<CommentListDto> commentListDto = commentService.getCommentListByMember(memberDto);
         // 사용자가 작성한 question을 가져온다.
-        List<QuestionDto> questionListDto = questionService.getQuestionListByMember(memberDto);
+        Page<QuestionDto> questionListDto = questionService.getQuestionListByMember(memberDto, Pageable.ofSize(10));
         // 사용자가 작성한 answer를 가져온다.
-        List<AnswerDto> answerListDto = answerService.getAnswerListByMember(memberDto);
+        Page<AnswerDto> answerListDto = answerService.getAnswerListByMember(memberDto, Pageable.ofSize(10));
         // MyPageDto에 담아서 build한다.
         return MyPageDto.builder()
                 .memberMyPageDto(memberMyPageDto)

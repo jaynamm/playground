@@ -1,5 +1,7 @@
 package com.encore.playground.domain.feed.controller;
 
+import com.encore.playground.domain.feed.dto.FeedDto;
+import com.encore.playground.domain.feed.dto.FeedGetIdDto;
 import com.encore.playground.domain.feed.dto.FeedListDto;
 import com.encore.playground.domain.feed.service.FeedService;
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
@@ -39,7 +41,7 @@ public class FeedController {
     // 게시글 수정 페이지로 이동
     @GetMapping(value = "/modify")
     public String modify(Long feedNo, Model model) {
-        FeedListDto feedToModify = feedService.getFeed(feedNo);
+        FeedDto feedToModify = feedService.getFeed(FeedGetIdDto.builder().id(feedNo).build());
         model.addAttribute("feed", feedToModify);
         return "feed/feed_modify";
     }

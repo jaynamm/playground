@@ -36,7 +36,6 @@ public class FeedAPIController {
      * 현재 DB에 저장된 모든 피드를 반환하는 메소드
      * @return JSON 형태의 피드 리스트
      */
-    // TODO: 팔로우 여부에 따라 해당 사용자의 피드만 묶어서 반환하도록 수정 필요
     @Operation(summary = "피드 메인페이지", description = "메인 페이지 접속 시 피드 목록을 반환한다.")
     @GetMapping(value = "/list")
     public Slice<FeedListDto> feedMain(HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
@@ -62,13 +61,12 @@ public class FeedAPIController {
         if (request.getAttribute("AccessTokenValidation").equals("true")) {
             MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
             HashMap<String, Object> feedAndComments = new HashMap<>();
-            FeedListDto feedListDto = feedService.getFeed(id);
-            feedAndComments.put("feed", feedListDto);
-            feedAndComments.put("comments",
-                    commentService.getCommentsInFeed(
-                            CommentReadDto.builder().feedId(id).build(),
-                            memberIdDto,
-                            Pageable.unpaged()
+            FeedListDto feedListDto = feedService.getFeed(id, memberIdDto);
+        feedAndComments.put("feed", feedListDto);
+        feedAndComments.put("comments", commentService.getCommentsInFeed(
+                        CommentReadDto.builder().feedId(id).build(),
+                        memberIdDto,
+                        Pageable.ofSize(10)
                     )
             );
             String responseMessage = "";

@@ -13,8 +13,10 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     void deleteByFeedAndMember(Feed feed, Member member);
 
     // Feed의 좋아요 수
-    Long countByFeed(Feed feed);
+    Integer countByFeed_Id(Long feedId);
 
     // 사용자가 좋아요한 feed
     Long countByMember(Member member);
+
+    Boolean existsByFeed_IdAndMember_Id(Long feedId, Long memberId);
 }
