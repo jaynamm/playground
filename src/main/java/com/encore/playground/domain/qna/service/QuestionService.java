@@ -9,6 +9,8 @@ import com.encore.playground.domain.qna.repository.QuestionRepository;
 import com.encore.playground.global.exception.DataNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,12 +30,16 @@ public class QuestionService {
      * qna 게시물을 가져온다.
      * @return List<QuestionDto>
      */
-
-    public List<QuestionDto> questionList() {
-        List<QuestionDto> questionDtoList = questionRepository.findAll().stream().map(QuestionDto::new).toList();
+    public Page<QuestionDto> questionList(Pageable pageable) {
+        Page<QuestionDto> questionDtoList = questionRepository.findAllByOrderByIdDesc(pageable).map(QuestionDto::new);
         return questionDtoList;
     }
 
+    /**
+     * id에 해당하는 글의 작성자와 로그인한 사용자가 같은지 확인한다.
+     * @param id Question 테이블 id
+     * @return 로그인한 사용자가 쓴 글인지 true/false 
+     */
     public boolean isQuestionWriter(Long id, MemberGetMemberIdDto memberIdDto) {
         return memberIdDto.getUserid().equals(questionRepository.findById(id).get().getMember().getUserid());
     }
@@ -43,9 +49,8 @@ public class QuestionService {
      * @param memberDto
      * @return List<QuestionDto>
      */
-
-    public List<QuestionDto> getQuestionListByMember(MemberDto memberDto) {
-        List<QuestionDto> questionDtoList = questionRepository.findByMemberId(memberDto.getId()).get().stream().map(QuestionDto::new).toList();
+    public Page<QuestionDto> getQuestionListByMember(MemberDto memberDto, Pageable pageable) {
+        Page<QuestionDto> questionDtoList = questionRepository.findByMemberIdOrderByIdDesc(memberDto.getId(), pageable).map(QuestionDto::new);
         return questionDtoList;
     }
 

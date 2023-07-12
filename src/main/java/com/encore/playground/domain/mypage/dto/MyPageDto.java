@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class MyPageDto {
     private FollowMyPageDto followMyPageDto;
     private List<FeedListDto> myPageFeedDtoList;
     private List<CommentListDto> myPageCommentDtoList;
-    private List<QuestionDto> myPageQuestionDtoList;
-    private List<AnswerDto> myPageAnswerDtoList;
+    private Page<QuestionDto> myPageQuestionDtoList;
+    private Page<AnswerDto> myPageAnswerDtoList;
 
 
 

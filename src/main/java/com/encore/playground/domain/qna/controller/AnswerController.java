@@ -8,6 +8,8 @@ import com.encore.playground.global.api.ResponseMessage;
 import com.encore.playground.global.api.StatusCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,10 @@ public class AnswerController {
      * @return  List<AnswerDTO>
      */
     @PostMapping("/answer/list")
-    private List<AnswerListDto> answerList(@RequestBody QuestionGetIdDto questionGetIdDto, HttpServletRequest request) {
+    private Page<AnswerListDto> answerList(@RequestBody QuestionGetIdDto questionGetIdDto, HttpServletRequest request, Pageable pageable) {
         Long questionId = questionGetIdDto.getId();
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-        return answerService.getAnswerList(questionId, memberIdDto);
+        return answerService.getAnswerList(questionId, memberIdDto, pageable);
     }
 
 

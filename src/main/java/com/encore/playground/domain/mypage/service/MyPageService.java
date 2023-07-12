@@ -17,6 +17,8 @@ import com.encore.playground.domain.qna.dto.QuestionDto;
 import com.encore.playground.domain.qna.service.AnswerService;
 import com.encore.playground.domain.qna.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -44,9 +46,9 @@ public class MyPageService {
         // 사용자가 작성한 comment를 가져온다.
         List<CommentListDto> commentListDto = commentService.getCommentListByMember(memberDto);
         // 사용자가 작성한 question을 가져온다.
-        List<QuestionDto> questionListDto = questionService.getQuestionListByMember(memberDto);
+        Page<QuestionDto> questionListDto = questionService.getQuestionListByMember(memberDto, Pageable.unpaged());
         // 사용자가 작성한 answer를 가져온다.
-        List<AnswerDto> answerListDto = answerService.getAnswerListByMember(memberDto);
+        Page<AnswerDto> answerListDto = answerService.getAnswerListByMember(memberDto, Pageable.unpaged());
         // MyPageDto에 담아서 build한다.
         return MyPageDto.builder()
                 .memberMyPageDto(memberMyPageDto)
