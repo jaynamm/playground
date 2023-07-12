@@ -123,9 +123,13 @@ public class FeedService {
      * @param id: 글 번호
      * @return FeedListDto
      */
-    public FeedListDto getFeed(Long id) {
+    public FeedListDto getFeed(Long id, MemberGetMemberIdDto memberIdDto) {
+        MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         Feed feed = feedRepository.findById(id).get();
-        return countComments(new FeedListDto(feed));
+        FeedListDto feedListDto = countLikes(countComments(new FeedListDto(feed)));
+        feedListDto = isLiked(feedListDto, memberDto);
+        feedListDto = isFollowing(feedListDto, new ArrayList<>(followService.getFollowingList(memberDto)));
+        return feedListDto;
     }
 
     public FeedDto getFeed(FeedGetIdDto feedGetIdDto) {

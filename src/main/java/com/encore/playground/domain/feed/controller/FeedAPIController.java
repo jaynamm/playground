@@ -58,10 +58,9 @@ public class FeedAPIController {
     public ResponseEntity<?> getFeed(@PathVariable Long id, HttpServletRequest request) {
         MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
         HashMap<String, Object> feedAndComments = new HashMap<>();
-        FeedListDto feedListDto = feedService.getFeed(id);
+        FeedListDto feedListDto = feedService.getFeed(id, memberIdDto);
         feedAndComments.put("feed", feedListDto);
-        feedAndComments.put("comments",
-                commentService.getCommentsInFeed(
+        feedAndComments.put("comments", commentService.getCommentsInFeed(
                         CommentReadDto.builder().feedId(id).build(),
                         memberIdDto,
                         Pageable.unpaged()
