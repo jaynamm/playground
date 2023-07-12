@@ -53,7 +53,7 @@ public class QuestionController {
         questionAndAnswers.put("answers", answerService.getAnswerList(
                             id,
                             memberIdDto,
-                            Pageable.unpaged()
+                            Pageable.ofSize(10)
                 )
         );
         if (questionService.isQuestionWriter(id, memberIdDto)) {

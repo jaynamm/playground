@@ -96,7 +96,7 @@ public class NoticeController {
                     DefaultResponse.res(
                             StatusCode.UNAUTHORIZED,
                             ResponseMessage.NOTICE_USER_ACCESS,
-                            noticeService.noticeList(Pageable.unpaged())
+                            noticeService.noticeList(Pageable.ofSize(10))
                     ),
                     HttpStatus.UNAUTHORIZED
             );

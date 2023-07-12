@@ -112,9 +112,9 @@ public class FeedService {
      * @param memberDto: jwt로부터 추출한 memberId가 들어있는 DTO
      * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
      */
-    public List<FeedListDto> getFeedListByMember(MemberDto memberDto) {
-        List<Feed> feedList = feedRepository.findByMemberId(memberDto.getId()).get();
-        List<FeedListDto> feedDtoList = feedList.stream().map(FeedListDto::new).map(this::countComments).toList();
+    public Slice<FeedListDto> getFeedListByMember(MemberDto memberDto) {
+        Slice<Feed> feedList = feedRepository.findByMemberIdOrderByIdDesc(memberDto.getId(), Pageable.ofSize(10));
+        Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new).map(this::countComments);
         return feedDtoList;
     }
 

@@ -43,7 +43,6 @@ public class CommentAPIController {
         return commentService.getCommentsInFeed(CommentReadDto.builder().feedId(feedId).build(), memberIdDto, pageable);
     }
 
-
     /**
      * 댓글 작성
      * @param commentWriteDto 해당 프로퍼티를 가진 Dto<br>

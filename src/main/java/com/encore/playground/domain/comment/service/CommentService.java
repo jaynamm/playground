@@ -71,9 +71,9 @@ public class CommentService {
      *                   Id: 멤버 테이블 pk<br>
      * @return 해당 유저가 작성한 댓글 목록
      */
-    public List<CommentListDto> getCommentListByMember(MemberDto memberDto) {
-        return commentRepository.findByMemberId(memberDto.getId()).get()
-                .stream().map(CommentListDto::new).toList();
+    public Slice<CommentListDto> getCommentListByMember(MemberDto memberDto) {
+        return commentRepository.findAllByMemberIdOrderByIdDesc(memberDto.getId(), Pageable.ofSize(10))
+                .map(CommentListDto::new);
     }
 
     /**

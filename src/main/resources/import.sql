@@ -81,6 +81,18 @@ INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_i
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (2, '올 때 메로나', '2023-05-17 19:37:36.881436', 2, '2023-05-17 19:37:36.881436', 1);
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (3, '그게 들어감?', '2023-05-17 19:37:38.571587', 3, '2023-05-17 19:37:38.571587', 1);
 INSERT INTO comment (id, content, created_date, member_id, modified_date, feed_id) VALUES (4, '난 피자가 싫어', '2023-05-17 19:37:37.770748', 4, '2023-05-17 19:37:37.770748', 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (5, '1', '2023-07-12 17:09:02.265655', '2023-07-12 17:09:02.265655', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (6, '2', '2023-07-12 17:09:04.540116', '2023-07-12 17:09:04.540116', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (7, '3', '2023-07-12 17:09:07.140100', '2023-07-12 17:09:07.140100', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (8, '4', '2023-07-12 17:09:09.047255', '2023-07-12 17:09:09.047255', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (9, '5', '2023-07-12 17:09:11.361829', '2023-07-12 17:09:11.361829', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (10, '6', '2023-07-12 17:09:13.530102', '2023-07-12 17:09:13.530102', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (11, '7', '2023-07-12 17:09:15.370710', '2023-07-12 17:09:15.370710', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (12, '8', '2023-07-12 17:09:17.298476', '2023-07-12 17:09:17.298476', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (13, '9', '2023-07-12 17:09:20.162186', '2023-07-12 17:09:20.162186', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (14, '10', '2023-07-12 17:09:21.631744', '2023-07-12 17:09:21.631744', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (15, '11', '2023-07-12 17:09:23.889455', '2023-07-12 17:09:23.889455', 36, 1);
+INSERT INTO comment (id, content, created_date, modified_date, feed_id, member_id) VALUES (16, '12', '2023-07-12 17:09:32.558831', '2023-07-12 17:09:32.558831', 36, 1);
 
 insert into follow (from_member, to_member, created_date) values (1, 3, 20230519221726);
 insert into follow (from_member, to_member, created_date) values (1, 2, 20230519221726);
@@ -131,7 +143,7 @@ insert into question(title, content, member_id, created_date) values ('캠퍼스
 insert into question(title, content, member_id, created_date) values ('차량 등록 방법을 알려주세요.', '차량을 등록하려면 어떤 절차가 필요한가요?', 2, '2023-07-01 16:09:31');
 insert into question(title, content, member_id, created_date) values ('휴학 신청 방법을 알려주세요.', '휴학을 신청하려면 어떻게 해야 하나요?', 5, '2023-07-03 12:42:40');
 insert into question(title, content, member_id, created_date) values ('국제 학생 지원 프로그램을 알려주세요.', '국제 학생을 위한 지원 프로그램에 대해 알고 싶습니다.', 3, '2023-07-05 15:15:48');
-insert into question(title, content, member_id, created_date) values ('개발자 진로에 대해서 알려주세요.', '개발자 직군과 그 직군으로 취업하고 싶으면 어떻게 해야 하는지 알려주세요.', 7, 202307111800);
+insert into question(title, content, member_id, created_date) values ('개발자 진로에 대해서 알려주세요.', '개발자 직군과 그 직군으로 취업하고 싶으면 어떻게 해야 하는지 알려주세요.', 7, '2023-07-06 16:15:46');
 
 insert into answer(content, created_date, member_id, question_id) values ('10시입니다.', '2023-05-20 12:22:26', 1, 3);
 insert into answer(content, created_date, member_id, question_id) values ('강의 시작일은 9월 1일이고 종료일은 12월 15일입니다.', '2023-05-22 11:39:27', 2, 4);
