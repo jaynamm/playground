@@ -49,5 +49,5 @@ public class ResponseMessage {
     public static final String GETSKILL_SUCCESS = "GETSKILL_SUCCESS";
     public static final String MYPAGE_USERPAGE_ACCESS = "MYPAGE_USERPAGE_ACCESS";
     public static final String MYPAGE_OTHERPAGE_ACCESS = "MYPAGE_OTHERPAGE_ACCESS";
-
+    public static final String PASSWORD_CHANGE_FAILED = "PASSWORD_CHANGE_FAILED";
 }
