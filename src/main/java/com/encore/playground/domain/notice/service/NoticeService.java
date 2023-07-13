@@ -9,6 +9,8 @@ import com.encore.playground.domain.notice.dto.NoticeModifyDto;
 import com.encore.playground.domain.notice.dto.NoticeWriteDto;
 import com.encore.playground.domain.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,8 @@ public class NoticeService {
      * 공지사항 게시물을 가져온다.
      * @return List<NoticeDto>
      */
-    public List<NoticeDto> noticeList() {
-            List<NoticeDto> noticeDtoList = noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream().map(NoticeDto::new).toList();
+    public Page<NoticeDto> noticeList(Pageable pageable) {
+            Page<NoticeDto> noticeDtoList = noticeRepository.findAllByOrderByIdDesc(pageable).map(NoticeDto::new);
             return noticeDtoList;
     }
 

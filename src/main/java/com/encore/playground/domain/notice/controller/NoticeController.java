@@ -2,6 +2,7 @@ package com.encore.playground.domain.notice.controller;
 
 import com.encore.playground.domain.member.dto.MemberGetMemberIdDto;
 import com.encore.playground.domain.member.dto.MemberGetRoleDto;
+import com.encore.playground.domain.notice.dto.NoticeDto;
 import com.encore.playground.domain.notice.dto.NoticeGetIdDto;
 import com.encore.playground.domain.notice.dto.NoticeModifyDto;
 import com.encore.playground.domain.notice.dto.NoticeWriteDto;
@@ -11,6 +12,9 @@ import com.encore.playground.global.api.ResponseMessage;
 import com.encore.playground.global.api.StatusCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,16 +28,16 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @GetMapping("/notice")
-    public ResponseEntity<?> noticeMain(HttpServletRequest request) {
-        if (request.getAttribute("AccessTokenValidation").equals("true")) {
-            MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
-            MemberGetRoleDto memberRoleDto = (MemberGetRoleDto) request.getAttribute("memberRoleDto");
+    public ResponseEntity<?> noticeMain(HttpServletRequest request, @PageableDefault(size=10) Pageable pageable) {
+        if (request.getAttribute("AccessTokenValidation").equals("true")) {MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
+        MemberGetRoleDto memberRoleDto = (MemberGetRoleDto) request.getAttribute("memberRoleDto");
+        Page<NoticeDto> noticeDtoList = noticeService.noticeList(pageable);
             if (memberRoleDto.getRole().equals("ROLE_ADMIN")) {
                 return new ResponseEntity<>(
                         DefaultResponse.res(
                                 StatusCode.OK,
                                 ResponseMessage.NOTICE_ADMIN_ACCESS,
-                                noticeService.noticeList()
+                                noticeDtoList
                         ),
                         HttpStatus.OK
                 );
@@ -42,7 +46,7 @@ public class NoticeController {
                         DefaultResponse.res(
                                 StatusCode.OK,
                                 ResponseMessage.NOTICE_USER_ACCESS,
-                                noticeService.noticeList()
+                                noticeDtoList
                         ),
                         HttpStatus.OK
                 );
@@ -97,7 +101,7 @@ public class NoticeController {
                         DefaultResponse.res(
                                 StatusCode.UNAUTHORIZED,
                                 ResponseMessage.NOTICE_USER_ACCESS,
-                                noticeService.noticeList()
+                                noticeService.noticeList(Pageable.ofSize(10))
                         ),
                         HttpStatus.UNAUTHORIZED
                 );
