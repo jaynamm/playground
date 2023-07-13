@@ -78,8 +78,6 @@ public class JwtAuthenticationFilter extends GenericFilter {
             httpRequest.setAttribute("AccessTokenValidation", "true");
             httpRequest.setAttribute("memberIdDto", memberGetMemberIdDto);
             httpRequest.setAttribute("memberRoleDto", memberGetRoleDto);
-
-
         } else if (token == null) {
             System.out.println("[JwtAuthenticationFilter] ::: 토큰이 존재하지 않습니다.");
         } else if (!jwtTokenProvider.validateAccessToken(token)) {

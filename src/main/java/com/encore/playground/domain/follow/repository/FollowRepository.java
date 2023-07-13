@@ -27,4 +27,5 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     @Transactional
     void deleteByFromMemberAndToMember(Member fromMember, Member toMember);
 
+    boolean existsByFromMember_IdAndToMember_Id(Long fromMemberId, Long toMemberId);
 }
