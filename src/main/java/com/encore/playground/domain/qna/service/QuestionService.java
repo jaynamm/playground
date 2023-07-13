@@ -108,5 +108,4 @@ public class QuestionService {
     public void deleteQuestion(QuestionGetIdDto questionIdDto, MemberGetMemberIdDto memberIdDto) {
         questionRepository.deleteById(questionIdDto.getId());
     }
-
 }

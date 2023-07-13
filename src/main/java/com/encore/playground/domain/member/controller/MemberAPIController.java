@@ -188,8 +188,15 @@ public class MemberAPIController {
         if (request.getAttribute("AccessTokenValidation").equals("true")) {
             MemberGetMemberIdDto memberIdDto = (MemberGetMemberIdDto) request.getAttribute("memberIdDto");
             String userid = memberIdDto.getUserid();
-            String password = memberPasswordDto.getPassword();
-            memberService.changePassword(userid, password);
+            try {
+                memberService.changePassword(userid, memberPasswordDto);
+            } catch (Exception e) {
+                return new ResponseEntity<>(DefaultResponse.res(
+                        StatusCode.BAD_REQUEST,
+                        ResponseMessage.PASSWORD_CHANGE_FAILED),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } else
             return null;

@@ -9,4 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class MemberPasswordDto {
     private String password;
+    private String newPassword;
 }
