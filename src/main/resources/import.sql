@@ -9,7 +9,7 @@ INSERT INTO member (id, created_date, curriculum, email, name, nickname, passwor
 
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 비 오는 날에 영화 보기 좋을 것 같아요', '2023-04-02T12:45:20.157781', 0, 2, '2023-04-02T12:45:20.157781', 0);
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('나 오늘 버거킹 불고기 와퍼 먹을 예정', '2023-04-05T14:37:22.116961', 0, 4, '2023-04-05T14:37:22.116961', 0);
-INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 산책하면서 가을 풍경 감상', '2023-04-07T17:58:32.805491', 0, 2, '2023-04-07T17:58:32.805491', 0);
+INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 산책하면서 가을 풍경 감상', '2023-04-07T17:58:32.805491', 0, 3, '2023-04-07T17:58:32.805491', 0);
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('나는 오늘 마카롱을 먹을 예정!', '2023-04-09T20:48:08.206456', 0, 5, '2023-04-09T20:48:08.206456', 0);
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('오늘은 요리 대결을 할 예정입니다!', '2023-04-12T21:07:23.633895', 0, 1, '2023-04-12T21:07:23.633895', 0);
 INSERT INTO feed (content, created_date, like_count, member_id, modified_date, view_count) VALUES ('나는 요즘 여행 계획을 세우고 있어요!', '2023-04-14T11:25:44.118762', 0, 3, '2023-04-14T11:25:44.118762', 0);

@@ -75,6 +75,4 @@ public class FollowService {
                 .followerList(getFollowerList(memberDto))
                 .build();
     }
-
-
 }
