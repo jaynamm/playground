@@ -47,4 +47,5 @@ public class ResponseMessage {
     public static final String RECOMMENDED_SUCCESS = "RECOMMENDED_SUCCESS";
     public static final String SETSKILL_SUCCESS = "SETSKILL_SUCCESS";
     public static final String GETSKILL_SUCCESS = "GETSKILL_SUCCESS";
+    public static final String PASSWORD_CHANGE_FAILED = "PASSWORD_CHANGE_FAILED";
 }

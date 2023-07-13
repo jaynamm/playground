@@ -45,5 +45,4 @@ public class QuestionDto {
                 .createdDate(createdDate)
                 .build();
     }
-
 }
