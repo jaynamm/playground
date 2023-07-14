@@ -8,8 +8,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,11 +34,4 @@ public class Question {
 
     @CreatedDate
     private LocalDateTime createdDate;
-
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
-
-//    @OneToMany(mappedBy = "question")
-//    private List<Answer> answerList;
 }

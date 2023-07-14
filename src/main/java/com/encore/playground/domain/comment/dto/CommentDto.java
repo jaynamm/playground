@@ -3,7 +3,6 @@ package com.encore.playground.domain.comment.dto;
 import com.encore.playground.domain.comment.entity.Comment;
 import com.encore.playground.domain.feed.entity.Feed;
 import com.encore.playground.domain.member.entity.Member;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ public class CommentDto {
     private Member member;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-//    private int likeCount;
     private String content;
 
     public Comment toEntity() {
@@ -31,7 +29,6 @@ public class CommentDto {
                 .member(member) // 작성자
                 .createdDate(createdDate) // 작성일자
                 .modifiedDate(modifiedDate) // 수정일자
-//                .likeCount(likeCount) // 좋아요 수
                 .content(content) // 댓글 내용
                 .build();
     }
@@ -42,7 +39,6 @@ public class CommentDto {
         this.member = entity.getMember();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
-//        this.likeCount = entity.getLikeCount();
         this.content = entity.getContent();
     }
 }
