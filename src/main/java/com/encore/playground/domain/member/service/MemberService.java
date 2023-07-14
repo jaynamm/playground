@@ -67,8 +67,6 @@ public class MemberService {
         Optional<Member> memberForUserid = this.memberRepository.findByUserid(userid);
         Optional<Member> memberForEmail = this.memberRepository.findByEmail(email);
 
-        // TODO : 아이디와 이메일의 중복 체크를 어떻게 해줘야할지 생각해보기
-
         // 아이디와 이메일이 둘 중 하나라도 중복이 되었다면 중복된 것으로 본다.
         if (memberForUserid.isPresent() || memberForEmail.isPresent()) {
             return Boolean.TRUE;

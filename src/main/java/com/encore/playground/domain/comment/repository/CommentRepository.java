@@ -31,6 +31,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      * @return 해당 유저가 작성한 댓글 (Optional) 목록
      */
     Optional<List<Comment>> findByMemberId(Long memberId);
-    // TODO: 마이페이지 댓글 목록 페이징 처리용
     Slice<Comment> findAllByMemberIdOrderByIdDesc(Long memberId, Pageable pageable);
 }

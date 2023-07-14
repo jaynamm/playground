@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,11 +18,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "comment")
-//        , // 테이블 이름
-//        indexes = { // 인덱스 설정
-//                @Index(name = "feedid_comment_idx", columnList = "feed_id"),
-//                @Index(name = "member_id_comment_idx", columnList = "member_id")
-//        })
 @Getter
 @Builder
 @Entity
@@ -49,10 +43,6 @@ public class Comment {
 
     @LastModifiedDate
     private LocalDateTime modifiedDate; // 댓글 수정시각
-
-//    @Column(nullable = false)
-////    @ColumnDefault("0")
-////    private int likeCount; // 좋아요 수
 
     @Column(nullable = false, length = 1000)
     private String content; // 댓글 내용

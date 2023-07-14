@@ -104,7 +104,6 @@ public class FeedAPIController {
      * content: 작성한 피드 내용<br>
      * @return 작성한 글을 추가한 JSON 형태의 피드 리스트
      */
-    // TODO: jwt로만 멤버 정보를 받을 경우 swagger에서는 테스트 불가능
     @Operation(summary = "피드 작성", description = "로그인 한 사용자 계정을 작성자로 하여 글 내용을 받아 피드를 작성한다.")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "피드 작성 정보<br>content: 피드 글 내용",
