@@ -18,5 +18,6 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     // 사용자가 좋아요한 feed
     Long countByMember(Member member);
 
+    // 이미 좋아요를 누른 피드인지 검사
     Boolean existsByFeed_IdAndMember_Id(Long feedId, Long memberId);
 }

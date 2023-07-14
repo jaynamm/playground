@@ -27,8 +27,4 @@ public class MyPageDto {
     private Slice<CommentListDto> myPageCommentDtoList;
     private Page<QuestionDto> myPageQuestionDtoList;
     private Page<AnswerDto> myPageAnswerDtoList;
-
-
-
-
 }
