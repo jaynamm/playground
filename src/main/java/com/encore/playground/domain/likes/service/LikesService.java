@@ -24,6 +24,9 @@ public class LikesService {
     public void likes(LikesGetIdDto likesGetIdDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = feedService.getFeed(FeedGetIdDto.builder().id(likesGetIdDto.getFeedId()).build());
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        if (likesRepository.existsByFeed_IdAndMember_Id(feedDto.getId(), memberDto.getId())) {
+            throw new IllegalArgumentException("이미 좋아요를 누른 피드입니다.");
+        }
         likesRepository.save(LikesDto.builder()
                 .feed(feedDto.toEntity())
                 .member(memberDto.toEntity())
@@ -35,6 +38,9 @@ public class LikesService {
     public void likesCancel(LikesGetIdDto likesGetIdDto, MemberGetMemberIdDto memberIdDto) {
         FeedDto feedDto = feedService.getFeed(FeedGetIdDto.builder().id(likesGetIdDto.getFeedId()).build());
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
+        if (!likesRepository.existsByFeed_IdAndMember_Id(feedDto.getId(), memberDto.getId())) {
+            throw new IllegalArgumentException("좋아요를 누르지 않은 피드입니다.");
+        }
         likesRepository.deleteByFeedAndMember(feedDto.toEntity(), memberDto.toEntity());
     }
 }

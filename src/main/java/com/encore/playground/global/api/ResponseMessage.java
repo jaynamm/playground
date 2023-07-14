@@ -50,4 +50,8 @@ public class ResponseMessage {
     public static final String MYPAGE_USERPAGE_ACCESS = "MYPAGE_USERPAGE_ACCESS";
     public static final String MYPAGE_OTHERPAGE_ACCESS = "MYPAGE_OTHERPAGE_ACCESS";
     public static final String PASSWORD_CHANGE_FAILED = "PASSWORD_CHANGE_FAILED";
+    public static final String LIKES_ALREADY_EXIST = "LIKES_ALREADY_EXIST";
+    public static final String LIKES_NOT_EXIST = "LIKES_NOT_EXIST";
+    public static final String FOLLOW_ALREADY_EXIST = "FOLLOW_ALREADY_EXIST";
+    public static final String FOLLOW_NOT_EXIST = "FOLLOW_NOT_EXIST";
 }
