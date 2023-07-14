@@ -78,7 +78,7 @@ public class FeedService {
     }
 
     public List<FeedListDto> feedPageAll() {
-        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<FeedListDto> feedDtoList = feedList.stream()
                 // Feed Entity를 FeedListDto로 변환
                 .map(FeedListDto::new)

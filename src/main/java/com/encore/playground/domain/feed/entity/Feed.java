@@ -36,7 +36,6 @@ public class Feed {
     @LastModifiedDate
     private LocalDateTime modifiedDate; // 수정일자
 
-    // TODO: 좋아요 수를 Like 테이블에서 join하여 가져오는 작업 예정
     @ColumnDefault("0")
     private Integer likeCount; // 좋아요 수
 

@@ -24,7 +24,6 @@ public class Question {
     @Column(nullable = false)
     private String title;
 
-    // TODO: author 를 member_id 로 참조해서 가져와야한다.
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
