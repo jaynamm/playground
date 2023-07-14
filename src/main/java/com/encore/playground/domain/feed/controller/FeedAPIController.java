@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/feed")
@@ -202,5 +203,14 @@ public class FeedAPIController {
             }
         } else
             return null;
+    }
+
+    /**
+     * 실시간 인기 페이지를 갖고 오는 메소드
+     */
+    @Operation(summary = "실시간 인기 페이지")
+    @GetMapping(value = "/hotfeed")
+    public List<FeedListDto> hotFeed() {
+        return feedService.hotFeed();
     }
 }

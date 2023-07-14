@@ -117,6 +117,15 @@ public class FeedService {
     }
 
     /**
+     * 실시간 인기 피드 목록을 반환하는 메소드
+     */
+    public List<FeedListDto> hotFeed() {
+        ArrayList<Long> feedIdList = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
+        List<FeedListDto> feeds = feedRepository.findAllByIdInOrderByIdDesc(feedIdList).get().stream().map(FeedListDto::new).toList();
+        return feeds;
+    }
+
+    /**
      * id에 해당하는 사용자가 작성한 피드 글 목록을 반환하는 메소드 (마이페이지에서 사용할 용도)
      * @param memberDto: jwt로부터 추출한 memberId가 들어있는 DTO
      * @return memberId에 해당하는 사용자가 작성한 피드 글 목록
