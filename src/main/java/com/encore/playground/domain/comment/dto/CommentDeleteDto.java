@@ -1,6 +1,5 @@
 package com.encore.playground.domain.comment.dto;
 
-import com.encore.playground.domain.comment.entity.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

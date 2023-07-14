@@ -3,11 +3,11 @@ package com.encore.playground.domain.qna.entity;
 import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +24,8 @@ public class Question {
     @Column(nullable = false)
     private String title;
 
-    // TODO: author 를 member_id 로 참조해서 가져와야한다.
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -34,11 +34,4 @@ public class Question {
 
     @CreatedDate
     private LocalDateTime createdDate;
-
-//    @ManyToOne(cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
-
-//    @OneToMany(mappedBy = "question")
-//    private List<Answer> answerList;
 }

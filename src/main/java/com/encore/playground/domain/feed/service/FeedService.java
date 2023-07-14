@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -77,7 +78,7 @@ public class FeedService {
     }
 
     public List<FeedListDto> feedPageAll() {
-        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id")); // TODO: 추후 페이징 처리(검색 갯수 제한) 필요
+        List<Feed> feedList = feedRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<FeedListDto> feedDtoList = feedList.stream()
                 // Feed Entity를 FeedListDto로 변환
                 .map(FeedListDto::new)
@@ -101,11 +102,13 @@ public class FeedService {
                 followerListDto.stream().map(MemberDto::toEntity).toList(),
                 pageable
         );
+        boolean isLastPage = feedList.isLast();
         // 팔로워가 없을 경우 1, 2, 3, 4, 5번 피드를 함께 넣어서 보여준다.
-        if (!isThereFollowers) {
+        if (!isThereFollowers && isLastPage) {
             ArrayList<Long> feedIdList = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
             List<Feed> defaultFeeds = feedRepository.findAllByIdInOrderByIdDesc(feedIdList).get();
-            feedList = new SliceImpl<>(defaultFeeds, pageable, false);
+            // 기본 피드를 피드 리스트에 추가
+            feedList = new SliceImpl<>(Stream.concat(feedList.stream(), defaultFeeds.stream()).toList(), pageable, feedList.hasNext());
         }
         feedList.forEach(Feed::readFeed); // 목록에 추가된 피드 조회수 증가
         Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new)

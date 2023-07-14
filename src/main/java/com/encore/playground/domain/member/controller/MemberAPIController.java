@@ -46,7 +46,6 @@ public class MemberAPIController {
 
         System.out.println("[MemberAPIController:/api/member/login] ::: loginCheck()");
 
-        // TODO : 유저 정보를 확인할 때 Security 를 사용할지 별도로 Service 에 추가해서 확인할지 생각 필요
         // UserDetails member = memberSecurityService.loadUserByUsername(loginMember.get("userid"));
 
         // API 로 가져온 userid 로 멤버가 있는지 확인
@@ -69,8 +68,6 @@ public class MemberAPIController {
         String accessToken = accessTokenDto.getAccessToken();
         String refreshToken = refreshTokenDto.getRefreshToken();
 
-
-        // TODO : 로그인할 때 보내줘야할 데이터 - 아이디, 닉네임, 이메일, 토큰(헤더로 보내기 때문에 이후에 제외해도 될듯)
         // header에 access token을 넣어서 보내고 body에 refresh token을 넣어서 보낸다.
 
         // API 로 보낼 데이터를 HashMap 에 담아서 보낸다.
@@ -83,8 +80,6 @@ public class MemberAPIController {
         // 헤더에 access 토큰을 저장한다.
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
-
-        // TODO : statusCode 와 responseMessage 를 어떻게 구분해서 보낼 것인가
 
         return new ResponseEntity<>(loginRes, headers, HttpStatus.OK);
     }
@@ -117,8 +112,6 @@ public class MemberAPIController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody MemberDto registerMember) {
         System.out.println(registerMember);
-
-        // TODO: 회원가입 시 사용자 아이디와 이메일을 중복체크하는데 어떤 방식으로 확인을 해야할지 생각해봐야 한다.
 
         // 현재로써는 Boolean 타입으로 각 여부를 체크해서 값을 가져온다.
         Boolean existed = memberService.existedUserCheck(registerMember.getUserid(), registerMember.getEmail());
