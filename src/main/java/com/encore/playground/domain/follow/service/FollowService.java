@@ -24,9 +24,11 @@ public class FollowService {
 
     // 사용자가 다른 사용자를 follow
     public void follow(FollowGetIdDto followGetIdDto, MemberGetMemberIdDto memberIdDto) {
-
         MemberDto fromMember = memberService.getMemberByUserid(memberIdDto.getUserid());
         MemberDto toMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getToId()).build());
+        if (followRepository.existsByFromMember_IdAndToMember_Id(fromMember.getId(), toMember.getId())) {
+            throw new IllegalArgumentException("이미 팔로우한 사용자입니다.");
+        }
         followRepository.save(FollowDto.builder()
                 .fromMember(fromMember.toEntity())
                 .toMember(toMember.toEntity())
@@ -39,6 +41,9 @@ public class FollowService {
     public void unfollow(FollowGetIdDto followGetIdDto, MemberGetMemberIdDto memberIdDto) {
         MemberDto fromMember = memberService.getMemberByUserid(memberIdDto.getUserid());
         MemberDto toMember = memberService.getMember(MemberGetIdDto.builder().id(followGetIdDto.getToId()).build());
+        if (!followRepository.existsByFromMember_IdAndToMember_Id(fromMember.getId(), toMember.getId())) {
+            throw new IllegalArgumentException("팔로우하지 않은 사용자입니다.");
+        }
         followRepository.deleteByFromMemberAndToMember(fromMember.toEntity(), toMember.toEntity());
     }
 
@@ -75,6 +80,4 @@ public class FollowService {
                 .followerList(getFollowerList(memberDto))
                 .build();
     }
-
-
 }

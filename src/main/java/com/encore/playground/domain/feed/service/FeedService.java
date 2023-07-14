@@ -12,12 +12,14 @@ import com.encore.playground.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -93,11 +95,18 @@ public class FeedService {
     public Slice<FeedListDto> feedPage(MemberGetMemberIdDto memberIdDto, Pageable pageable) {
         MemberDto memberDto = memberService.getMemberByUserid(memberIdDto.getUserid());
         ArrayList<MemberDto> followerListDto = new ArrayList<>(followService.getFollowingList(memberDto));
+        boolean isThereFollowers = followerListDto.size() > 0;
         followerListDto.add(memberDto); // 자신의 피드도 보여주기 위해 현재 사용자의 MemberDto를 추가
         Slice<Feed> feedList = feedRepository.findAllByMemberInOrderByIdDesc(
                 followerListDto.stream().map(MemberDto::toEntity).toList(),
                 pageable
         );
+        // 팔로워가 없을 경우 1, 2, 3, 4, 5번 피드를 함께 넣어서 보여준다.
+        if (!isThereFollowers) {
+            ArrayList<Long> feedIdList = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
+            List<Feed> defaultFeeds = feedRepository.findAllByIdInOrderByIdDesc(feedIdList).get();
+            feedList = new SliceImpl<>(defaultFeeds, pageable, false);
+        }
         feedList.forEach(Feed::readFeed); // 목록에 추가된 피드 조회수 증가
         Slice<FeedListDto> feedDtoList = feedList.map(FeedListDto::new)
                 .map(this::countComments)
@@ -105,6 +114,15 @@ public class FeedService {
                 .map(feedListDto -> isLiked(feedListDto, memberDto))
                 .map(feedListDto -> isFollowing(feedListDto, followerListDto));
         return feedDtoList;
+    }
+
+    /**
+     * 실시간 인기 피드 목록을 반환하는 메소드
+     */
+    public List<FeedListDto> hotFeed() {
+        ArrayList<Long> feedIdList = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
+        List<FeedListDto> feeds = feedRepository.findAllByIdInOrderByIdDesc(feedIdList).get().stream().map(FeedListDto::new).toList();
+        return feeds;
     }
 
     /**
