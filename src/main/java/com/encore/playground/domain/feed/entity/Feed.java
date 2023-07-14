@@ -4,6 +4,8 @@ import com.encore.playground.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class Feed {
     private Long id; // 글번호
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "member_id", nullable = false) // 외래키 이름
     private Member member; // 작성자의 멤버 id
 
