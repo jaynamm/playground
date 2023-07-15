@@ -5,7 +5,8 @@ plugins {
 }
 
 group = 'com.encore'
-version = '0.0.1-SNAPSHOT'
+//version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
 
 configurations {
