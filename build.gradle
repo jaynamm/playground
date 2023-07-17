@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.encore'
 //version = '0.0.1-SNAPSHOT'
-version = '0.0.1'
+version = '0.0.2'
 sourceCompatibility = '17'
 
 configurations {
@@ -36,7 +36,7 @@ dependencies {
 
     // mysql-connector
     runtimeOnly 'com.mysql:mysql-connector-j'
-    implementation 'mysql:mysql-connector-java:5.1.41'
+    implementation 'mysql:mysql-connector-java:8.0.33'
 
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -55,7 +55,7 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 
     // google
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
